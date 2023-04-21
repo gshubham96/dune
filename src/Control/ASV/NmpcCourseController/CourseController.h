@@ -15,7 +15,7 @@
 #define DEG2RAD(angle) ((angle) * M_PI / 180.0)
 #define RAD2DEG(angle) ((angle) * 180.0 / M_PI)
 
-// namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 
 namespace NMPC{
 

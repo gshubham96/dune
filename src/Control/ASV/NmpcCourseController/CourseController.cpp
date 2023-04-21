@@ -354,7 +354,7 @@ namespace NMPC{
     // reads data from file and stores in passed arg
     bool CourseController::loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file){
 
-        std::string file = std::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
+        std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
 
         std::ifstream myFile(file);
         std::string line;

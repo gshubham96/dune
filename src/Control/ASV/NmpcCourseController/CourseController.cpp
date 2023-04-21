@@ -26,7 +26,7 @@ namespace NMPC{
         nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
         Tp = config_["Tp"]; Ts = config_["Ts"];
         N = floor(Tp / Ts);
-        double model_dim = config_["model_dim"], model_type = config_["model_type"], cost_type = config_["cost_type"];
+        double model_type = config_["model_type"], cost_type = config_["cost_type"];
 
         // system params
         const double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
@@ -673,6 +673,17 @@ namespace NMPC{
         std::cout << "\n##################################\n\n ";
     }
 
+    // 
+    void CourseController::reset(){
+        // To be implemented
+    }
+
+    // performs sanity check of config params
+    bool CourseController::areConfigsSane(void){
+        // To be implemented
+    }
+
+
     // Constructor
     CourseController::CourseController(){
         // set init flag
@@ -702,23 +713,23 @@ namespace NMPC{
         // set file count flag
         filecount = -1;
         // loading defaults from a file
-        if(loadDefaults())
-            std::cout << "default options loaded!\n";
-        else{
-            std::cout << "could not load default options, make sure to update ALL MPC configs parameters before configuration";
+        if(!loadDefaults()){
+            if(flag)
+                std::cerr << "could not load default options, exiting since user asked for defining the problem without all params present";
+            else
+                std::clog << "could not load default options, make sure to update ALL MPC configs parameters before configuration";
         }
 
-        if(flag)
-            std::cout << "skipping configuration for now!" << std::endl;
-        else{
+        // initialize only if flag is true
+        if(flag){
             // relaunch the configuration function
-            if(defineMpcProblem()){
-                std::cout << "Problem configured succesfully" << std::endl;
+            if(defineMpcProblem())
                 initialized++;
-            }
             else
-                std::cout << "configuration failed!\n";
+                std::cerr << "configuration failed!\n";
         }
+
+        // initialize logging
         saveTrajectoryToFile();
     }
 

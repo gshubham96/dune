@@ -74,6 +74,9 @@ namespace NMPC{
             // generates random vector for warm start
             std::vector<double> generate_random_vector(int n);
 
+            // performs sanity check of config params
+            bool areConfigsSane(void);
+
         public:
             // updates parameters such as wind, currents, etc
             // need to do it atlease once
@@ -102,6 +105,9 @@ namespace NMPC{
 
             // debug function to print trajectory and other info on screen
             void print_details();
+
+            // resets the controller
+            void reset();
 
     // Constructor
     CourseController();

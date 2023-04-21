@@ -31,7 +31,7 @@
 #include <DUNE/DUNE.hpp>
 
 // NMPC Library
-#include <CourseController.h>
+#include "CourseController.h"
 
 namespace Control
 {

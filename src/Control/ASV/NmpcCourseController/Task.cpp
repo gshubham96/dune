@@ -30,11 +30,14 @@
 // DUNE headers.
 #include <DUNE/DUNE.hpp>
 
+// NMPC Library
+#include <CourseController.h>
+
 namespace Control
 {
-  //! Insert short task description here.
+  //! Calls the NMPC::CourseController library
   //!
-  //! Insert explanation on task behaviour here.
+  //! Controls the course of the vehicle
   //! @author “gshubham96”
   namespace ASV
   {

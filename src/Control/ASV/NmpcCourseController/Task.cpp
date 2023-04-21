@@ -24,29 +24,21 @@
 // https://github.com/LSTS/dune/blob/master/LICENCE.md and                  *
 // http://ec.europa.eu/idabc/eupl.html.                                     *
 //***************************************************************************
-// Author: Shubham Garg                                                     *
+// Author: “gshubham96”                                                     *
 //***************************************************************************
 
 // DUNE headers.
 #include <DUNE/DUNE.hpp>
 
-// NMPC Library
-#include <libs/NMPC.hpp>
-
 namespace Control
 {
-  //! Course Controller using Nonlinear MPC 
+  //! Insert short task description here.
   //!
-  //! Loads parameters from the config file
-  //! Gets vehicle state data from EstimatedState
-  //! Gets env state data from EstimatedFreq, AbsoluteWind, and CurrentProfile
-  //! Gets desired course angle from DesiredHeading
-  //! Computes the required rudder angle using the class NmpcCourseController
-  //! Sets the desired rudder angle at SetServoPosition 
-  //! @author Shubham Garg
-  namespace MPC
+  //! Insert explanation on task behaviour here.
+  //! @author “gshubham96”
+  namespace ASV
   {
-    namespace MpcController
+    namespace NmpcCourseController
     {
       using DUNE_NAMESPACES;
 

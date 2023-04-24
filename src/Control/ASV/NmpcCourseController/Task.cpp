@@ -32,7 +32,6 @@
 
 // NMPC Library
 #include "CourseController.h"
-#include "CourseController.cpp"
 
 namespace Control
 {

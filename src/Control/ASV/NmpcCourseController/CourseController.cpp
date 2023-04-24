@@ -350,14 +350,14 @@ namespace NMPC{
     // reads data from file and stores in passed arg
     bool CourseController::loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file){
 
-        std::string file = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
+        std::string full_file_name = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
 
-        std::ifstream myFile(file);
+        std::ifstream myFile(full_file_name);
         std::string line;
 
         if (myFile.fail()){
             std::cerr << "ERROR: FILE OPEN FAILED. " << myFile.is_open() << std::endl;
-            std::cerr << "ERROR: LOOKING AT: " << file << std::endl;
+            std::cerr << "ERROR: LOOKING AT: " << full_file_name << std::endl;
             return false;               
         }
 
@@ -557,9 +557,6 @@ namespace NMPC{
 
         // initial position
         std::vector<double> pn(4,0), p0 = {0.091855, 0.9821, 0.19964, 0.031876};
-
-        // get rk configs
-        double Ts = config_["Ts"];
 
         // set default parameters
         // std::map<std::string, double> params_d;

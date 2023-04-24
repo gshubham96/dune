@@ -64,7 +64,7 @@ namespace Control
         std::vector<double> m_theta_;
         std::map<std::string, double> m_config_, m_params_, m_state_;
         Arguments m_args;
-        NMPC::CourseController nmpc(false);
+        NMPC::CourseController controller();
 
         // DUNE Vars
         double t_now, t_last_solved;
@@ -108,7 +108,7 @@ namespace Control
             .defaultValue("5")
             .description("Specify output frequency in Hz");
 
-          if(!nmpc.updateMpcConfig(m_config_))
+          if(!controller.updateMpcConfig(m_config_))
             err("Configuration Parameters NOT Set!");
 
           bind<IMC::Abort>(this);
@@ -146,7 +146,7 @@ namespace Control
             m_config_["R"] = m_args.R;
 
           // update MPC configuration
-          if(!nmpc.updateMpcConfig(m_config_))
+          if(!controller.updateMpcConfig(m_config_))
             war("Configuration Parameters NOT Updated!");
 
           // checks if task params are updated
@@ -188,9 +188,9 @@ namespace Control
         void
         reset(void)
         {
-          nmpc.reset();
-          nmpc.updateMpcConfig(m_config_);
-          if(!nmpc.defineMpcProblem()){
+          controller.reset();
+          controller.updateMpcConfig(m_config_);
+          if(!controller.defineMpcProblem()){
             cri("Could not define MPC Problem, EXITING!");
           }
         }
@@ -246,7 +246,7 @@ namespace Control
           m_state_["v"] = msg->v;
           m_state_["r"] = msg->r;
 
-          nmpc.updateMpcState(m_state_);
+          controller.updateMpcState(m_state_);
         }
 
         // Updated desired course
@@ -257,7 +257,7 @@ namespace Control
             return;
 
           m_reference_ = msg->value;
-          nmpc.updateMpcReference(m_reference_)
+          controller.updateMpcReference(m_reference_)
           debug("DH %f",Angles::degrees(m_reference_));
         }
 
@@ -268,7 +268,7 @@ namespace Control
 
             m_params_["Vw"] = msg->speed;
             m_params_["beta_w"] = msg->dir;
-            nmpc.updateMpcParams(m_params_);
+            controller.updateMpcParams(m_params_);
 
         }
 
@@ -279,7 +279,7 @@ namespace Control
 
             m_params_["Vc"] = msg->vel;
             m_params_["beta_c"] = msg->dir;
-            nmpc.updateMpcParams(m_params_);
+            controller.updateMpcParams(m_params_);
 
         }
 
@@ -308,7 +308,7 @@ namespace Control
 
           m_params_["k_1"] = k1;
           m_params_["k_2"] = k2;
-          nmpc.updateMpcParams(m_params_);
+          controller.updateMpcParams(m_params_);
 
         }  
 
@@ -330,7 +330,7 @@ namespace Control
             // Check if time elapsed is greater than threshold
             if((t_now - t_last_solved) > 1/solver_rate){
               // optimize problem and check for success
-              if(!nmpc.optimizeMpcProblem()){
+              if(!controller.optimizeMpcProblem()){
                 err("SOLVER FAILED!!");
                 spew("did you update the state?");
               }
@@ -339,7 +339,7 @@ namespace Control
             }
             // if not enough time has elapsed, update using existing solution
             else
-              m_u_opt_ = nmpc.getOptimalInput();
+              m_u_opt_ = controller.getOptimalInput();
 
             // send input to topic
             dispatchControl(m_u_opt_);

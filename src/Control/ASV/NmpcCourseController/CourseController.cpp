@@ -92,7 +92,6 @@ namespace NMPC{
         // Add only if model is nonlinear
         casadi::SX coriolis_u = 0, coriolis_v = 0;
         if(model_type == 0){
-            casadi::SX
                 coriolis_u = CR12 * r,
                 coriolis_v = CR21 * r;
         }
@@ -199,7 +198,7 @@ namespace NMPC{
                 u_p = sym_x(1) + EPS,
                 v_p = sym_x(2),
                 r_p = sym_x(3);
-            casadi::SX U = sqrt( pow(u_p,2) + pow(v_p,2) );
+            casadi::SX SOG = sqrt( pow(u_p,2) + pow(v_p,2) );
 
             // trajectory
             chi_t_dot = ssa(chi_d - chi_t);
@@ -208,16 +207,13 @@ namespace NMPC{
             casadi::SX delta_x;
             // minimizes error in course angle
             if(cost_type == 0)
-                delta_x = ssa(chi_t - psi_p - asin(v_p / U));
+                delta_x = ssa(chi_t - psi_p - asin(v_p / SOG));
 
             // minimizes error in course vector                    
             else if(cost_type == 1){
-                casadi::SX
-                    x_dot = u_p * cos(psi_p) - v_p * sin(psi_p),
-                    y_dot = u_p * sin(psi_p) + v_p * cos(psi_p),
-                    vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
-                vec_chi_p(0) = 1/U * x_dot;
-                vec_chi_p(1) = 1/U * y_dot;
+                casadi::SX vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
+                vec_chi_p(0) = 1/SOG * (u_p * cos(psi_p) - v_p * sin(psi_p));
+                vec_chi_p(1) = 1/SOG * (u_p * sin(psi_p) + v_p * cos(psi_p));
 
                 casadi::SX vec_chi_d = casadi::SX::sym("vec_chi_d", 2);
                 vec_chi_d(0) = cos(chi_t);
@@ -335,15 +331,15 @@ namespace NMPC{
         state_["r"] = 0;    // [rad/s]
 
         // get system dynamics
-        std::string file = "system.csv";
-        if(!loadDefaultsFromFile(file, system_)){
-            std::cerr << "Data loading from file " << file << " FAILED!" << std::endl;             
+        std::string file_name = "system.csv";
+        if(!loadDefaultsFromFile(file_name, system_)){
+            std::cerr << "Data loading from file " << file_name << " FAILED!" << std::endl;             
             return false;
         }
 
-        file = "config.csv";
-        if(!loadDefaultsFromFile(file, config_)){
-            std::cerr << "Data loading from file " << file << " FAILED!" << std::endl;             
+        file_name = "config.csv";
+        if(!loadDefaultsFromFile(file_name, config_)){
+            std::cerr << "Data loading from file " << file_name << " FAILED!" << std::endl;             
             return false;
         }
         

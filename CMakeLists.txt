@@ -150,6 +150,8 @@ endif(DUNE_PROGRAM_PYTHON)
 ##########################################################################
 # CASADI AND IPOPT LIBS                                                           #
 ##########################################################################
+# for using casadi
+find_package(casadi REQUIRED)
 # set the Ipopt library and include directory
 set(LIBRARY_DIRS /usr/local/lib)
 if(UNIX AND NOT APPLE)

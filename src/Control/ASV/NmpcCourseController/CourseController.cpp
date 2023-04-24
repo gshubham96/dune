@@ -677,6 +677,10 @@ namespace NMPC{
         return true;
     }
 
+    // checks if the problem is configured properly. If not, configure it
+    bool isProblemConfigured(void){
+        return true
+    }
 
     // Constructor
     CourseController::CourseController(){

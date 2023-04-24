@@ -116,10 +116,10 @@ namespace Control
           bind<IMC::DesiredHeading>(this);
           bind<IMC::AbsoluteWind>(this);
           bind<IMC::EstimatedFreq>(this);
-          bind<IMC::CurrentProfile>(this);
           // #DOUBT Not sure if I need this
-          bind<IMC::Rpm>(this);
-          bind<IMC::ControlLoops>(this);
+          // bind<IMC::CurrentProfile>(this);
+          // bind<IMC::Rpm>(this);
+          // bind<IMC::ControlLoops>(this);
 
           // #DOUBT Not sure if I need this
           // Initialize entity state.
@@ -181,7 +181,6 @@ namespace Control
         void
         onResourceInitialization(void)
         {
-
           reset();
         }
 
@@ -190,7 +189,7 @@ namespace Control
         {
           controller.reset();
           controller.updateMpcConfig(m_config_);
-          if(!controller.defineMpcProblem()){
+          if(!controller.isProblemConfigured()){
             cri("Could not define MPC Problem, EXITING!");
           }
         }
@@ -257,7 +256,7 @@ namespace Control
             return;
 
           m_reference_ = msg->value;
-          controller.updateMpcReference(m_reference_)
+          controller.updateMpcReference(m_reference_);
           debug("DH %f",Angles::degrees(m_reference_));
         }
 
@@ -266,22 +265,23 @@ namespace Control
           if (!isActive())
             return;
 
-            m_params_["Vw"] = msg->speed;
-            m_params_["beta_w"] = msg->dir;
-            controller.updateMpcParams(m_params_);
+          m_params_["Vw"] = msg->speed;
+          m_params_["beta_w"] = msg->dir;
+          controller.updateMpcParams(m_params_);
 
         }
 
+        // #DOUBT I am not sure if this is the right message
         // fill in m_theta_ for current params
-        void consume(const IMC::CurrentProfile* msg){
-          if (!isActive())
-            return;
+        // void consume(const IMC::CurrentProfile* msg){
+        //   if (!isActive())
+        //     return;
 
-            m_params_["Vc"] = msg->vel;
-            m_params_["beta_c"] = msg->dir;
-            controller.updateMpcParams(m_params_);
+        //     m_params_["Vc"] = msg->vel;
+        //     m_params_["beta_c"] = msg->dir;
+        //     controller.updateMpcParams(m_params_);
 
-        }
+        // }
 
         // fill in m_theta_ for wave foils params
         void consume(const IMC::EstimatedFreq* msg){

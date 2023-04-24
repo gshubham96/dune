@@ -101,13 +101,16 @@ namespace NMPC{
             void test_dynamics();
 
             // debug function to save trajectory to file
-            void saveTrajectoryToFile();
+            void saveTrajectoryToFile(void);
 
             // debug function to print trajectory and other info on screen
-            void print_details();
+            void print_details(void);
 
             // resets the controller
-            void reset();
+            void reset(void);
+
+            // checks if the problem is configured properly. If not, configure it
+            bool isProblemConfigured(void);
 
     // Constructor
     CourseController();

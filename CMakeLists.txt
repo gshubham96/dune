@@ -175,7 +175,7 @@ include_directories(
     SYSTEM ${IPOPT_INCLUDE_DIRS}
     SYSTEM ${CASADI_INCLUDE_DIR}
 )
-
+link_directories(${LIBRARY_DIRS})
 
 ##########################################################################
 #                         DUNE's Core Library                            #

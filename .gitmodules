@@ -1,0 +1,3 @@
+[submodule "vendor/libraries/casadi"]
+	path = vendor/libraries/casadi
+	url = git@github.com:casadi/casadi.git

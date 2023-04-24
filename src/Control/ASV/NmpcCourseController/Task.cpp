@@ -64,7 +64,7 @@ namespace Control
         std::vector<double> m_theta_;
         std::map<std::string, double> m_config_, m_params_, m_state_;
         Arguments m_args;
-        NMPC::CourseController controller();
+        NMPC::CourseController controller;
 
         // DUNE Vars
         double t_now, t_last_solved;

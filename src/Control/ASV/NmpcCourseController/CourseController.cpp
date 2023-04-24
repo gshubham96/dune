@@ -674,6 +674,7 @@ namespace NMPC{
     // performs sanity check of config params
     bool CourseController::areConfigsSane(void){
         // To be implemented
+        return true;
     }
 
 

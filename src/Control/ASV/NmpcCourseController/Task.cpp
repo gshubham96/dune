@@ -315,7 +315,6 @@ namespace Control
         //! publisher function
         void dispatchControl(double u = 1000){
           cri("NLP SOLVER HASN'T RUN FOR A WHILE, SOMETHING IS WRONG");
-          if 
         } 
 
         //! Main loop.

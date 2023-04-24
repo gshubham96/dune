@@ -171,6 +171,12 @@ if(CASADI_LIBRARY)
     set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
 endif()
 
+include_directories(
+    SYSTEM ${IPOPT_INCLUDE_DIRS}
+    SYSTEM ${CASADI_INCLUDE_DIR}
+)
+
+
 ##########################################################################
 #                         DUNE's Core Library                            #
 ##########################################################################

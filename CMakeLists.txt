@@ -279,6 +279,7 @@ include_directories(
     SYSTEM ${IPOPT_INCLUDE_DIRS}
     SYSTEM ${CASADI_INCLUDE_DIR}
 )
+message(STATUS  ${CASADI_LIBRARIES})
 
 # library directories
 link_directories(${LIBRARY_DIRS})
@@ -287,7 +288,7 @@ if(DUNE_SHARED)
   message(STATUS "Building shared library")
   add_library(dune-core SHARED ${DUNE_CORE_FILES} ${USER_CORE_FILES} )
   set_target_properties(dune-core PROPERTIES DEFINE_SYMBOL DUNE_DLL_EXPORT)
-  target_link_libraries(dune-core ${DUNE_SYS_LIBS} ${CASADI_LIBRARIES})
+  target_link_libraries(dune-core ${DUNE_SYS_LIBS})
 else(DUNE_SHARED)
   message(STATUS "Building static library")
   add_library(dune-core STATIC ${DUNE_CORE_FILES} ${USER_CORE_FILES} )

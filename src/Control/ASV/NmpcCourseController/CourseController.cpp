@@ -437,8 +437,8 @@ namespace NMPC{
         }
 
         // Update defaul parameter list
-        for (auto i : param) 
-            params_[i.first] = i.second;
+        for (auto it = param.begin(); it != param.end(); it++)            
+            params_[it->first] = it->second;
 
         return true;
     }
@@ -464,11 +464,9 @@ namespace NMPC{
     // updates config parameters if user wants to change the NLP
     bool CourseController::updateMpcConfig(const std::map<std::string, double> &config){
         
-        for (auto it = config.begin(); it != config.end(); it++){            
-            // Update Mpc Configuration parameters
+        // Update Mpc Configuration parameters
+        for (auto it = config.begin(); it != config.end(); it++)            
             config_[it->first] = it->second;
-            flag_config = true;
-        }
 
         // relaunch the configuration function
         if(!defineMpcProblem()){
@@ -504,7 +502,7 @@ namespace NMPC{
 
         // set Mpc parameters
         // checks if params are sane
-        if(areParamsSane()){
+        if(areParamsSane(params_)){
             std::vector p = reWriteParams();
             arg["p"] = p;            
         }

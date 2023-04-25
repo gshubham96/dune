@@ -74,7 +74,7 @@ namespace NMPC{
             std::vector<double> reWriteParams();
 
             // generates random vector for warm start
-            std::vector<double> generate_random_vector(int n);
+            std::vector<double> generateRandomVector(int n);
 
             // performs sanity check of config params
             bool areConfigsSane(const std::map<std::string, double> &mapped_dict);

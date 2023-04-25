@@ -75,7 +75,8 @@ namespace NMPC{
             std::vector<double> generate_random_vector(int n);
 
             // performs sanity check of config params
-            bool areConfigsSane(void);
+            bool areConfigsSane(const std::map<std::string, double> &mapped_dict);
+            bool areParamsSane(const std::map<std::string, double> &mapped_dict);
 
         public:
             // updates parameters such as wind, currents, etc

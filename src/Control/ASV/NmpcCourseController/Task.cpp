@@ -67,7 +67,7 @@ namespace Control
         NMPC::CourseController controller;
 
         // DUNE Vars
-        double t_now, t_last_solved;
+        double t_now, t_last, t_last_solved;
         double solver_rate, output_rate;
 
         //! Constructor.

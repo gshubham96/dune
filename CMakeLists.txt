@@ -254,11 +254,40 @@ link_directories(${DUNE_VENDOR_LIBS_DIR})
 set(DUNE_CORE_FILES ${DUNE_CORE_SOURCES} ${DUNE_VENDOR_FILES})
 set(USER_CORE_FILES ${USER_CORE_SOURCES} ${USER_VENDOR_FILES})
 
+##########################################################################
+# CASADI AND IPOPT LIBS                                                           #
+##########################################################################
+# for using casadi
+find_package(casadi REQUIRED)
+# set the Ipopt library and include directory
+set(LIBRARY_DIRS /usr/local/lib)
+set(IPOPT_INCLUDE_DIRS /usr/include/coin)
+
+# set casadi include directory
+set(CASADI_INCLUDE_DIR /usr/local/include/casadi)
+
+# find casadi library
+find_library(CASADI_LIBRARY
+    NAMES casadi
+    HINTS ${CASADI_INCLUDE_DIR}/../lib $ENV{CASADI_PREFIX}/lib)
+if(CASADI_LIBRARY)
+    set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
+endif()
+
+# installing system dir
+include_directories(
+    SYSTEM ${IPOPT_INCLUDE_DIRS}
+    SYSTEM ${CASADI_INCLUDE_DIR}
+)
+
+# library directories
+link_directories(${LIBRARY_DIRS})
+
 if(DUNE_SHARED)
   message(STATUS "Building shared library")
   add_library(dune-core SHARED ${DUNE_CORE_FILES} ${USER_CORE_FILES} )
   set_target_properties(dune-core PROPERTIES DEFINE_SYMBOL DUNE_DLL_EXPORT)
-  target_link_libraries(dune-core ${DUNE_SYS_LIBS})
+  target_link_libraries(dune-core ${DUNE_SYS_LIBS} ${CASADI_LIBRARIES})
 else(DUNE_SHARED)
   message(STATUS "Building static library")
   add_library(dune-core STATIC ${DUNE_CORE_FILES} ${USER_CORE_FILES} )

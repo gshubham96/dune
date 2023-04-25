@@ -51,7 +51,6 @@ namespace Control
       {
         std::string file_path;
         // config parameters for MPC
-        // int nx, nu, np;
         int model_type, cost_type;
         double Tp, Ts, Q, R;
         // solver and output frequency
@@ -119,10 +118,11 @@ namespace Control
           bind<IMC::EstimatedFreq>(this);
           // #DOUBT Not sure if I need this
           // bind<IMC::CurrentProfile>(this);
-          // bind<IMC::Rpm>(this);
-          // bind<IMC::ControlLoops>(this);
 
           // #DOUBT Not sure if I need this
+          // Making the task activable
+          paramActive(Tasks::Parameter::SCOPE_GLOBAL, Tasks::Parameter::VISIBILITY_USER);
+
           // Initialize entity state.
           setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
 
@@ -142,9 +142,9 @@ namespace Control
           if(paramChanged(m_args.Ts))
             m_config_["Ts"] = m_args.Ts;
           if(paramChanged(m_args.Q))
-            m_config_["Q"] = m_args.Q;
+            m_params_["Q"] = m_args.Q;
           if(paramChanged(m_args.R))
-            m_config_["R"] = m_args.R;
+            m_params_["R"] = m_args.R;
 
           // update MPC configuration
           if(!controller.updateMpcConfig(m_config_))
@@ -331,11 +331,18 @@ namespace Control
         {
           while (!stopping())
           {
-            waitForMessages(1.0);
             t_now = Clock::getSinceEpoch();
 
-            // Check if time elapsed is greater than threshold
+            // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
+            // Check if time elapsed is greater than sovler rate
+            if((t_now - t_last)/1000 < 1/output_rate){
+              waitForMessages(0.1);
+              continue;
+            }
+
+            // Check if time elapsed is greater than solver rate
             if((t_now - t_last_solved) > 1/solver_rate){
+
               // optimize problem and check for success
               if(!controller.optimizeMpcProblem()){
                 err("SOLVER FAILED!!");
@@ -343,10 +350,12 @@ namespace Control
               }
               else
                 t_last_solved = Clock::getSinceEpoch();
+
             }
-            // if not enough time has elapsed, update using existing solution
-            else
-              m_u_opt_ = controller.getOptimalInput();
+
+            // if not enough time has elapsed, just update using the existing solution
+            m_u_opt_ = controller.getOptimalInput();
+            t_last = t_now;
 
             // send input to topic
             dispatchControl(m_u_opt_);

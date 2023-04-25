@@ -50,6 +50,8 @@ namespace NMPC{
             int filecount;
             std::ofstream file;
             std::string filename;
+            // error handling
+            std::string ERROR_STRING;
             
             // ##################################
             // ##-------MEMBER FUNCTIONS-------##

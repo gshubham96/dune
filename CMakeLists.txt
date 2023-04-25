@@ -147,6 +147,7 @@ if(DUNE_PROGRAM_PYTHON)
     DEPENDS ${PROJECT_SOURCE_DIR}/src/DUNE/Status/Codes.def)
 endif(DUNE_PROGRAM_PYTHON)
 
+
 ##########################################################################
 #                         DUNE's Core Library                            #
 ##########################################################################
@@ -220,36 +221,6 @@ include_directories(${DUNE_GENERATED}/src ${PROJECT_SOURCE_DIR}/src ${PROJECT_SO
 link_directories(${DUNE_VENDOR_LIBS_DIR})
 set(DUNE_CORE_FILES ${DUNE_CORE_SOURCES} ${DUNE_VENDOR_FILES})
 set(USER_CORE_FILES ${USER_CORE_SOURCES} ${USER_VENDOR_FILES})
-
-##########################################################################
-# CASADI AND IPOPT LIBS                                                           #
-##########################################################################
-# for using casadi
-find_package(casadi REQUIRED)
-# set the Ipopt library and include directory
-set(LIBRARY_DIRS /usr/local/lib)
-set(IPOPT_INCLUDE_DIRS /usr/include/coin)
-
-# set casadi include directory
-set(CASADI_INCLUDE_DIR /usr/local/include/casadi)
-
-# find casadi library
-find_library(CASADI_LIBRARY
-    NAMES casadi
-    HINTS ${CASADI_INCLUDE_DIR}/../lib $ENV{CASADI_PREFIX}/lib)
-if(CASADI_LIBRARY)
-    set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
-endif()
-
-# installing system dir
-include_directories(
-    SYSTEM ${IPOPT_INCLUDE_DIRS}
-    SYSTEM ${CASADI_INCLUDE_DIR}
-)
-message(STATUS  ${CASADI_LIBRARIES})
-
-# library directories
-link_directories(${LIBRARY_DIRS})
 
 if(DUNE_SHARED)
   message(STATUS "Building shared library")

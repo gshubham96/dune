@@ -171,6 +171,7 @@ if(CASADI_LIBRARY)
     set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
 endif()
 
+# installing system dir
 include_directories(
     SYSTEM ${IPOPT_INCLUDE_DIRS}
     SYSTEM ${CASADI_INCLUDE_DIR}
@@ -178,10 +179,6 @@ include_directories(
 
 # library directories
 link_directories(${LIBRARY_DIRS})
-
-# find all the header files
-file(GLOB HEADER_FILES_HPP ${CMAKE_SOURCE_DIR}/include/*.hpp)
-file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/*.h)
 
 ##########################################################################
 #                         DUNE's Core Library                            #

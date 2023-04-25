@@ -23,9 +23,14 @@ namespace NMPC{
         // ################################################
 
         // mpc params
-        nx = config_["nx"]; nu = config_["nu"]; np = config_["np"];
-        Tp = config_["Tp"]; Ts = config_["Ts"];
-        N = floor(Tp / Ts);
+        nx = 4; nu = 1; np = 13;                                                    // constants as their is no plan to allow multiple models yet
+
+        // checks if configs are sane?
+        if(!areConfigsSane(config_))
+            return false;
+
+        // assign configs
+        Tp = config_["Tp"]; Ts = config_["Ts"]; N = Tp/Ts;
         double model_type = config_["model_type"], cost_type = config_["cost_type"];
 
         // system params
@@ -314,9 +319,9 @@ namespace NMPC{
         args_["lbg"] = lbg;
         args_["ubg"] = ubg;
 
-        args_["x0"] = generate_random_vector(nx*(N+1)+nu*N);
-        args_["lam_x0"] = generate_random_vector(nx*(N+1)+nu*N);
-        args_["lam_g0"] = generate_random_vector(nx*(N+1));
+        args_["x0"] = generateRandomVector(nx*(N+1)+nu*N);
+        args_["lam_x0"] = generateRandomVector(nx*(N+1)+nu*N);
+        args_["lam_g0"] = generateRandomVector(nx*(N+1));
 
         return true;
     }
@@ -350,6 +355,7 @@ namespace NMPC{
     // reads data from file and stores in passed arg
     bool CourseController::loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file){
 
+        // get file name + path
         std::string full_file_name = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
 
         std::ifstream myFile(full_file_name);
@@ -388,7 +394,7 @@ namespace NMPC{
         std::vector<double> param_vector(np, 0);
 
         // set initial state
-        param_vector[0] = state_["psi"];
+        param_vector[0] = ssa(state_["psi"]);
         param_vector[1] = state_["u"];
         param_vector[2] = state_["v"];
         param_vector[3] = state_["r"];
@@ -396,26 +402,26 @@ namespace NMPC{
         param_vector[4] = reference_;
         // set env params                
         param_vector[5] = params_["Vc"];
-        param_vector[6] = params_["beta_c"];
+        param_vector[6] = ssa(params_["beta_c"]);
         param_vector[7] = params_["Vw"];
-        param_vector[8] = params_["beta_w"];
+        param_vector[8] = ssa(params_["beta_w"]);
         param_vector[9] = params_["k_1"];
         param_vector[10] = params_["k_2"];
         // set costs
-        param_vector[11] = config_["Q"];
-        param_vector[12] = config_["R"];
+        param_vector[11] = params_["Q"];
+        param_vector[12] = params_["R"];
 
         return param_vector;
     }
 
     // generates random vector for warm start
-    std::vector<double> CourseController::generate_random_vector(int n) {
+    std::vector<double> CourseController::generateRandomVector(int n) {
         std::vector<double> result(n);
-        std::random_device rd; // obtain a random seed from the OS
-        std::mt19937 gen(rd()); // seed the generator
+        std::random_device rd;              // obtain a random seed from the OS
+        std::mt19937 gen(rd());             // seed the generator
         std::uniform_real_distribution<> distr(EPS, 1.0); // define the range
         for (int i = 0; i < n; ++i) {
-            result[i] = distr(gen); // generate the random number and assign it to the vector
+            result[i] = distr(gen);         // generate the random number and assign it to the vector
         }
         return result;
     }
@@ -458,24 +464,16 @@ namespace NMPC{
     // updates config parameters if user wants to change the NLP
     bool CourseController::updateMpcConfig(const std::map<std::string, double> &config){
         
-        // flag to check if problem needs (re)configuration
-        bool flag_config = false;
-
         for (auto it = config.begin(); it != config.end(); it++){            
             // Update Mpc Configuration parameters
             config_[it->first] = it->second;
-            // recompile NLP if configuration parameters are changed
-            if(it->first.compare("Q") == 0 || it->first.compare("R") == 0)
-                continue;     
             flag_config = true;
         }
 
         // relaunch the configuration function
-        if(flag_config == true){
-            if(!defineMpcProblem()){
-                std::cerr << "Configuration FAILED!\n";
-                return false;
-            }
+        if(!defineMpcProblem()){
+            std::cerr << "Configuration FAILED!\n";
+            return false;
         }
         return true;
     }
@@ -505,8 +503,13 @@ namespace NMPC{
         arg["ubg"] = args_["ubg"];
 
         // set Mpc parameters
-        std::vector p = reWriteParams();
-        arg["p"] = p;
+        // checks if params are sane
+        if(areParamsSane()){
+            std::vector p = reWriteParams();
+            arg["p"] = p;            
+        }
+        else
+            return false;
         
         // set initial trajectory for warm start
         arg["x0"] = args_["x0"];
@@ -672,8 +675,39 @@ namespace NMPC{
     }
 
     // performs sanity check of config params
-    bool CourseController::areConfigsSane(void){
-        // To be implemented
+    bool CourseController::areConfigsSane(const std::map<std::string, double> &mapped_dict){
+        // check for the correct number of configuration paramters
+        if(mapped_dict.size() != 4){
+            ERROR_STRING = "CONFIG PARAMETER NOT OF RIGHT LENGTH!";
+            return false;
+        }
+        
+        // checks for all keys 
+        int sum = mapped_dict.count("Tp") + mapped_dict.count("Ts") + mapped_dict.count("model_type") + mapped_dict.count("cost_type");
+        if(sum != 4){
+            ERROR_STRING = "ALL CONFIG PARAMETERs NOT PRESENT!";
+            return false;
+        }
+        
+        return true;
+    }
+
+    // performs sanity check of config params
+    bool CourseController::areParamsSane(const std::map<std::string, double> &mapped_dict){
+        // check for the correct number of configuration paramters
+        if(mapped_dict.size() != np-nx-1){
+            ERROR_STRING = "PARAMETER NOT OF RIGHT LENGTH!";
+            return false;
+        }
+        
+        // checks for all keys 
+        int sum = mapped_dict.count("Vc") + mapped_dict.count("beta_c") + mapped_dict.count("Vw") + mapped_dict.count("beta_w")
+                + mapped_dict.count("k_1") + mapped_dict.count("k_2") + mapped_dict.count("Q") + mapped_dict.count("R");
+        if(sum != np-nx-1){
+            ERROR_STRING = "ALL CONFIG PARAMETERs NOT PRESENT!";
+            return false;
+        }
+        
         return true;
     }
 

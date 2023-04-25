@@ -318,8 +318,10 @@ namespace Control
           if(u == 1000)
             cri("NLP SOLVER HASN'T RUN FOR A WHILE, SOMETHING IS WRONG");
           else{
-            ;
-            // dispatch(u);
+            // IMC Vars
+            IMC::SetServoPosition msg;
+            msg.value = u;
+            dispatch(msg);
           }
         } 
 

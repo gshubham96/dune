@@ -149,6 +149,12 @@ endif(DUNE_PROGRAM_PYTHON)
 
 
 ##########################################################################
+#                         CASADI TRIALS                                  #
+##########################################################################
+# for using casadi
+find_package(casadi REQUIRED)
+
+##########################################################################
 #                         DUNE's Core Library                            #
 ##########################################################################
 if(SHARED)
@@ -156,8 +162,6 @@ if(SHARED)
 else(SHARED)
   set(DUNE_STATIC 1)
 endif(SHARED)
-
-message(SHARED)
 
 if(TLSF)
   set(DUNE_USING_TLSF 1 CACHE INTERNAL "TLSF allocator")

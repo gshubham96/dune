@@ -171,7 +171,7 @@ if(CASADI_LIBRARY)
     set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
 endif()
 
-message(STATUS CASADI_LIBRARY)
+message(STATUS ${CASADI_LIBRARY})
 
 ##########################################################################
 #                         DUNE's Core Library                            #

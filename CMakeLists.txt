@@ -158,6 +158,20 @@ message(STATUS "******************************************")
 
 # for using casadi
 find_package(casadi REQUIRED)
+# set the Ipopt library and include directory
+set(LIBRARY_DIRS /usr/local/lib)
+set(IPOPT_INCLUDE_DIRS /usr/include/coin)
+# set casadi include directory
+set(CASADI_INCLUDE_DIR /usr/local/include/casadi)
+# find casadi library
+find_library(CASADI_LIBRARY
+    NAMES casadi
+    HINTS ${CASADI_INCLUDE_DIR}/../lib $ENV{CASADI_PREFIX}/lib)
+if(CASADI_LIBRARY)
+    set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
+endif()
+
+message(STATUS CASADI_LIBRARY)
 
 ##########################################################################
 #                         DUNE's Core Library                            #

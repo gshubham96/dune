@@ -151,6 +151,11 @@ endif(DUNE_PROGRAM_PYTHON)
 ##########################################################################
 #                         CASADI TRIALS                                  #
 ##########################################################################
+message(STATUS "")
+message(STATUS "******************************************")
+message(STATUS "***          CASADI/IPOPT              ***")
+message(STATUS "******************************************")
+
 # for using casadi
 find_package(casadi REQUIRED)
 

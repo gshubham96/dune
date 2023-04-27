@@ -363,7 +363,7 @@ namespace Control
 
             // if not enough time has elapsed, just update using the existing solution
             debug("publishing!");
-            m_u_opt_ = controller.getOptimalInput(CONTROLLER_STATUS);
+            m_u_opt_ = controller.getOptimalInput();
             t_last = t_now;
 
             // send input to topic

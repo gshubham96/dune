@@ -483,13 +483,13 @@ namespace NMPC{
         return true;
     }
 
-    bool CourseController::optimizeMpcProblem(std::string &status){
+    bool CourseController::optimizeMpcProblem(){
 
         // flag to check if nlp was set up and parameters were updated
         switch(initialized){
-            case -1: status = "configure problem first!"; return false;
-            case  0: status = "update parameters first!"; return false;
-            case  1: status = "update state first!"; return false;
+            case -1: ERROR_STRING = "configure problem first!"; return false;
+            case  0: ERROR_STRING = "update parameters first!"; return false;
+            case  1: ERROR_STRING = "update state first!"; return false;
             default: break;
         }
 
@@ -534,7 +534,7 @@ namespace NMPC{
     }
 
     // 
-    double CourseController::getOptimalInput(std::string &status){
+    double CourseController::getOptimalInput(){
 
         // get current time
         double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -542,7 +542,7 @@ namespace NMPC{
 
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
-            std::string &status = "time since last NLP run exceeds threshold";
+            ERROR_STRING = "time since last NLP run exceeds threshold";
             return 1000;
         }
 
@@ -713,6 +713,10 @@ namespace NMPC{
     bool CourseController::isProblemConfigured(){
         ;
         return true;
+    }
+
+    void CourseController::getErrorString(std::string &err){
+        err = ERROR_STRING;
     }
 
     // Constructor

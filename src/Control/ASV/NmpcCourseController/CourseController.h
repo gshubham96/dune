@@ -95,10 +95,10 @@ namespace NMPC{
             bool updateMpcReference(const double &reference);
 
             // Optimize the NLP with updated state and parameters
-            bool optimizeMpcProblem(std::string &status);
+            bool optimizeMpcProblem();
 
             // Get the result from the optimized input
-            double getOptimalInput(std::string &status);
+            double getOptimalInput();
 
             // debug function to test system dynamics
             void test_dynamics();
@@ -114,6 +114,9 @@ namespace NMPC{
 
             // checks if the problem is configured properly. If not, configure it
             bool isProblemConfigured();
+
+            // returns error or updates from controller
+            void getErrorString(std::string &err);
 
     // Constructor
     CourseController();

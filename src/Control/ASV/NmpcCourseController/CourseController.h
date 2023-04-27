@@ -113,7 +113,7 @@ namespace NMPC{
             void reset(void);
 
             // checks if the problem is configured properly. If not, configure it
-            bool isProblemConfigured(void);
+            bool isProblemConfigured();
 
     // Constructor
     CourseController();

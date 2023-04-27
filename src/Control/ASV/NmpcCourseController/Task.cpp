@@ -353,6 +353,7 @@ namespace Control
               // optimize problem and check for success
               err("solving!");
               if(!controller.optimizeMpcProblem(SOLVER_STATUS)){
+                err(SOLVER_STATUS);
                 err("SOLVER FAILED!!, did you update the state?");
               }
               else

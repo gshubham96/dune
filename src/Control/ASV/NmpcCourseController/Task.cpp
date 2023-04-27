@@ -125,7 +125,7 @@ namespace Control
           paramActive(Tasks::Parameter::SCOPE_GLOBAL, Tasks::Parameter::VISIBILITY_USER);
 
           // Initialize entity state.
-          // setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
+          setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
 
           // Update clock
           t_last = Clock::getSinceEpoch();
@@ -236,8 +236,6 @@ namespace Control
         void
         consume(const IMC::EstimatedState* msg)
         {
-          err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->u, msg->u);
-
           if (msg->getSource() != getSystemId())
             return;
 
@@ -254,13 +252,15 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
+
+          err("m_state_ %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
         // Updated desired course
         void
         consume(const IMC::DesiredHeading* msg)
         {
-          err("reference %f", msg->value);
+          err("reference %f", m_reference_);
           if (!isActive())
             return;
 
@@ -270,7 +270,7 @@ namespace Control
 
         // fill in m_theta_ for wind params
         void consume(const IMC::AbsoluteWind* msg){
-          err("reference %f and %f", msg->speed, msg->dir);
+          err("reference %f and %f", m_params_["Vw"], m_params_["beta_w"]);
           if (!isActive())
             return;
 

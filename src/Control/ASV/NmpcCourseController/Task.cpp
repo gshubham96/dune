@@ -335,7 +335,7 @@ namespace Control
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
-            err("time elapsed: %d", t_now - t_last);
+            err("time elapsed: %d", (t_now - t_last)/1000);
             if((t_now - t_last)/1000 < 1/output_rate){
               err("waiting!");
               waitForMessages(0.1);
@@ -343,8 +343,8 @@ namespace Control
             }
 
             // Check if time elapsed is greater than solver rate
-            err("time elapsed solved: %d", t_now - t_last_solved);
-            if((t_now - t_last_solved) > 1/solver_rate){
+            err("time elapsed solved: %d", (t_now - t_last_solved)/1000);
+            if((t_now - t_last_solved)/1000 > 1/solver_rate){
 
               // optimize problem and check for success
               err("solving!");

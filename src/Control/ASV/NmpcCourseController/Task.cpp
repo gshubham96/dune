@@ -335,7 +335,7 @@ namespace Control
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
-            err(t_now - t_last)
+            err(t_now - t_last);
             if((t_now - t_last)/1000 < 1/output_rate){
               err("waiting!");
               waitForMessages(0.1);

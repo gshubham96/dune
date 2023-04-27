@@ -710,7 +710,8 @@ namespace NMPC{
     }
 
     // checks if the problem is configured properly. If not, configure it
-    bool isProblemConfigured(){
+    bool CourseController::isProblemConfigured(){
+        ;
         return true;
     }
 

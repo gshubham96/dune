@@ -357,14 +357,14 @@ namespace Control
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
-            debug("time published: %f with rate %f", (t_now - t_last), 1/output_rate);
             if((t_now - t_last) < 1/output_rate){
               waitForMessages(0.1);
               continue;
             }
+            else
+              debug("waiting to publish: %f with rate %f", (t_now - t_last), 1/output_rate);
 
             // Check if time elapsed is greater than solver rate
-            debug("time solved: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
             if((t_now - t_last_solved) > 1/solver_rate){
 
               // optimize problem and check for success
@@ -378,7 +378,9 @@ namespace Control
                 t_last_solved = Clock::getSinceEpoch();
 
             }
-
+            else
+              debug("waiting to solve: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
+  
             // if not enough time has elapsed, just update using the existing solution
             debug("publishing!");
             m_u_opt_ = controller.getOptimalInput();

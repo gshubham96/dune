@@ -3,34 +3,29 @@
 ############################################################################
 
 ############################################################################
-# Author: Shubham Garg                                                #
+# Author: Shubham Garg                                                  #
 ############################################################################
 
 if(CASADI)
-    find_library(CASADI_LIBRARY
-        NAMES casadi
-        HINTS ${CASADI_INCLUDE_DIR}/../lib $ENV{CASADI_PREFIX}/lib)
-    if(CASADI_LIBRARY)
-        set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
-    endif()
+  find_library(CASADI_LIBRARY NAMES casadi PATHS /usr/local/lib)
 
-  if(${EXIV2_LIBRARY} STRLESS "libexiv2.so")
-    # Exiv2 Present
-    set(DUNE_SYS_HAS_EXIV2 1 CACHE INTERNAL "Exiv2 library")
-    set(DUNE_USING_EXIV2 1 CACHE INTERNAL "Exiv2 library")
+  if(${CASADI_LIBRARY} STRLESS "libcasadi.so")
+    # Casadi Present
+    set(DUNE_SYS_HAS_CASADI 1 CACHE INTERNAL "Casadi library")
+    set(DUNE_USING_CASADI 1 CACHE INTERNAL "Casadi library")
 
-    # FIND_PACKAGE(Exiv2 REQUIRED)
+    # FIND_PACKAGE(Casadi REQUIRED)
     dune_add_lib(casadi)
 
     # Check Header
     dune_test_header(casadi/casadi.hpp)
 
   else()
-    # Exiv2 not found on the system.
-    message(SEND_ERROR "Exiv2 was not found on the system.")
-    set(DUNE_SYS_HAS_EXIV2 0 CACHE INTERNAL "Exiv2 library")
-    set(DUNE_USING_EXIV2 0 CACHE INTERNAL "Exiv2 library")
+    # Casadi not found on the system.
+    message(SEND_ERROR "Casadi was not found on the system.")
+    set(DUNE_SYS_HAS_CASADI 0 CACHE INTERNAL "Casadi library")
+    set(DUNE_USING_CASADI 0 CACHE INTERNAL "Casadi library")
 
   endif()
 
-endif(EXIV2)
+endif(CASADI)

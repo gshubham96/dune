@@ -148,37 +148,6 @@ if(DUNE_PROGRAM_PYTHON)
     DEPENDS ${PROJECT_SOURCE_DIR}/src/DUNE/Status/Codes.def)
 endif(DUNE_PROGRAM_PYTHON)
 
-
-##########################################################################
-#                         CASADI TRIALS                                  #
-##########################################################################
-message(STATUS "")
-message(STATUS "******************************************")
-message(STATUS "***          CASADI/IPOPT              ***")
-message(STATUS "******************************************")
-
-# find the following packages
-find_package(casadi REQUIRED)
-find_package(Threads REQUIRED)
-# set the Ipopt library and include directory
-set(LIBRARY_DIRS /usr/local/lib)
-set(IPOPT_INCLUDE_DIRS /usr/include/coin)
-# set casadi include directory
-set(CASADI_INCLUDE_DIR /usr/local/include/casadi)
-# find casadi library
-find_library(CASADI_LIBRARY
-    NAMES casadi
-    HINTS ${CASADI_INCLUDE_DIR}/../lib $ENV{CASADI_PREFIX}/lib)
-if(CASADI_LIBRARY)
-    set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
-endif()
-# include header directories
-include_directories(
-    SYSTEM ${IPOPT_INCLUDE_DIRS}
-    SYSTEM ${CASADI_INCLUDE_DIR}
-)
-message(STATUS ${CASADI_LIBRARY})
-
 ##########################################################################
 #                         DUNE's Core Library                            #
 ##########################################################################

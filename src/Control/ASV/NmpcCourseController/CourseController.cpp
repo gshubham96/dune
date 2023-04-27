@@ -357,6 +357,7 @@ namespace NMPC{
 
         // get file name + path
         std::string full_file_name = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
+        std::cout << "fs::current_path().parent_path().string()\n\n\n" ;
 
         std::ifstream myFile(full_file_name);
         std::string line;

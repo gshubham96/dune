@@ -252,6 +252,8 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
+
+          err("m_state_ %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
         // Updated desired course
@@ -263,7 +265,7 @@ namespace Control
 
           m_reference_ = msg->value;
           controller.updateMpcReference(m_reference_);
-          debug("DH %f",Angles::degrees(m_reference_));
+          err("reference %f", m_reference_);
         }
 
         // fill in m_theta_ for wind params
@@ -274,6 +276,7 @@ namespace Control
           m_params_["Vw"] = msg->speed;
           m_params_["beta_w"] = msg->dir;
           controller.updateMpcParams(m_params_);
+          err("reference %f and %f", m_params_["Vw"], m_params_["beta_w"]);
 
         }
 
@@ -336,6 +339,11 @@ namespace Control
         {
           while (!stopping())
           {
+
+            // DEBUGGING
+            waitForMessages(1.0);
+            continue;
+
             t_now = Clock::getSinceEpoch();
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?

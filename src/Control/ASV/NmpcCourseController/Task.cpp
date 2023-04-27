@@ -236,6 +236,8 @@ namespace Control
         void
         consume(const IMC::EstimatedState* msg)
         {
+          err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->u, msg->u);
+
           if (msg->getSource() != getSystemId())
             return;
 
@@ -252,31 +254,29 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
-
-          err("m_state_ %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
         // Updated desired course
         void
         consume(const IMC::DesiredHeading* msg)
         {
+          err("reference %f", msg->value);
           if (!isActive())
             return;
 
           m_reference_ = msg->value;
           controller.updateMpcReference(m_reference_);
-          err("reference %f", m_reference_);
         }
 
         // fill in m_theta_ for wind params
         void consume(const IMC::AbsoluteWind* msg){
+          err("reference %f and %f", msg->speed, msg->dir);
           if (!isActive())
             return;
 
           m_params_["Vw"] = msg->speed;
           m_params_["beta_w"] = msg->dir;
           controller.updateMpcParams(m_params_);
-          err("reference %f and %f", m_params_["Vw"], m_params_["beta_w"]);
 
         }
 

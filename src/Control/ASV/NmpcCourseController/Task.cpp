@@ -344,6 +344,7 @@ namespace Control
           {
 
             // DEBUGGING
+            onActivation();
             waitForMessages(1.0);
             continue;
 

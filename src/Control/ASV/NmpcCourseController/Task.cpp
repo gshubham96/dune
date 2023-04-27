@@ -339,31 +339,30 @@ namespace Control
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
-            err("time published: %f with rate %f", (t_now - t_last), 1/output_rate);
+            spew("time published: %f with rate %f", (t_now - t_last), 1/output_rate);
             if((t_now - t_last) < 1/output_rate){
-              err("waiting!");
               waitForMessages(0.1);
               continue;
             }
 
             // Check if time elapsed is greater than solver rate
-            err("time solved: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
+            spew("time solved: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
             if((t_now - t_last_solved) > 1/solver_rate){
 
               // optimize problem and check for success
               err("solving!");
-              // if(!controller.optimizeMpcProblem()){
-              //   err("SOLVER FAILED!!");
-              //   spew("did you update the state?");
-              // }
-              // else
-              //   t_last_solved = Clock::getSinceEpoch();
+              if(!controller.optimizeMpcProblem()){
+                err("SOLVER FAILED!!");
+                spew("did you update the state?");
+              }
+              else
+                t_last_solved = Clock::getSinceEpoch();
 
             }
 
             // if not enough time has elapsed, just update using the existing solution
             err("publishing!");
-            // m_u_opt_ = controller.getOptimalInput();
+            m_u_opt_ = controller.getOptimalInput();
             t_last = t_now;
 
             // send input to topic

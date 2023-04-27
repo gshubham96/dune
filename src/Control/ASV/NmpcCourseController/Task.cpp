@@ -362,7 +362,7 @@ namespace Control
               continue;
             }
             else
-              debug("waiting to publish: %f with rate %f", (t_now - t_last), 1/output_rate);
+              debug("publishing: %f with rate %f", (t_now - t_last), 1/output_rate);
 
             // Check if time elapsed is greater than solver rate
             if((t_now - t_last_solved) > 1/solver_rate){
@@ -379,7 +379,7 @@ namespace Control
 
             }
             else
-              debug("waiting to solve: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
+              debug("solving: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
   
             // if not enough time has elapsed, just update using the existing solution
             debug("publishing!");

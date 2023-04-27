@@ -356,7 +356,7 @@ namespace NMPC{
     bool CourseController::loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file){
 
         // get file name + path
-        std::string full_file_name = fs::current_path().parent_path().string() + "/autonaut/matlab_gen/" + file_name;
+        std::string full_file_name = fs::current_path().parent_path().string() + "/dune/etc/autonaut-mpc/" + file_name;
         std::cout << "fs::current_path().parent_path().string()\n\n\n" ;
 
         std::ifstream myFile(full_file_name);

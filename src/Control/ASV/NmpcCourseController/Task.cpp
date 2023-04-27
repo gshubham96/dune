@@ -353,7 +353,7 @@ namespace Control
               // optimize problem and check for success
               err("solving!");
               if(!controller.optimizeMpcProblem()){
-                controller.getErrorString(CONTROLLER_STATUS)
+                controller.getErrorString(CONTROLLER_STATUS);
                 err("Controller says : %s", CONTROLLER_STATUS.c_str());
                 err("SOLVER FAILED!!, did you update the state?");
               }

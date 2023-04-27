@@ -126,6 +126,9 @@ namespace Control
           // Initialize entity state.
           setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
 
+          // Update clock
+          t_last = Clock::getSinceEpoch();
+
         }
 
         //! Update internal state with new parameter values.

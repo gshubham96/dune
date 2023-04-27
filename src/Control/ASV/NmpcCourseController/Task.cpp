@@ -125,7 +125,7 @@ namespace Control
           paramActive(Tasks::Parameter::SCOPE_GLOBAL, Tasks::Parameter::VISIBILITY_USER);
 
           // Initialize entity state.
-          setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
+          // setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
 
           // Update clock
           t_last = Clock::getSinceEpoch();

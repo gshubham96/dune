@@ -251,9 +251,8 @@ namespace Control
           m_state_["v"] = msg->v;
           m_state_["r"] = msg->r;
 
-          controller.updateMpcState(m_state_);
-
           err("m_state_ %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          controller.updateMpcState(m_state_);
         }
 
         // Updated desired course
@@ -341,8 +340,8 @@ namespace Control
           {
 
             // DEBUGGING
-            // waitForMessages(1.0);
-            // continue;
+            waitForMessages(1.0);
+            continue;
 
             std::map<std::string, double> dummy;
             dummy["Vc"] = 0.35;

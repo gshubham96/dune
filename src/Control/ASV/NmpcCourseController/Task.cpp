@@ -338,10 +338,10 @@ namespace Control
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
-            err("time now  : %f", t_now/1000);
-            err("time last : %f", t_last/1000);
-            err("time delta: %f", (t_now - t_last)/1000);
-            if((t_now - t_last)/1000 < 1/output_rate){
+            err("time now  : %f", t_now);
+            err("time last : %f", t_last);
+            err("time delta: %f", (t_now - t_last));
+            if((t_now - t_last) < 1/output_rate){
               err("waiting!");
               waitForMessages(0.1);
               continue;

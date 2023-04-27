@@ -336,7 +336,7 @@ namespace Control
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
             if((t_now - t_last)/1000 < 1/output_rate){
-              debug("waiting!");
+              err("waiting!");
               waitForMessages(0.1);
               continue;
             }
@@ -345,7 +345,7 @@ namespace Control
             if((t_now - t_last_solved) > 1/solver_rate){
 
               // optimize problem and check for success
-              debug("solving!");
+              err("solving!");
               // if(!controller.optimizeMpcProblem()){
               //   err("SOLVER FAILED!!");
               //   spew("did you update the state?");
@@ -356,8 +356,8 @@ namespace Control
             }
 
             // if not enough time has elapsed, just update using the existing solution
-            debug("publishing!");
-            m_u_opt_ = controller.getOptimalInput();
+            err("publishing!");
+            // m_u_opt_ = controller.getOptimalInput();
             t_last = t_now;
 
             // send input to topic

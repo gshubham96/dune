@@ -270,7 +270,7 @@ namespace Control
 
         // fill in m_theta_ for wind params
         void consume(const IMC::AbsoluteWind* msg){
-          err("reference %f and %f", m_params_["Vw"], m_params_["beta_w"]);
+          err("wind %f and %f", m_params_["Vw"], m_params_["beta_w"]);
           if (!isActive())
             return;
 
@@ -343,6 +343,15 @@ namespace Control
             // DEBUGGING
             waitForMessages(1.0);
             continue;
+
+            std::map<std::string, double> dummy;
+            dummy["Vc"] = 0.35;
+            dummy["beta_c"] = 1.57;
+            dummy["Vw"] = 5;
+            dummy["beta_w"] = 1.57;
+            dummy["k_1"] = 0.9;
+            dummy["k_2"] = 0.6;
+            controller.updateMpcParams(dummy);
 
             t_now = Clock::getSinceEpoch();
 

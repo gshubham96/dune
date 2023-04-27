@@ -534,7 +534,7 @@ namespace NMPC{
     }
 
     // 
-    double CourseController::getOptimalInput(){
+    double CourseController::getOptimalInput(std::string &status){
 
         // get current time
         double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -542,7 +542,7 @@ namespace NMPC{
 
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
-            std::cerr << "time since last NLP run exceeds threshold\n";
+            std::string &status = "time since last NLP run exceeds threshold";
             return 1000;
         }
 

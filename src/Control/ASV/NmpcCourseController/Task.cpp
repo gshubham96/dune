@@ -69,7 +69,7 @@ namespace Control
         // DUNE Vars
         double t_now, t_last, t_last_solved;
         double solver_rate, output_rate;
-        std::string SOLVER_STATUS;
+        std::string CONTROLLER_STATUS;
 
         //! Constructor.
         //! @param[in] name task name.
@@ -352,8 +352,8 @@ namespace Control
 
               // optimize problem and check for success
               err("solving!");
-              if(!controller.optimizeMpcProblem(SOLVER_STATUS)){
-                err(SOLVER_STATUS);
+              if(!controller.optimizeMpcProblem(CONTROLLER_STATUS)){
+                err(CONTROLLER_STATUS);
                 err("SOLVER FAILED!!, did you update the state?");
               }
               else
@@ -362,8 +362,8 @@ namespace Control
             }
 
             // if not enough time has elapsed, just update using the existing solution
-            err("publishing!");
-            m_u_opt_ = controller.getOptimalInput();
+            debug("publishing!");
+            m_u_opt_ = controller.getOptimalInput(CONTROLLER_STATUS);
             t_last = t_now;
 
             // send input to topic

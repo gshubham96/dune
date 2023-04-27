@@ -487,9 +487,9 @@ namespace NMPC{
 
         // flag to check if nlp was set up and parameters were updated
         switch(initialized){
-            case -1: std::cerr << status = "configure problem first!\n"; return false;
-            case  0: std::cerr << status = "update parameters first!\n"; return false;
-            case  1: std::cerr << status = "update state first!\n"; return false;
+            case -1: status = "configure problem first!"; return false;
+            case  0: status = "update parameters first!"; return false;
+            case  1: status = "update state first!"; return false;
             default: break;
         }
 

@@ -128,6 +128,7 @@ namespace Control
 
           // Update clock
           t_last = Clock::getSinceEpoch();
+          t_last_solved = t_last;
 
         }
 

@@ -236,6 +236,7 @@ namespace Control
         void
         consume(const IMC::EstimatedState* msg)
         {
+          err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->v, msg->r);
           if (msg->getSource() != getSystemId())
             return;
 

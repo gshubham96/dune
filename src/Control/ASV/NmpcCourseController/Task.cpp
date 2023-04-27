@@ -239,6 +239,7 @@ namespace Control
           err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->v, msg->r);
           if (msg->getSource() != getSystemId())
             return;
+          err("m_state_ one");
 
           // #DOUBT what does this do?
           if (!isActive())
@@ -246,14 +247,16 @@ namespace Control
             return;
           }
 
+          err("m_state_ two");
           // update state
           m_state_["psi"] = msg->psi;
           m_state_["u"] = msg->u;
           m_state_["v"] = msg->v;
           m_state_["r"] = msg->r;
 
-          err("m_state_ %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          err("m_state_ three");
           controller.updateMpcState(m_state_);
+          err("m_state_ four");
         }
 
         // Updated desired course

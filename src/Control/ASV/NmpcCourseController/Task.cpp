@@ -341,8 +341,8 @@ namespace Control
           {
 
             // DEBUGGING
-            waitForMessages(1.0);
-            continue;
+            // waitForMessages(1.0);
+            // continue;
 
             std::map<std::string, double> dummy;
             dummy["Vc"] = 0.35;

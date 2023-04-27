@@ -483,13 +483,13 @@ namespace NMPC{
         return true;
     }
 
-    bool CourseController::optimizeMpcProblem(){
+    bool CourseController::optimizeMpcProblem(std::string &status){
 
         // flag to check if nlp was set up and parameters were updated
         switch(initialized){
-            case -1: std::cerr << "configure problem first!\n"; return false;
-            case  0: std::cerr << "update parameters first!\n"; return false;
-            case  1: std::cerr << "update state first!\n"; return false;
+            case -1: std::cerr << status = "configure problem first!\n"; return false;
+            case  0: std::cerr << status = "update parameters first!\n"; return false;
+            case  1: std::cerr << status = "update state first!\n"; return false;
             default: break;
         }
 

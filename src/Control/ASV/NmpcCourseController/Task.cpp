@@ -69,6 +69,7 @@ namespace Control
         // DUNE Vars
         double t_now, t_last, t_last_solved;
         double solver_rate, output_rate;
+        std::string SOLVER_STATUS;
 
         //! Constructor.
         //! @param[in] name task name.
@@ -339,21 +340,20 @@ namespace Control
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
             // Check if time elapsed is greater than sovler rate
-            spew("time published: %f with rate %f", (t_now - t_last), 1/output_rate);
+            debug("time published: %f with rate %f", (t_now - t_last), 1/output_rate);
             if((t_now - t_last) < 1/output_rate){
               waitForMessages(0.1);
               continue;
             }
 
             // Check if time elapsed is greater than solver rate
-            spew("time solved: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
+            debug("time solved: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
             if((t_now - t_last_solved) > 1/solver_rate){
 
               // optimize problem and check for success
               err("solving!");
-              if(!controller.optimizeMpcProblem()){
-                err("SOLVER FAILED!!");
-                spew("did you update the state?");
+              if(!controller.optimizeMpcProblem(SOLVER_STATUS)){
+                err("SOLVER FAILED!!, did you update the state?");
               }
               else
                 t_last_solved = Clock::getSinceEpoch();

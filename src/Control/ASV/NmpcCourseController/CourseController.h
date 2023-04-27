@@ -95,7 +95,7 @@ namespace NMPC{
             bool updateMpcReference(const double &reference);
 
             // Optimize the NLP with updated state and parameters
-            bool optimizeMpcProblem();
+            bool optimizeMpcProblem(std::string &status);
 
             // Get the result from the optimized input
             double getOptimalInput();

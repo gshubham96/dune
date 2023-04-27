@@ -99,6 +99,7 @@ dune_option(NO_RTTI "Disable support for RTTI")
 dune_option(UEYE "Enable support for IDS uEye cameras")
 dune_option(H5CPP "Enable support for hdf5 format i/o using the h5cpp library")
 dune_option(ELLIPSOIDAL "Enable ellipsoidal coordinates in (WGS84) displace")
+dune_option(CASADI "Enable casadi/ipopt toolbox")
 
 # Internationalization.
 include(${PROJECT_SOURCE_DIR}/cmake/I18N.cmake)
@@ -156,8 +157,9 @@ message(STATUS "******************************************")
 message(STATUS "***          CASADI/IPOPT              ***")
 message(STATUS "******************************************")
 
-# for using casadi
+# find the following packages
 find_package(casadi REQUIRED)
+find_package(Threads REQUIRED)
 # set the Ipopt library and include directory
 set(LIBRARY_DIRS /usr/local/lib)
 set(IPOPT_INCLUDE_DIRS /usr/include/coin)
@@ -170,7 +172,11 @@ find_library(CASADI_LIBRARY
 if(CASADI_LIBRARY)
     set(CASADI_LIBRARIES ${CASADI_LIBRARIES} ${CASADI_LIBRARY})
 endif()
-
+# include header directories
+include_directories(
+    SYSTEM ${IPOPT_INCLUDE_DIRS}
+    SYSTEM ${CASADI_INCLUDE_DIR}
+)
 message(STATUS ${CASADI_LIBRARY})
 
 ##########################################################################

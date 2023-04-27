@@ -343,7 +343,7 @@ namespace Control
             }
 
             // Check if time elapsed is greater than solver rate
-            err(t_now - t_last_solved)
+            err("time elapsed solved: %d", t_now - t_last_solved);
             if((t_now - t_last_solved) > 1/solver_rate){
 
               // optimize problem and check for success

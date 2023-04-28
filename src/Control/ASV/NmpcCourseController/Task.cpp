@@ -333,7 +333,7 @@ namespace Control
             // err("%f, %f, %f seconds", time_to_publish, t_published, time_to_publish - t_published);
             // wait till it is time to publish again
             waitForMessages(t_published + time_to_publish - t_now);
-            debug("I waited for %f seconds", time_to_publish - t_published);
+            debug("I waited for %f seconds", t_published + time_to_publish - t_now);
 
 
             // if duration of last solved is greater than threshold

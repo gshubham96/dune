@@ -354,6 +354,8 @@ namespace Control
             dummy["beta_w"] = 1.57;
             dummy["k_1"] = 0.9;
             dummy["k_2"] = 0.6;
+            dummy["Q"] = 4.5;
+            dummy["R"] = 3.5;
             controller.updateMpcParams(dummy);
 
             std::map<std::string, double> state_d;

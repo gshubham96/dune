@@ -326,38 +326,32 @@ namespace Control
             // get current time
             t_now = Clock::getSinceEpoch();
 
-            // err("%f, %f, %f seconds", time_to_publish, t_published, time_to_publish - t_published);
             // wait till it is time to publish again
             waitForMessages(t_published + time_to_publish - t_now);
-            debug("I waited for %f seconds", t_published + time_to_publish - t_now);
-
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
 
-              debug("I am solving after %f seconds", t_now - t_solved);
-
-              // solve the problem and check for success
-              // if(controller.optimizeMpcProblem())
-              t_solved = Clock::getSinceEpoch();
-              // // else raise an error
-              // else{
-              //   controller.getErrorString(CONTROLLER_STATUS);
-              //   err("Controller says : %s", CONTROLLER_STATUS.c_str());
-              // }
+              solve the problem and check for success
+              if(controller.optimizeMpcProblem())
+                t_solved = Clock::getSinceEpoch();
+              // else raise an error
+              else{
+                controller.getErrorString(CONTROLLER_STATUS);
+                err("Controller says : %s", CONTROLLER_STATUS.c_str());
+              }
             }
   
             // publish the latest available solution
-            debug("I am publishing!");
-            // if(controller.getOptimalInput(m_u_opt_)){
-            //   // send input to topic
-            //   dispatchControl(m_u_opt_);
-            t_published = Clock::getSinceEpoch();
-            // }
-            // else{
-            //   controller.getErrorString(CONTROLLER_STATUS);
-            //   err("Controller says : %s", CONTROLLER_STATUS.c_str());
-            // }
+            if(controller.getOptimalInput(m_u_opt_)){
+              // send input to topic
+              dispatchControl(m_u_opt_);
+              t_published = Clock::getSinceEpoch();
+            }
+            else{
+              controller.getErrorString(CONTROLLER_STATUS);
+              err("Controller says : %s", CONTROLLER_STATUS.c_str());
+            }
 
           }
         }

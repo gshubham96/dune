@@ -346,7 +346,6 @@ namespace Control
 
             // DEBUGGING
             waitForMessages(1.0);
-            continue;
 
             std::map<std::string, double> dummy;
             dummy["Vc"] = 0.35;
@@ -356,6 +355,23 @@ namespace Control
             dummy["k_1"] = 0.9;
             dummy["k_2"] = 0.6;
             controller.updateMpcParams(dummy);
+
+            std::map<std::string, double> state_d;
+            state_d["psi"] = 0.091855;
+            state_d["u"] = 0.9821;
+            state_d["v"] = 0.19964;
+            state_d["r"] = 0.031876;
+            nmpc.updateMpcState(state_d);
+
+            if(!controller.optimizeMpcProblem()){
+              controller.getErrorString(CONTROLLER_STATUS);
+              err("Controller says : %s", CONTROLLER_STATUS.c_str());
+              err("SOLVER FAILED!!, did you update the state?");
+            }
+
+
+            continue;
+
 
             t_now = Clock::getSinceEpoch();
 

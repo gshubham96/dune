@@ -129,8 +129,8 @@ namespace Control
           // setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
 
           // Update clock
-          t_last = Clock::getSinceEpoch();
-          t_last_solved = t_last;
+          t_published = Clock::getSinceEpoch();
+          t_solved = t_published;
 
         }
 
@@ -341,7 +341,7 @@ namespace Control
           {
             // wait till it is time to publish again
             waitForMessages(time_to_publish - t_published);
-            debug("I waited for %f seconds", time_to_publish - t_published)
+            debug("I waited for %f seconds", time_to_publish - t_published);
 
             // get current time
             t_now = Clock::getSinceEpoch();
@@ -349,7 +349,7 @@ namespace Control
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
 
-              debug("I am solving after %f seconds", t_now - t_solved)
+              debug("I am solving after %f seconds", t_now - t_solved);
 
               // solve the problem and check for success
               if(controller.optimizeMpcProblem())

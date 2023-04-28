@@ -98,7 +98,7 @@ namespace NMPC{
             bool optimizeMpcProblem();
 
             // Get the result from the optimized input
-            bool getOptimalInput(double &u_star_);
+            bool getOptimalInput(double &u_star);
 
             // debug function to test system dynamics
             void test_dynamics();

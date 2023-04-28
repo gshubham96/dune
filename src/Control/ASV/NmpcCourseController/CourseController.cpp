@@ -534,7 +534,7 @@ namespace NMPC{
     }
 
     // 
-    bool CourseController::getOptimalInput(double &u_star_){
+    bool CourseController::getOptimalInput(double &u_star){
 
         // get current time
         double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();

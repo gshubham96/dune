@@ -331,8 +331,7 @@ namespace Control
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
-
-              solve the problem and check for success
+              // solve the problem and check for success
               if(controller.optimizeMpcProblem())
                 t_solved = Clock::getSinceEpoch();
               // else raise an error

@@ -340,13 +340,14 @@ namespace Control
         {
           while (!stopping())
           {
-            // wait till it is time to publish again
-            err("%f, %f, %f seconds", time_to_publish, t_published, time_to_publish - t_published);
-            waitForMessages(time_to_publish - t_published);
-            // debug("I waited for %f seconds", time_to_publish - t_published);
-
             // get current time
             t_now = Clock::getSinceEpoch();
+
+            // err("%f, %f, %f seconds", time_to_publish, t_published, time_to_publish - t_published);
+            // wait till it is time to publish again
+            waitForMessages(t_published + time_to_publish - t_now);
+            debug("I waited for %f seconds", time_to_publish - t_published);
+
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

@@ -361,7 +361,7 @@ namespace Control
             state_d["u"] = 0.9821;
             state_d["v"] = 0.19964;
             state_d["r"] = 0.031876;
-            nmpc.updateMpcState(state_d);
+            controller.updateMpcState(state_d);
 
             if(!controller.optimizeMpcProblem()){
               controller.getErrorString(CONTROLLER_STATUS);

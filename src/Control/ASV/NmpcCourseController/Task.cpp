@@ -248,6 +248,7 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
+          debug("updated state");
         }
 
         // Updated desired course
@@ -258,6 +259,8 @@ namespace Control
 
           m_reference_ = msg->value;
           controller.updateMpcReference(m_reference_);
+          debug("updated heading");
+
         }
 
         // fill in m_theta_ for wind params
@@ -267,18 +270,36 @@ namespace Control
           m_params_["Vw"] = msg->speed;
           m_params_["beta_w"] = msg->dir;
           controller.updateMpcParams(m_params_);
+          debug("updated param: wind");
 
         }
 
-        // #DOUBT I am not sure if this is the right message
-        // fill in m_theta_ for current params
-        // void consume(const IMC::SingleCurrentCell* msg){
+        void
+        consume(const IMC::SingleCurrentCell* msg)
+        {
+          // Find valid measurement closest to surface.
+          std::stringstream stream_vel(msg->vel), stream_dir(msg->dir);
+          std::vector<double> vels,dirs;
 
-        //     m_params_["Vc"] = msg->vel;
-        //     m_params_["beta_c"] = msg->dir;
-        //     controller.updateMpcParams(m_params_);
+          while(stream_vel.good())
+          {
+            std::string substr;
+            getline(stream_vel, substr, ';');
+            vels.push_back(atof(substr.c_str()));
+          }
+          while(stream_dir.good())
+          {
+            std::string substr;
+            getline(stream_dir, substr, ';');
+            dirs.push_back(atof(substr.c_str()));
+          }
 
-        // }
+          m_params_["Vc"] = vels[0];
+          m_params_["beta_c"] = dirs[0];
+          controller.updateMpcParams(m_params_);
+          debug("updated param: current");
+
+        }
 
         //! fill in m_theta_ for wave foils params
         void consume(const IMC::EstimatedFreq* msg){
@@ -288,6 +309,9 @@ namespace Control
           // #DOUBT where can i get the three wave parameters?
           // m_theta_ = [Hs, Tp, gamma_w]
           m_theta_[0] = msg->value;          
+
+          computeSurgeCoefficients();
+          debug("updated param: wave");
 
         }
 
@@ -306,7 +330,6 @@ namespace Control
           m_params_["k_1"] = k1;
           m_params_["k_2"] = k2;
           controller.updateMpcParams(m_params_);
-
         }  
 
         //! publisher function

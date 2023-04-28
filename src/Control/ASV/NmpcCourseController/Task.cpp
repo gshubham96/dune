@@ -237,7 +237,6 @@ namespace Control
         void
         consume(const IMC::EstimatedState* msg)
         {
-          err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->v, msg->r);
           if (msg->getSource() != getSystemId())
             return;
           err("m_state_ one");
@@ -258,6 +257,7 @@ namespace Control
           err("m_state_ three");
           controller.updateMpcState(m_state_);
           err("m_state_ four");
+          err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->v, msg->r);
         }
 
         // Updated desired course
@@ -370,6 +370,8 @@ namespace Control
               err("Controller says : %s", CONTROLLER_STATUS.c_str());
               err("SOLVER FAILED!!, did you update the state?");
             }
+            m_u_opt_ = controller.getOptimalInput();
+            err("optimal output is: %f", m_u_opt_);
 
 
             continue;

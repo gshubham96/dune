@@ -239,7 +239,7 @@ namespace Control
         {
           if (msg->getSource() != getSystemId())
             return;
-          err("m_state_ one");
+          // err("m_state_ one");
 
           // #DOUBT what does this do?
           if (!isActive())
@@ -340,8 +340,9 @@ namespace Control
           while (!stopping())
           {
             // wait till it is time to publish again
+            err("%f, %f, %f seconds", time_to_publish, t_published, time_to_publish - t_published);
             waitForMessages(time_to_publish - t_published);
-            debug("I waited for %f seconds", time_to_publish - t_published);
+            // debug("I waited for %f seconds", time_to_publish - t_published);
 
             // get current time
             t_now = Clock::getSinceEpoch();
@@ -352,26 +353,26 @@ namespace Control
               debug("I am solving after %f seconds", t_now - t_solved);
 
               // solve the problem and check for success
-              if(controller.optimizeMpcProblem())
-                t_solved = Clock::getSinceEpoch();
-              // else raise an error
-              else{
-                controller.getErrorString(CONTROLLER_STATUS);
-                err("Controller says : %s", CONTROLLER_STATUS.c_str());
-              }
+              // if(controller.optimizeMpcProblem())
+              //   t_solved = Clock::getSinceEpoch();
+              // // else raise an error
+              // else{
+              //   controller.getErrorString(CONTROLLER_STATUS);
+              //   err("Controller says : %s", CONTROLLER_STATUS.c_str());
+              // }
             }
   
             // publish the latest available solution
             debug("I am publishing!");
-            if(controller.getOptimalInput(m_u_opt_)){
-              // send input to topic
-              dispatchControl(m_u_opt_);
-              t_published = Clock::getSinceEpoch();
-            }
-            else{
-              controller.getErrorString(CONTROLLER_STATUS);
-              err("Controller says : %s", CONTROLLER_STATUS.c_str());
-            }
+            // if(controller.getOptimalInput(m_u_opt_)){
+            //   // send input to topic
+            //   dispatchControl(m_u_opt_);
+            //   t_published = Clock::getSinceEpoch();
+            // }
+            // else{
+            //   controller.getErrorString(CONTROLLER_STATUS);
+            //   err("Controller says : %s", CONTROLLER_STATUS.c_str());
+            // }
 
           }
         }

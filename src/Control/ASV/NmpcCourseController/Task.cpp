@@ -131,6 +131,7 @@ namespace Control
           // Update clock
           t_published = Clock::getSinceEpoch();
           t_solved = t_published;
+          err("setting clock time %f", t_published);
 
         }
 

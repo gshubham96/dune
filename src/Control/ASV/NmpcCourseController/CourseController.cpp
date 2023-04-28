@@ -534,7 +534,7 @@ namespace NMPC{
     }
 
     // 
-    double CourseController::getOptimalInput(){
+    bool CourseController::getOptimalInput(double &u_star_){
 
         // get current time
         double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -543,14 +543,12 @@ namespace NMPC{
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
             ERROR_STRING = "time since last NLP run exceeds threshold";
-            return 1000;
+            return false;
         }
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);
-        double u_star = input_traj_[t_ind];
-
-        return u_star;
+        u_star = input_traj_[t_ind];
     }
 
     // 
@@ -694,7 +692,7 @@ namespace NMPC{
     bool CourseController::areParamsSane(const std::map<std::string, double> &mapped_dict){
         // check for the correct number of configuration paramters
         if(mapped_dict.size() != np-nx-1){
-            std::cerr << "Does it work?" << mapped_dict << std::endl;
+            // std::cerr << "Does it work?" << mapped_dict << std::endl;
             ERROR_STRING = "PARAMETER NOT OF RIGHT LENGTH!";
             return false;
         }

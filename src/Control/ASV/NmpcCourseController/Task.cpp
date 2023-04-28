@@ -67,8 +67,8 @@ namespace Control
         NMPC::CourseController controller;
 
         // DUNE Vars
-        double t_now, t_last, t_last_solved;
-        double solver_rate, output_rate;
+        double t_now, t_published, t_solved;
+        double time_to_solve, time_to_publish;
         std::string CONTROLLER_STATUS;
 
         //! Constructor.
@@ -158,9 +158,9 @@ namespace Control
 
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))
-            solver_rate = m_args.Hz_solver;
+            time_to_solve = 1/m_args.Hz_solver;
           if(paramChanged(m_args.Hz_output))
-            output_rate = m_args.Hz_output;            
+            time_to_publish = 1/m_args.Hz_output;            
           
         }
 
@@ -327,14 +327,10 @@ namespace Control
 
         //! publisher function
         void dispatchControl(double u = 1000){
-          if(u == 1000)
-            cri("NLP SOLVER HASN'T RUN FOR A WHILE, SOMETHING IS WRONG");
-          else{
-            // IMC Vars
-            IMC::SetServoPosition msg;
-            msg.value = u;
-            // dispatch(msg);
-          }
+          // IMC Vars
+          IMC::SetServoPosition msg;
+          msg.value = u;
+          // dispatch(msg);
         } 
 
         //! Main loop.
@@ -343,42 +339,35 @@ namespace Control
         {
           while (!stopping())
           {
+            // wait till it is time to publish again
+            waitForMessages(time_to_publish - t_published);
 
+            // get current time
             t_now = Clock::getSinceEpoch();
 
-            // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?
-            // Check if time elapsed is greater than sovler rate
-            if((t_now - t_last) < 1/output_rate){
-              waitForMessages(0.1);
-              continue;
-            }
-            else
-              debug("publishing: %f with rate %f", (t_now - t_last), 1/output_rate);
-
-            // Check if time elapsed is greater than solver rate
-            if((t_now - t_last_solved) > 1/solver_rate){
-
-              // optimize problem and check for success
-              err("solving!");
-              if(!controller.optimizeMpcProblem()){
+            // if duration of last solved is greater than threshold
+            if((t_now - t_solved) > time_to_solve){
+              // solve the problem and check for success
+              if(controller.optimizeMpcProblem())
+                t_solved = Clock::getSinceEpoch();
+              // else raise an error
+              else{
                 controller.getErrorString(CONTROLLER_STATUS);
                 err("Controller says : %s", CONTROLLER_STATUS.c_str());
-                err("SOLVER FAILED!!, did you update the state?");
               }
-              else
-                t_last_solved = Clock::getSinceEpoch();
-
             }
-            else
-              debug("solving: %f with rate %f", (t_now - t_last_solved), 1/solver_rate);
   
-            // if not enough time has elapsed, just update using the existing solution
+            // publish the latest available solution
             debug("publishing!");
-            m_u_opt_ = controller.getOptimalInput();
-            t_last = t_now;
-
-            // send input to topic
-            dispatchControl(m_u_opt_);
+            if(controller.getOptimalInput(m_u_opt_)){
+              // send input to topic
+              dispatchControl(m_u_opt_);
+              t_published = Clock::getSinceEpoch();
+            }
+            else{
+              controller.getErrorString(CONTROLLER_STATUS);
+              err("Controller says : %s", CONTROLLER_STATUS.c_str());
+            }
 
           }
         }

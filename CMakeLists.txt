@@ -41,7 +41,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(cmake/Toolchain.cmake)
 
-set(CASADI 1)
+# set(CASADI 1)
 
 ##########################################################################
 #                         Project information                            #

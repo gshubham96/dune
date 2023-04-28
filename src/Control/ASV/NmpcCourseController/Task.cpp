@@ -255,8 +255,6 @@ namespace Control
         void
         consume(const IMC::DesiredHeading* msg)
         {
-          err("reference %f", m_reference_);
-
           m_reference_ = msg->value;
           controller.updateMpcReference(m_reference_);
           debug("updated heading");

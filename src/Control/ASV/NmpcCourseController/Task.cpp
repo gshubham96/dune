@@ -241,17 +241,13 @@ namespace Control
           if (msg->getSource() != getSystemId())
             return;
 
-          err("m_state_two");
           // update state
           m_state_["psi"] = msg->psi;
           m_state_["u"] = msg->u;
           m_state_["v"] = msg->v;
           m_state_["r"] = msg->r;
 
-          err("m_state_ three");
           controller.updateMpcState(m_state_);
-          err("m_state_ four");
-          err("m_state_ %f, %f, %f, %f", msg->psi, msg->u, msg->v, msg->r);
         }
 
         // Updated desired course

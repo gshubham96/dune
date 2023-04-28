@@ -344,39 +344,6 @@ namespace Control
           while (!stopping())
           {
 
-            // DEBUGGING
-            waitForMessages(1.0);
-
-            std::map<std::string, double> dummy;
-            dummy["Vc"] = 0.35;
-            dummy["beta_c"] = 1.57;
-            dummy["Vw"] = 5;
-            dummy["beta_w"] = 1.57;
-            dummy["k_1"] = 0.9;
-            dummy["k_2"] = 0.6;
-            dummy["Q"] = 4.5;
-            dummy["R"] = 3.5;
-            controller.updateMpcParams(dummy);
-
-            std::map<std::string, double> state_d;
-            state_d["psi"] = 0.091855;
-            state_d["u"] = 0.9821;
-            state_d["v"] = 0.19964;
-            state_d["r"] = 0.031876;
-            controller.updateMpcState(state_d);
-
-            if(!controller.optimizeMpcProblem()){
-              controller.getErrorString(CONTROLLER_STATUS);
-              err("Controller says : %s", CONTROLLER_STATUS.c_str());
-              err("SOLVER FAILED!!, did you update the state?");
-            }
-            m_u_opt_ = controller.getOptimalInput();
-            err("optimal output is: %f", m_u_opt_);
-
-
-            continue;
-
-
             t_now = Clock::getSinceEpoch();
 
             // #DOUBT should I remove this? maybe output rate can be helpful here? what does this do?

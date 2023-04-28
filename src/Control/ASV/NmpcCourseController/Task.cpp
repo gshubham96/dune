@@ -240,15 +240,8 @@ namespace Control
         {
           if (msg->getSource() != getSystemId())
             return;
-          // err("m_state_ one");
 
-          // #DOUBT what does this do?
-          if (!isActive())
-          {
-            return;
-          }
-
-          err("m_state_ two");
+          err("m_state_two");
           // update state
           m_state_["psi"] = msg->psi;
           m_state_["u"] = msg->u;
@@ -266,8 +259,6 @@ namespace Control
         consume(const IMC::DesiredHeading* msg)
         {
           err("reference %f", m_reference_);
-          if (!isActive())
-            return;
 
           m_reference_ = msg->value;
           controller.updateMpcReference(m_reference_);
@@ -276,8 +267,6 @@ namespace Control
         // fill in m_theta_ for wind params
         void consume(const IMC::AbsoluteWind* msg){
           err("wind %f and %f", m_params_["Vw"], m_params_["beta_w"]);
-          if (!isActive())
-            return;
 
           m_params_["Vw"] = msg->speed;
           m_params_["beta_w"] = msg->dir;
@@ -287,9 +276,7 @@ namespace Control
 
         // #DOUBT I am not sure if this is the right message
         // fill in m_theta_ for current params
-        // void consume(const IMC::CurrentProfile* msg){
-        //   if (!isActive())
-        //     return;
+        // void consume(const IMC::SingleCurrentCell* msg){
 
         //     m_params_["Vc"] = msg->vel;
         //     m_params_["beta_c"] = msg->dir;
@@ -356,7 +343,7 @@ namespace Control
 
               // solve the problem and check for success
               // if(controller.optimizeMpcProblem())
-              //   t_solved = Clock::getSinceEpoch();
+              t_solved = Clock::getSinceEpoch();
               // // else raise an error
               // else{
               //   controller.getErrorString(CONTROLLER_STATUS);
@@ -369,7 +356,7 @@ namespace Control
             // if(controller.getOptimalInput(m_u_opt_)){
             //   // send input to topic
             //   dispatchControl(m_u_opt_);
-            //   t_published = Clock::getSinceEpoch();
+            t_published = Clock::getSinceEpoch();
             // }
             // else{
             //   controller.getErrorString(CONTROLLER_STATUS);

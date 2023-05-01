@@ -365,10 +365,10 @@ namespace Control
             }
   
             // publish the latest available solution
+            t_published = Clock::getSinceEpoch();
             if(controller.getOptimalInput(m_u_opt_)){
               // send input to topic
               dispatchControl(m_u_opt_);
-              t_published = Clock::getSinceEpoch();
             }
             else{
               controller.getErrorString(CONTROLLER_STATUS);

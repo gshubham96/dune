@@ -345,18 +345,12 @@ namespace Control
           while (!stopping())
           {
 
-            cri("Optimizing Problem: %d", controller.optimizeMpcProblem());
-            controller.getErrorString(CONTROLLER_STATUS);
-            cri("ERROR STRING: %s", CONTROLLER_STATUS.c_str());
-            cri("Getting Output: %d", controller.getOptimalInput(m_u_opt_));
-            waitForMessages(10.0);
-            continue;
-
             // get current time
             t_now = Clock::getSinceEpoch();
 
             // wait till it is time to publish again
-            waitForMessages(t_published + time_to_publish - t_now);
+            Time::Delay::wait(t_published + time_to_publish - t_now);
+            waitForMessages(1.0);
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

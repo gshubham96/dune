@@ -124,15 +124,6 @@ namespace Control
             .defaultValue("5")
             .description("Specify output frequency in Hz");
 
-          // set runtime params
-          m_params_["Hs"] = m_args.Hs;
-          m_params_["omega_p"] = m_args.omega_p;
-          m_params_["gamma"] = m_args.gamma;
-          m_params_["Q"] = m_args.Q;
-          m_params_["R"] = m_args.R;
-          if(!controller.updateMpcParams(m_params_))
-            err("Runtime Parameters NOT Set!");
-
           // set DUNE params
           time_to_publish = 1/m_args.Hz_output;            
           time_to_solve = 1/m_args.Hz_solver;

@@ -45,7 +45,6 @@ namespace NMPC{
         // ###----------------SETUP CONTROL DYNAMICS----###
         // ################################################
 
-        std::cerr << "#### - 0!!\n" ;
         // named symbolica vars
         casadi::SX psi = casadi::SX::sym("psi", 1),
                 u = casadi::SX::sym("u", 1),
@@ -86,7 +85,6 @@ namespace NMPC{
             nu_r = vertcat(u_r, v_r, r),
             U_r2 = pow(u_r, 2) + pow(v_r, 2);
 
-        std::cerr << "#### - 1!!\n" ;
         // ################################################
         // ###----------------DYNAMIC EQUATIONS---------###
         // ################################################
@@ -162,7 +160,6 @@ namespace NMPC{
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
-        std::cerr << "#### - 2!!\n" ;
         // ################################################
         // ###----------------SETUP LOOP----------------###
         // ################################################
@@ -170,24 +167,17 @@ namespace NMPC{
         // trajectory / motion planning
         casadi::SX chi_t_dot, chi_t = chi_d;
 
-        std::cerr << "#### - 2.05!! " << nx << " --- " << N << "\n" ;
         // optimization variables
         casadi::SX
-            X = casadi::SX::sym("X", nx, N+1);
-        std::cerr << "#### - 2.06!!\n" ;
-        casadi::SX
-            U = casadi::SX::sym("U", N);
-        std::cerr << "#### - 2.07!!\n" ;
-        casadi::SX
+            X = casadi::SX::sym("X", nx, N+1),
+            U = casadi::SX::sym("U", N),
             optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
 
-        std::cerr << "#### - 2.1!!\n" ;
         // objective function, equlity constraints
         casadi::SX 
             obj = 0,
             g = casadi::SX::sym("g", nx*(N+1));
 
-        std::cerr << "#### - 2.2!!\n" ;
         // casadi loop helper vars
         casadi::SX sym_du, sym_dx = casadi::SX::sym("sym_dx", nx);
 
@@ -196,12 +186,10 @@ namespace NMPC{
             sym_dx(j) = X(j,0) - sym_p(j);
         sym_dx(0) = ssa(sym_dx(0));
 
-        std::cerr << "#### - 2.3!!\n" ;
         // fill in the constraint vector
         for(int j = 0; j < nx; j++)
             g(j) = sym_dx(j);
 
-        std::cerr << "#### - 3!!\n" ;
         // optimization loop
         for(int i = 0; i < N; i++){
 
@@ -302,7 +290,6 @@ namespace NMPC{
         for(int j = 0; j < nx; j++)
             optims(nx*N + j) = X(j,N);
 
-        std::cerr << "#### - 3!!\n" ;
         // ################################################
         // ###----------------SETUP NLP PROBLEM---------###
         // ################################################
@@ -342,9 +329,6 @@ namespace NMPC{
         args_["x0"] = generateRandomVector(nx*(N+1)+nu*N);
         args_["lam_x0"] = generateRandomVector(nx*(N+1)+nu*N);
         args_["lam_g0"] = generateRandomVector(nx*(N+1));
-
-
-        std::cerr << "########################I AM HERE!\n" ;
 
         return true;
     }
@@ -483,20 +467,16 @@ namespace NMPC{
         for (auto it = config.begin(); it != config.end(); it++)            
             config_[it->first] = it->second;
 
-        std::cerr << "#### - LAUNCHING CONFIG!!\n" ;
-
         if(!areConfigsSane(config_)){
             ERROR_STRING = "CONFIGS ARE NOT SANE!";
             return false;
         }
-        std::cerr << "#### - CONFIGs ARE SANE!!\n" << config_ <<"\n" ;
 
         // relaunch the configuration function
         if(!defineMpcProblem()){
             std::cerr << "Configuration FAILED!\n";
             return false;
         }
-        std::cerr << "#### - CONFIGURED!!\n" ;
 
         return true;
     }

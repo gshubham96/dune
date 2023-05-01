@@ -65,13 +65,13 @@ namespace NMPC{
             beta_w  = sym_p(nx+4),
             Hs      = sym_p(nx+5),
             omega_p = sym_p(nx+6),
-            gamma   = sym_p(nx+7),
+            gamma_p = sym_p(nx+7),
             Q       = sym_p(nx+8),
             R       = sym_p(nx+9);
 
         // surge coefficients
         casadi::SX
-            k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],
+            k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma_p) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],
             k_2 = speed_model[3]*Vw;
 
         // detived states

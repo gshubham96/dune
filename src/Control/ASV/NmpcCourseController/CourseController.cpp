@@ -465,20 +465,17 @@ namespace NMPC{
         // Update Mpc Configuration parameters
         for (auto it = config.begin(); it != config.end(); it++)            
             config_[it->first] = it->second;
-        std::cerr << "UPDATING CONFIG VARS: " << config_ << "\n";
 
         if(!areConfigsSane(config_)){
             ERROR_STRING = "CONFIGS ARE NOT SANE!";
             return false;
         }
-        std::cerr << "CONFIG ARE SANE: << \n";
 
         // relaunch the configuration function
         if(!defineMpcProblem()){
             std::cerr << "Configuration FAILED!\n";
             return false;
         }
-        std::cerr << "PROBLEM DEFINED: \n";
 
         return true;
     }

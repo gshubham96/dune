@@ -121,7 +121,7 @@ namespace NMPC{
             void getErrorString(std::string &err);
 
     // allow user to skip problem configuration
-    CourseController(bool flag=false);
+    CourseController(bool flag);
 
     // Destructor
     ~CourseController();

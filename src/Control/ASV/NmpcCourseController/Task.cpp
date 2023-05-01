@@ -211,7 +211,7 @@ namespace Control
           if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");
           else
-            debug("controller initialized!")
+            debug("controller initialized!");
           t_now = Clock::getSinceEpoch();
         }
 

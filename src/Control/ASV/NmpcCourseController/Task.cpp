@@ -130,6 +130,7 @@ namespace Control
           m_config_["Tp"] = m_args.Tp;
           m_config_["Ts"] = m_args.Ts;
 
+          std::cout << "configs are: " << m_config_ << "\n";
           if(!controller.updateMpcConfig(m_config_))
             err("Configuration Parameters NOT Set!");
 

@@ -469,11 +469,14 @@ namespace NMPC{
         for (auto it = config.begin(); it != config.end(); it++)            
             config_[it->first] = it->second;
 
+        std::cerr << "#### - LAUNCHING CONFIG!!\n" ;
         // relaunch the configuration function
         if(!defineMpcProblem()){
             std::cerr << "Configuration FAILED!\n";
             return false;
         }
+        std::cerr << "#### - CONFIGURED!!\n" ;
+
         return true;
     }
 
@@ -730,14 +733,12 @@ namespace NMPC{
         // set file count flag
         filecount = -1;
 
-        std::cerr << "#### - LOADING DEFAULTS!!\n" ;
         // loading default system specs from a file
         if(!loadDefaults()){
             ERROR_STRING = "COULD NOT LOAD DEFAULTS" ;
             return;
         }
 
-        std::cerr << "#### - INITIALIZING!!\n" ;
         // initialize only if flag is true
         if(flag){
             // launch the configuration function
@@ -747,7 +748,6 @@ namespace NMPC{
                 ERROR_STRING = "CONFIGURATION FAILED";
         }
 
-        std::cerr << "#### - FILE MANAGEMENT!!\n" ;
         // initialize logging
         saveTrajectoryToFile();
     }

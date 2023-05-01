@@ -175,11 +175,13 @@ namespace NMPC{
             U = casadi::SX::sym("U", N),
             optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
 
+        std::cerr << "#### - 2.1!!\n" ;
         // objective function, equlity constraints
         casadi::SX 
             obj = 0,
             g = casadi::SX::sym("g", nx*(N+1));
 
+        std::cerr << "#### - 2.2!!\n" ;
         // casadi loop helper vars
         casadi::SX sym_du, sym_dx = casadi::SX::sym("sym_dx", nx);
 
@@ -188,6 +190,7 @@ namespace NMPC{
             sym_dx(j) = X(j,0) - sym_p(j);
         sym_dx(0) = ssa(sym_dx(0));
 
+        std::cerr << "#### - 2.3!!\n" ;
         // fill in the constraint vector
         for(int j = 0; j < nx; j++)
             g(j) = sym_dx(j);

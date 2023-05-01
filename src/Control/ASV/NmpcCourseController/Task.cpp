@@ -124,16 +124,6 @@ namespace Control
             .defaultValue("5")
             .description("Specify output frequency in Hz");
 
-          // set configuration parameters
-          m_config_["model_type"] = m_args.model_type;
-          m_config_["cost_type"] = m_args.cost_type;
-          m_config_["Tp"] = m_args.Tp;
-          m_config_["Ts"] = m_args.Ts;
-
-          std::cout << "configs are: " << m_config_ << "\n";
-          if(!controller.updateMpcConfig(m_config_))
-            err("Configuration Parameters NOT Set!");
-
           // set runtime params
           m_params_["Hs"] = m_args.Hs;
           m_params_["omega_p"] = m_args.omega_p;

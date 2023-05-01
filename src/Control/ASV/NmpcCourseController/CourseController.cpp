@@ -405,7 +405,7 @@ namespace NMPC{
         param_vector[8] = ssa(params_["beta_w"]);
         param_vector[9] = params_["Hs"];
         param_vector[10] = params_["omega_p"];
-        param_vector[11] = params_["gamma"];
+        param_vector[11] = params_["gamma_p"];
         // set costs
         param_vector[12] = params_["Q"];
         param_vector[13] = params_["R"];

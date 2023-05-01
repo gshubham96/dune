@@ -210,6 +210,8 @@ namespace Control
           // defined the probelm
           if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");
+          else
+            debug("controller initialized!")
           t_now = Clock::getSinceEpoch();
         }
 
@@ -342,15 +344,11 @@ namespace Control
           controller.updateMpcParams(params_d);
           while (!stopping())
           {
-            cri("%f and %f - ", time_to_solve, time_to_publish);
-            cri("%f and %f - ", t_published, t_now);
             // get current time
             t_now = Clock::getSinceEpoch();
 
             // wait till it is time to publish again
             waitForMessages(t_published + time_to_publish - t_now);
-            cri("waitForMessages: %f", t_published + time_to_publish - t_now);
-            waitForMessages(0.5);
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

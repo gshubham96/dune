@@ -349,6 +349,7 @@ namespace Control
 
             // wait till it is time to publish again
             waitForMessages(t_published + time_to_publish - t_now);
+            cri("waitForMessages: %f", t_published + time_to_publish - t_now);
             waitForMessages(0.5);
 
             // if duration of last solved is greater than threshold

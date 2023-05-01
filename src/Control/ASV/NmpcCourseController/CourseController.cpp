@@ -338,24 +338,12 @@ namespace NMPC{
     // Function to load defaults for config, params and system dynamics
     bool CourseController::loadDefaults(){
 
-        // set state;
-        state_["psi"] = 0;  // [rad]
-        state_["u"] = 0.9;  // [m/s]
-        state_["v"] = 0;    // [m/s]
-        state_["r"] = 0;    // [rad/s]
-
         // hard coded speed model
         speed_model = {0.116392998053662, 0.214487083945715, 0.0880678632611925, -0.00635496887217675, 0.0937464223577265, 0.238364678400396 };        
 
         // get system dynamics
         std::string file_name = "system.csv";
         if(!loadDefaultsFromFile(file_name, system_)){
-            std::cerr << "Data loading from file " << file_name << " FAILED!" << std::endl;             
-            return false;
-        }
-
-        file_name = "config.csv";
-        if(!loadDefaultsFromFile(file_name, config_)){
             std::cerr << "Data loading from file " << file_name << " FAILED!" << std::endl;             
             return false;
         }
@@ -725,57 +713,36 @@ namespace NMPC{
 
     // checks if the problem is configured properly. If not, configure it
     bool CourseController::isProblemConfigured(){
-        ;
-        return true;
+        // returns true if initalized is greater than -1.
+        if (initialized > -1)
+            return true;
+        return false;
     }
 
     void CourseController::getErrorString(std::string &err){
         err = ERROR_STRING;
     }
 
-    // Constructor
-    CourseController::CourseController(){
-        // set init flag
-        initialized = -1;
-        // set file count flag
-        filecount = -1;
-
-        // loading defaults from a file
-        if(!loadDefaults()){
-            std::cerr << "could not load default options, exiting since user did not specify initilization variables\n";
-            return;
-        }
-
-        // configuring the problem with default vars
-        if(!defineMpcProblem())
-            std::cerr << "Problem configuration FAILED" << std::endl;
-        else
-            initialized++;
-
-        saveTrajectoryToFile();
-    }
-
     // allow user to skip configuration
-    CourseController::CourseController(bool flag){
+    CourseController::CourseController(bool flag=false){
         // set init flag
         initialized = -1;
         // set file count flag
         filecount = -1;
-        // loading defaults from a file
+
+        // loading default system specs from a file
         if(!loadDefaults()){
-            if(flag)
-                std::cerr << "could not load default options, exiting since user asked for defining the problem without all params present";
-            else
-                std::clog << "could not load default options, make sure to update ALL MPC configs parameters before configuration";
+            ERROR_STRING = "COULD NOT LOAD DEFAULTS" ;
+            return;
         }
 
         // initialize only if flag is true
         if(flag){
-            // relaunch the configuration function
+            // launch the configuration function
             if(defineMpcProblem())
                 initialized++;
             else
-                std::cerr << "configuration failed!\n";
+                ERROR_STRING = "CONFIGURATION FAILED";
         }
 
         // initialize logging

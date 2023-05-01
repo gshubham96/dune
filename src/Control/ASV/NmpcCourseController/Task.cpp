@@ -237,6 +237,7 @@ namespace Control
         reset(void)
         {
           controller.reset();
+            cri("RESETING!");
           controller.updateMpcConfig(m_config_);
           if(!controller.isProblemConfigured()){
             cri("Could not define MPC Problem, EXITING!");

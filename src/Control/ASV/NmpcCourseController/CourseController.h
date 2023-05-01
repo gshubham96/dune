@@ -120,11 +120,8 @@ namespace NMPC{
             // returns error or updates from controller
             void getErrorString(std::string &err);
 
-    // Constructor
-    CourseController();
-
-    // allow user to skip configuration
-    CourseController(bool flag);
+    // allow user to skip problem configuration
+    CourseController(bool flag=false);
 
     // Destructor
     ~CourseController();

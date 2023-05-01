@@ -341,12 +341,13 @@ namespace Control
           controller.updateMpcParams(params_d);
           while (!stopping())
           {
-            cri("%f and %f - ", time_to_solve, time_to_publish);
+            cri("%f, %f and %f - ", t_published, time_to_solve, time_to_publish);
             // get current time
             t_now = Clock::getSinceEpoch();
 
             // wait till it is time to publish again
             waitForMessages(t_published + time_to_publish - t_now);
+            waitForMessages(0.5);
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

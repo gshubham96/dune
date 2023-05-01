@@ -143,7 +143,6 @@ namespace Control
           // Update clock
           t_published = Clock::getSinceEpoch();
           t_solved = t_published;
-          err("setting clock time %f", t_published);
 
         }
 
@@ -176,9 +175,9 @@ namespace Control
           if(!controller.updateMpcConfig(m_new_configs))
             war("Configuration Parameters NOT Updated!");
 
-          // update MPC parameters
-          if(!controller.updateMpcParams(m_new_params))
-            war("Runtime Parameters NOT Updated!");
+          // skipping update MPC parameters
+          // if(!controller.updateMpcParams(m_new_params))
+          //   war("Runtime Parameters NOT Updated!");
 
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))

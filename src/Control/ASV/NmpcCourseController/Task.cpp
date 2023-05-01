@@ -211,7 +211,7 @@ namespace Control
         void
         onResourceInitialization(void)
         {
-          if(!controller.isProblemConfigured()){
+          if(!controller.isProblemConfigured())
             cri("Could not define MPC Problem, EXITING!");
         }
 

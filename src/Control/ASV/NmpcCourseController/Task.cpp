@@ -328,6 +328,7 @@ namespace Control
           // IMC Vars
           IMC::SetServoPosition msg;
           msg.value = u;
+          cri("dispatching output: %f", u);
           // dispatch(msg);
         } 
 

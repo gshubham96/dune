@@ -34,6 +34,8 @@ namespace NMPC{
             double t_update, Tp, Ts;
             // course reference for the controller
             double reference_;
+            // surge speed model
+            std::vector<double> speed_model;
             // read system parameters from "mat" file and load here
             std::map<std::string, double> system_;
             // config parameters, runtime paramters and state for MPC

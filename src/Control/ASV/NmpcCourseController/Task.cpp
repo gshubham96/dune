@@ -40,6 +40,7 @@ namespace Control
   //!
   //! Controls the course of the vehicle
   //! @author “gshubham96”
+  //  #TODO Speed model is constant and hardcoded. Fix this.
   namespace ASV
   {
     namespace NmpcCourseController
@@ -85,6 +86,14 @@ namespace Control
             .defaultValue("1")
             .description("Choose between: psi_d(2), dotv(1) and chi_d(0)");
 
+          param("Prediction Horizon", m_args.Tp)
+            .defaultValue("50")
+            .description("Updates MPC prediction horizon(Tp)");
+
+          param("Discretization Time Period", m_args.Ts)
+            .defaultValue("0.5")
+            .description("Updates MPC discretization time period(Ts)");
+
           param("State Cost", m_args.Q)
             .defaultValue("5")
             .description("Updates state cost in objective function");
@@ -93,13 +102,17 @@ namespace Control
             .defaultValue("3.5")
             .description("Updates input cost in objective function");
 
-          param("Prediction Horizon", m_args.Tp)
-            .defaultValue("50")
-            .description("Updates MPC prediction horizon(Tp)");
+          param("Wave Height", m_args.Hs)
+            .defaultValue("5")
+            .description("For Surge Model Prediction");
 
-          param("Discretization Time Period", m_args.Ts)
-            .defaultValue("0.5")
-            .description("Updates MPC discretization time period(Ts)");
+          param("Peak Wave Frequency", m_args.omega_p)
+            .defaultValue("0.6283")
+            .description("Specify output frequency in Hz");
+
+          param("Wave Angle of Attack", m_args.gamma)
+            .defaultValue("1.57")
+            .description("Specify output frequency in Hz");
 
           param("Solver Rate", m_args.Hz_solver)
             .defaultValue("2")
@@ -109,24 +122,39 @@ namespace Control
             .defaultValue("5")
             .description("Specify output frequency in Hz");
 
+          // set configuration parameters
+          m_config_["model_type"] = m_args.model_type;
+          m_config_["cost_type"] = m_args.cost_type;
+          m_config_["Tp"] = m_args.Tp;
+          m_config_["Ts"] = m_args.Ts;
+
           if(!controller.updateMpcConfig(m_config_))
             err("Configuration Parameters NOT Set!");
+
+          // set runtime params
+          m_params_["Hs"] = m_args.Hs;
+          m_params_["omega_p"] = m_args.omega_p;
+          m_params_["gamma"] = m_args.gamma;
+          m_params_["Q"] = m_args.Q;
+          m_params_["R"] = m_args.R;
+          if(!controller.updateMpcConfig(m_params_))
+            err("Runtime Parameters NOT Set!");
+
+          // set DUNE params
+          time_to_publish = 1/m_args.Hz_output;            
+          time_to_solve = 1/m_args.Hz_solver;
 
           bind<IMC::Abort>(this);
           bind<IMC::EstimatedState>(this);
           bind<IMC::DesiredHeading>(this);
           bind<IMC::AbsoluteWind>(this);
-          bind<IMC::EstimatedFreq>(this);
-          // #DOUBT Not sure if I need this
-          // bind<IMC::CurrentProfile>(this);
+          // bind<IMC::EstimatedFreq>(this);
+          bind<IMC::SingleCurrentCell>(this);
 
-          // #DOUBT Not sure if I need this
           // Making the task activable
           paramActive(Tasks::Parameter::SCOPE_GLOBAL, Tasks::Parameter::VISIBILITY_USER);
-
           // Initialize entity state.
           setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
-          // setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_IDLE);
 
           // Update clock
           t_published = Clock::getSinceEpoch();
@@ -139,23 +167,34 @@ namespace Control
         void
         onUpdateParameters(void)
         {
+          std::map<std::string, double> m_new_configs, m_new_params;
           // checks if MPC config params are changed
           if(paramChanged(m_args.model_type))
-            m_config_["model_type"] = m_args.model_type;
+            m_new_configs["model_type"] = m_args.model_type;
           if(paramChanged(m_args.cost_type))
-            m_config_["cost_type"] = m_args.cost_type;
+            m_new_configs["cost_type"] = m_args.cost_type;
           if(paramChanged(m_args.Tp))
-            m_config_["Tp"] = m_args.Tp;
+            m_new_configs["Tp"] = m_args.Tp;
           if(paramChanged(m_args.Ts))
-            m_config_["Ts"] = m_args.Ts;
+            m_new_configs["Ts"] = m_args.Ts;
           if(paramChanged(m_args.Q))
-            m_params_["Q"] = m_args.Q;
+            m_new_params["Q"] = m_args.Q;
           if(paramChanged(m_args.R))
-            m_params_["R"] = m_args.R;
+            m_new_params["R"] = m_args.R;
+          if(paramChanged(m_args.R))
+            m_new_params["Hs"] = m_args.Hs;
+          if(paramChanged(m_args.R))
+            m_new_params["omega_p"] = m_args.omega_p;
+          if(paramChanged(m_args.R))
+            m_new_params["gamma"] = m_args.gamma;
 
           // update MPC configuration
-          if(!controller.updateMpcConfig(m_config_))
+          if(!controller.updateMpcConfig(m_new_configs))
             war("Configuration Parameters NOT Updated!");
+
+          // update MPC parameters
+          if(!controller.updateMpcParams(m_new_params))
+            war("Runtime Parameters NOT Updated!");
 
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))
@@ -298,37 +337,6 @@ namespace Control
           debug("updated param: current");
 
         }
-
-        //! fill in m_theta_ for wave foils params
-        void consume(const IMC::EstimatedFreq* msg){
-          if (!isActive())
-            return;
-
-          // #DOUBT where can i get the three wave parameters?
-          // m_theta_ = [Hs, Tp, gamma_w]
-          m_theta_[0] = msg->value;          
-
-          computeSurgeCoefficients();
-          debug("updated param: wave");
-
-        }
-
-        //! helper function to get surge coefficients
-        void computeSurgeCoefficients(){         
-
-          // param_list = Hs, omega_p, gamma, 0, Vc*cos(beta_c), 1 
-          std::vector<double> param_list = {m_theta_[0], m_theta_[1], cos(m_theta_[2]), 0, m_params_["Vc"]*cos(m_params_["beta_c"]), 1};
-          std::vector<double> speed_model = {0.116392998053662, 0.214487083945715, 0.0880678632611925, -0.00635496887217675, 0.0937464223577265, 0.238364678400396 };        
-
-          double k1 =  0, k2 = 0;
-          for(int i = 0; i < 6; i++)
-            k1 += param_list[i]*speed_model[i];
-          k2 = m_params_["Vw"] * speed_model[3];
-
-          m_params_["k_1"] = k1;
-          m_params_["k_2"] = k2;
-          controller.updateMpcParams(m_params_);
-        }  
 
         //! publisher function
         void dispatchControl(double u = 1000){

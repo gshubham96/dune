@@ -23,7 +23,7 @@ namespace NMPC{
         // ################################################
 
         // mpc params
-        nx = 4; nu = 1; np = 13;                                                    // constants as their is no plan to allow multiple models yet
+        nx = 4; nu = 1; np = 14;                                                    // constants as their is no plan to allow multiple models yet
 
         // checks if configs are sane?
         if(!areConfigsSane(config_))
@@ -63,10 +63,16 @@ namespace NMPC{
             beta_c  = sym_p(nx+2),
             Vw      = sym_p(nx+3),
             beta_w  = sym_p(nx+4),
-            k_1     = sym_p(nx+5),
-            k_2     = sym_p(nx+6),
-            Q       = sym_p(nx+7),
-            R       = sym_p(nx+8);
+            Hs      = sym_p(nx+5),
+            omega_p = sym_p(nx+6),
+            gamma   = sym_p(nx+7),
+            Q       = sym_p(nx+8),
+            R       = sym_p(nx+9);
+
+        // surge coefficients
+        casadi::SX
+            k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],
+            k_2 = speed_model[3]*Vw;
 
         // detived states
         casadi::SX 
@@ -334,6 +340,9 @@ namespace NMPC{
         state_["u"] = 0.9;  // [m/s]
         state_["v"] = 0;    // [m/s]
         state_["r"] = 0;    // [rad/s]
+
+        // hard coded speed model
+        speed_model = {0.116392998053662, 0.214487083945715, 0.0880678632611925, -0.00635496887217675, 0.0937464223577265, 0.238364678400396 };        
 
         // get system dynamics
         std::string file_name = "system.csv";

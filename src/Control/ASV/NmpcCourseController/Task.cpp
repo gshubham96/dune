@@ -344,6 +344,12 @@ namespace Control
           controller.updateMpcParams(params_d);
           while (!stopping())
           {
+
+            cri("Optimizing Problem: %d", controller.optimizeMpcProblem());
+            cri("Getting Output: %d", controller.getOptimalInput(m_u_opt_));
+            waitForMessages(10.0);
+
+
             // get current time
             t_now = Clock::getSinceEpoch();
 

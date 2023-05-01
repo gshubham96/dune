@@ -53,7 +53,9 @@ namespace Control
         std::string file_path;
         // config parameters for MPC
         int model_type, cost_type;
-        double Tp, Ts, Q, R;
+        double Tp, Ts;
+        // runtime params for MPC
+        double Hs, omega_p, gamma, Q, R;
         // solver and output frequency
         double Hz_solver, Hz_output;
       };

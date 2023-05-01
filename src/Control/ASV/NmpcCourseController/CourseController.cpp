@@ -724,7 +724,7 @@ namespace NMPC{
     }
 
     // allow user to skip configuration
-    CourseController::CourseController(bool flag=false){
+    CourseController::CourseController(bool flag){
         // set init flag
         initialized = -1;
         // set file count flag

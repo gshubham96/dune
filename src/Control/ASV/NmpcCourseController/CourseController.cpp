@@ -31,6 +31,7 @@ namespace NMPC{
 
         // assign configs
         Tp = config_["Tp"]; Ts = config_["Ts"]; N = Tp/Ts;
+        std::cerr << "Tp = " << Tp << ", Ts = " << Ts <<"\n";
         double model_type = config_["model_type"], cost_type = config_["cost_type"];
 
         // system params

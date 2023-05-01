@@ -171,9 +171,11 @@ namespace NMPC{
 
         std::cerr << "#### - 2.05!!\n" ;
         // optimization variables
-        casadi::SX 
-            X = casadi::SX::sym("X", nx, N+1),
-            U = casadi::SX::sym("U", N),
+        casadi::SX
+            X = casadi::SX::sym("X", nx, N+1);
+        casadi::SX
+            U = casadi::SX::sym("U", N);
+        casadi::SX
             optims = casadi::SX::sym("optims", nx*(N+1) + nu*N);
 
         std::cerr << "#### - 2.1!!\n" ;

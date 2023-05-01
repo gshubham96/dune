@@ -210,6 +210,7 @@ namespace Control
           // defined the probelm
           if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");
+          t_now = Clock::getSinceEpoch();
         }
 
         void

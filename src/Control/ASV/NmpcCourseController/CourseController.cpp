@@ -329,6 +329,9 @@ namespace NMPC{
         args_["lam_x0"] = generateRandomVector(nx*(N+1)+nu*N);
         args_["lam_g0"] = generateRandomVector(nx*(N+1));
 
+
+        std::cerr << "########################I AM HERE!\n" ;
+
         return true;
     }
 
@@ -524,8 +527,6 @@ namespace NMPC{
         arg["lam_x0"] = args_["lam_x0"];
         arg["lam_g0"] = args_["lam_g0"];
 
-
-        std::cerr << "########################I AM HERE!\n" ;
         res = solver(arg);
         t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 

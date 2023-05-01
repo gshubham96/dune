@@ -429,7 +429,7 @@ namespace NMPC{
     bool CourseController::updateMpcParams(const std::map<std::string, double> &param){
         // Controller is ready to run when parameters are set
         switch(initialized){
-            case -1: std::cout << "configure problem first!\n"; return false;
+            case -1: ERROR_STRING = "configure problem first!\n"; return false;
             case  0: initialized++; break;
             default: break;
         }
@@ -446,8 +446,8 @@ namespace NMPC{
 
         // flag to check if state was updated
         switch(initialized){
-            case -1: std::cout << "configure problem first!\n"; return false;
-            case  0: std::cout << "update parameters first!\n"; return false;
+            case -1: ERROR_STRING = "configure problem first!\n"; return false;
+            case  0: ERROR_STRING = "update parameters first!\n"; return false;
             case  1: initialized++; break;
             default: break;
         }
@@ -468,12 +468,6 @@ namespace NMPC{
 
         if(!areConfigsSane(config_)){
             ERROR_STRING = "CONFIGS ARE NOT SANE!";
-            return false;
-        }
-
-        // relaunch the configuration function
-        if(!defineMpcProblem()){
-            std::cerr << "Configuration FAILED!\n";
             return false;
         }
 

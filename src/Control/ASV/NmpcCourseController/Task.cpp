@@ -175,10 +175,6 @@ namespace Control
           if(!controller.updateMpcConfig(m_new_configs))
             war("Configuration Parameters NOT Updated!");
 
-          // skipping update MPC parameters
-          // if(!controller.updateMpcParams(m_new_params))
-          //   war("Runtime Parameters NOT Updated!");
-
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))
             time_to_solve = 1/m_args.Hz_solver;
@@ -189,17 +185,17 @@ namespace Control
 
         // #DOUBT Not sure if I need this
         //! Reserve entity identifiers.
-        // void
-        // onEntityReservation(void)
-        // {
-        // }
+        void
+        onEntityReservation(void)
+        {
+        }
 
         // #DOUBT Not sure if I need this
         //! Resolve entity names.
-        // void
-        // onEntityResolution(void)
-        // {
-        // }
+        void
+        onEntityResolution(void)
+        {
+        }
 
         //! Acquire resources.
         void
@@ -211,7 +207,8 @@ namespace Control
         void
         onResourceInitialization(void)
         {
-          if(!controller.isProblemConfigured())
+          // defined the probelm
+          if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");
         }
 
@@ -221,7 +218,8 @@ namespace Control
           controller.reset();
           controller.updateMpcConfig(m_config_);
           if(!controller.isProblemConfigured()){
-            cri("Could not define MPC Problem, EXITING!");
+            if(!controller.defineMpcProblem())
+              cri("Could not define MPC Problem, EXITING!");
           }
         }
 

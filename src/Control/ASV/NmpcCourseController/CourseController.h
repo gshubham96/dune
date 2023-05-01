@@ -63,9 +63,6 @@ namespace NMPC{
             double ssa(double diff);
             casadi::SX ssa(casadi::SX diff);
 
-            // Function to define and compile the NLP Optimization Problem
-            bool defineMpcProblem(void);
-
             // Function to load defaults for config, params and system dynamics
             bool loadDefaults();
 
@@ -83,6 +80,9 @@ namespace NMPC{
             bool areParamsSane(const std::map<std::string, double> &mapped_dict);
 
         public:
+            // Function to define and compile the NLP Optimization Problem
+            bool defineMpcProblem(void);
+
             // updates parameters such as wind, currents, etc
             // need to do it atlease once
             bool updateMpcParams(const std::map<std::string, double> &param);

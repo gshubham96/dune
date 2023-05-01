@@ -44,6 +44,7 @@ namespace NMPC{
         // ###----------------SETUP CONTROL DYNAMICS----###
         // ################################################
 
+        std::cerr << "#### - 0!!\n" ;
         // named symbolica vars
         casadi::SX psi = casadi::SX::sym("psi", 1),
                 u = casadi::SX::sym("u", 1),
@@ -84,6 +85,7 @@ namespace NMPC{
             nu_r = vertcat(u_r, v_r, r),
             U_r2 = pow(u_r, 2) + pow(v_r, 2);
 
+        std::cerr << "#### - 1!!\n" ;
         // ################################################
         // ###----------------DYNAMIC EQUATIONS---------###
         // ################################################
@@ -159,6 +161,7 @@ namespace NMPC{
         casadi::SX nu_dot = vertcat(yaw_dot, u_dot, v_dot, r_dot);
         x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
 
+        std::cerr << "#### - 2!!\n" ;
         // ################################################
         // ###----------------SETUP LOOP----------------###
         // ################################################
@@ -289,6 +292,7 @@ namespace NMPC{
         for(int j = 0; j < nx; j++)
             optims(nx*N + j) = X(j,N);
 
+        std::cerr << "#### - 3!!\n" ;
         // ################################################
         // ###----------------SETUP NLP PROBLEM---------###
         // ################################################

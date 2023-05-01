@@ -329,6 +329,7 @@ namespace NMPC{
         args_["lam_x0"] = generateRandomVector(nx*(N+1)+nu*N);
         args_["lam_g0"] = generateRandomVector(nx*(N+1));
 
+        initalized=0;
         return true;
     }
 
@@ -736,9 +737,7 @@ namespace NMPC{
         // initialize only if flag is true
         if(flag){
             // launch the configuration function
-            if(defineMpcProblem())
-                initialized++;
-            else
+            if(!defineMpcProblem())
                 ERROR_STRING = "CONFIGURATION FAILED";
         }
 

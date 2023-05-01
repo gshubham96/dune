@@ -484,6 +484,12 @@ namespace NMPC{
             config_[it->first] = it->second;
 
         std::cerr << "#### - LAUNCHING CONFIG!!\n" ;
+
+        if(!areConfigsSane(config_)){
+            ERROR_STRING = "CONFIGS ARE NOT SANE!";
+            return false;
+        }
+
         // relaunch the configuration function
         if(!defineMpcProblem()){
             std::cerr << "Configuration FAILED!\n";

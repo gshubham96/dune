@@ -169,7 +169,7 @@ namespace NMPC{
         // trajectory / motion planning
         casadi::SX chi_t_dot, chi_t = chi_d;
 
-        std::cerr << "#### - 2.05!!\n" << nx << N ;
+        std::cerr << "#### - 2.05!! " << nx << " --- " << N << "\n" ;
         // optimization variables
         casadi::SX
             X = casadi::SX::sym("X", nx, N+1);

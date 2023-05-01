@@ -489,6 +489,7 @@ namespace NMPC{
             ERROR_STRING = "CONFIGS ARE NOT SANE!";
             return false;
         }
+        std::cerr << "#### - CONFIGs ARE SANE!!\n" ;
 
         // relaunch the configuration function
         if(!defineMpcProblem()){

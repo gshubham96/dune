@@ -329,7 +329,7 @@ namespace NMPC{
         args_["lam_x0"] = generateRandomVector(nx*(N+1)+nu*N);
         args_["lam_g0"] = generateRandomVector(nx*(N+1));
 
-        initalized=0;
+        initialized=0;
         return true;
     }
 

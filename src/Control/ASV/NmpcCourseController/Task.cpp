@@ -139,7 +139,7 @@ namespace Control
           m_params_["gamma"] = m_args.gamma;
           m_params_["Q"] = m_args.Q;
           m_params_["R"] = m_args.R;
-          if(!controller.updateMpcConfig(m_params_))
+          if(!controller.updateMpcParams(m_params_))
             err("Runtime Parameters NOT Set!");
 
           // set DUNE params

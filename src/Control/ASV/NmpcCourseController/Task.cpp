@@ -341,7 +341,8 @@ namespace Control
           controller.updateMpcParams(params_d);
           while (!stopping())
           {
-            cri("%f, %f and %f - ", t_published, time_to_solve, time_to_publish);
+            cri("%f and %f - ", time_to_solve, time_to_publish);
+            cri("%f and %f - ", t_published, t_now);
             // get current time
             t_now = Clock::getSinceEpoch();
 

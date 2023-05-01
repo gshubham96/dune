@@ -192,6 +192,7 @@ namespace NMPC{
         for(int j = 0; j < nx; j++)
             g(j) = sym_dx(j);
 
+        std::cerr << "#### - 3!!\n" ;
         // optimization loop
         for(int i = 0; i < N; i++){
 

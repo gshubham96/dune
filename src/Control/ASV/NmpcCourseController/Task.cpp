@@ -347,7 +347,7 @@ namespace Control
 
             cri("Optimizing Problem: %d", controller.optimizeMpcProblem());
             controller.getErrorString(CONTROLLER_STATUS);
-            cri("ERROR STRING: %s", CONTROLLER_STATUS);
+            cri("ERROR STRING: %s", CONTROLLER_STATUS.c_str());
             cri("Getting Output: %d", controller.getOptimalInput(m_u_opt_));
             waitForMessages(10.0);
 

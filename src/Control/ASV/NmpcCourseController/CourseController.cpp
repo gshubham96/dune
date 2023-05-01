@@ -693,16 +693,16 @@ namespace NMPC{
     bool CourseController::areParamsSane(const std::map<std::string, double> &mapped_dict){
         // check for the correct number of configuration paramters
         if(mapped_dict.size() != np-nx-1){
-            std::cerr << "Does it work?" << mapped_dict << std::endl;
             ERROR_STRING = "PARAMETER NOT OF RIGHT LENGTH!";
             return false;
         }
+        std::cerr << "Does it work?" << mapped_dict << std::endl;
         
         // checks for all keys 
         int sum = mapped_dict.count("Vc") + mapped_dict.count("beta_c") + mapped_dict.count("Vw") + mapped_dict.count("beta_w")
-                + mapped_dict.count("k_1") + mapped_dict.count("k_2") + mapped_dict.count("Q") + mapped_dict.count("R");
+                + mapped_dict.count("Hs") + mapped_dict.count("omega_p") + mapped_dict.count("gamma_p") + mapped_dict.count("Q") + mapped_dict.count("R");
         if(sum != np-nx-1){
-            ERROR_STRING = "ALL CONFIG PARAMETERs NOT PRESENT!";
+            ERROR_STRING = "ALL RUNTIME PARAMETERs NOT PRESENT!";
             return false;
         }
         

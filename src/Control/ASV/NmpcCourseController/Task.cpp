@@ -349,8 +349,9 @@ namespace Control
             t_now = Clock::getSinceEpoch();
 
             // wait till it is time to publish again
-            Time::Delay::wait(t_published + time_to_publish - t_now);
-            waitForMessages(1.0);
+            // Time::Delay::wait(t_published + time_to_publish - t_now);
+            // waitForMessages(1.0);
+            waitForMessages(t_published + time_to_publish - t_now);
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

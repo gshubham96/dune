@@ -350,6 +350,7 @@ namespace Control
             cri("ERROR STRING: %s", CONTROLLER_STATUS.c_str());
             cri("Getting Output: %d", controller.getOptimalInput(m_u_opt_));
             waitForMessages(10.0);
+            continue;
 
             // get current time
             t_now = Clock::getSinceEpoch();

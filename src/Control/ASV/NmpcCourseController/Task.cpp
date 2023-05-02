@@ -272,7 +272,7 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
-          inf("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          // inf("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
         // Updated desired course
@@ -355,7 +355,6 @@ namespace Control
             // wait till it is time to publish again
             if ((t_now - t_published) < time_to_publish)
               continue;
-            cri("publishing after: %f", t_published - t_now);
             
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

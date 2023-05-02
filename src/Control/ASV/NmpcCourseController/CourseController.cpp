@@ -692,7 +692,7 @@ namespace NMPC{
     // performs sanity check of config params
     bool CourseController::areParamsSane(const std::map<std::string, double> &mapped_dict){
         // check for the correct number of configuration paramters
-        if(mapped_dict.size() != np-nx-1){
+        if((int)mapped_dict.size() != np-nx-1){
             ERROR_STRING = "PARAMETER NOT OF RIGHT LENGTH!";
             return false;
         }

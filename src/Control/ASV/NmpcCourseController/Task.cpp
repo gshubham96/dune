@@ -343,10 +343,11 @@ namespace Control
           params_d["Q"] = 4.5;        params_d["R"] = 1.5;
           params_d["Hs"] = 5; params_d["omega_p"] = 0.6283; params_d["gamma_p"] = 1.57;
           controller.updateMpcParams(params_d);
-
+          cri("I got here! - 1");
           while (!stopping())
           {
 
+            cri("I got here! - 2");
             // get current time
             t_now = Clock::getSinceEpoch();
 

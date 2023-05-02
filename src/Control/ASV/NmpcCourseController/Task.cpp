@@ -371,7 +371,7 @@ namespace Control
   
             // double t_elapsed = ;
             // publish the latest available solution
-            if(controller.getOptimalInput(m_u_opt_, t_solved-t_now)){
+            if(controller.getOptimalInput(m_u_opt_, t_now-t_solved)){
               // send input to topic
               dispatchControl(m_u_opt_);
             }

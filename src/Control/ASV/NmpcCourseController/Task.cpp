@@ -370,8 +370,7 @@ namespace Control
             }
   
             // publish the latest available solution
-            t_published = Clock::getSinceEpoch();
-            if(controller.getOptimalInput(m_u_opt_)){
+            if(controller.getOptimalInput(m_u_opt_, t_solved-t_now)){
               // send input to topic
               dispatchControl(m_u_opt_);
             }
@@ -379,6 +378,8 @@ namespace Control
               controller.getErrorString(CONTROLLER_STATUS);
               err("Controller says : %s", CONTROLLER_STATUS.c_str());
             }
+            // update publish time
+            t_published = Clock::getSinceEpoch();
 
           }
         }

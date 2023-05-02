@@ -369,7 +369,9 @@ namespace Control
               }
             }
   
-            // double t_elapsed = ;
+            // get current time
+            t_now = Clock::getSinceEpoch();
+
             // publish the latest available solution
             if(controller.getOptimalInput(m_u_opt_, t_now-t_solved)){
               // send input to topic
@@ -381,6 +383,7 @@ namespace Control
             }
             // update publish time
             t_published = Clock::getSinceEpoch();
+            cri("publishing after: %f", t_published - t_now);
 
           }
         }

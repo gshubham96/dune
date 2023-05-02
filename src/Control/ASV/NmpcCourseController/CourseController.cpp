@@ -540,6 +540,7 @@ namespace NMPC{
         }
         std::cerr << "I got here! - 3\n" ;
 
+        std::cerr << "I got here! - 98" << t_elapsed << "\n";
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
             ERROR_STRING = "time since last NLP run exceeds threshold";

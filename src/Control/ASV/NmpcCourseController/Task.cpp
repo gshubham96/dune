@@ -370,6 +370,7 @@ namespace Control
               }
             }
   
+            cri("I got here! - 5");
             // publish the latest available solution
             if(controller.getOptimalInput(m_u_opt_, t_solved-t_now)){
               // send input to topic

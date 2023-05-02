@@ -358,9 +358,10 @@ namespace Control
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
               // solve the problem and check for success
-              if(controller.optimizeMpcProblem())
+              if(controller.optimizeMpcProblem()){
+                inf("Controller says : I am SUCCESS: %f", (t_now - t_solved));
                 t_solved = Clock::getSinceEpoch();
-                inf("Controller says : I am SUCCESS");
+              }
               // else raise an error
               else{
                 controller.getErrorString(CONTROLLER_STATUS);

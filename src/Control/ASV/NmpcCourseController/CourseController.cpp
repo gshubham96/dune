@@ -540,7 +540,6 @@ namespace NMPC{
         }
         std::cerr << "I got here! - 3\n" ;
 
-        std::cerr << "I got here! - 98" << t_elapsed << "\n";
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
             ERROR_STRING = "time since last NLP run exceeds threshold";
@@ -550,6 +549,8 @@ namespace NMPC{
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);
+
+        std::cerr << "I got here! - 98" << t_ind << "\n";
         u_star = input_traj_[t_ind];
 
         std::cerr << "I got here! - 99\n" ;

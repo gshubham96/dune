@@ -346,13 +346,15 @@ namespace Control
           while (!stopping())
           {  
             
+            // wait to receive messages
+            waitForMessages(1.0);
+
+            // get current time
+            t_now = Clock::getSinceEpoch();
+
             // wait till it is time to publish again
-            do{
-              // get current time
-              t_now = Clock::getSinceEpoch();
-              waitForMessages(1.0);
-            }            
-            while ((t_now - t_published) > time_to_publish);
+            if ((t_now - t_published) < time_to_publish)
+              continue;
             
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
@@ -361,7 +363,7 @@ namespace Control
                 inf("Controller says : I am SUCCESS: %f", (t_now - t_solved));
                 t_solved = Clock::getSinceEpoch();
                 t_now = Clock::getSinceEpoch();
-            }
+              }
               // else raise an error
               else{
                 controller.getErrorString(CONTROLLER_STATUS);

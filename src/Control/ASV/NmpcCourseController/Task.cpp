@@ -344,33 +344,29 @@ namespace Control
           params_d["Hs"] = 5; params_d["omega_p"] = 0.6283; params_d["gamma_p"] = 1.57;
           controller.updateMpcParams(params_d);
           while (!stopping())
-          {
-
-            // get current time
-            t_now = Clock::getSinceEpoch();
-
+          {  
             // wait till it is time to publish again
-            waitForMessages(t_published + time_to_publish - t_now);
-
-            // get current time
-            t_now = Clock::getSinceEpoch();
-
+            do{
+              // get current time
+              t_now = Clock::getSinceEpoch();
+              waitForMessages(1.0);
+            }            
+            while ((t_now - t_published) > time_to_publish)
+            
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
               // solve the problem and check for success
               if(controller.optimizeMpcProblem()){
                 inf("Controller says : I am SUCCESS: %f", (t_now - t_solved));
                 t_solved = Clock::getSinceEpoch();
-              }
+                t_now = Clock::getSinceEpoch();
+            }
               // else raise an error
               else{
                 controller.getErrorString(CONTROLLER_STATUS);
                 err("Controller says : %s", CONTROLLER_STATUS.c_str());
               }
             }
-  
-            // get current time
-            t_now = Clock::getSinceEpoch();
 
             // publish the latest available solution
             if(controller.getOptimalInput(m_u_opt_, t_now-t_solved)){

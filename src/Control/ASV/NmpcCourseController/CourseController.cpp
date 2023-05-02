@@ -514,6 +514,7 @@ namespace NMPC{
         arg["lam_g0"] = args_["lam_g0"];
 
         res = solver(arg);
+        solution_exists = true;
 
         // get optimal input trajectory
         optimized_vars_.clear();
@@ -534,26 +535,29 @@ namespace NMPC{
     // 
     bool CourseController::getOptimalInput(double &u_star, const double &t_elapsed){
 
+        // fail if problem is not yet initialized
         switch(initialized){
             case -1: ERROR_STRING = "PROBLEM NOT YET CONFIGURED!"; return false;
             default: break;
         }
-        std::cerr << "I got here! - 3\n" ;
+
+        // fail if NLP hasn't been solved even once 
+        if(!solution_exists){
+            ERROR_STRING = "VALID SOLUTION DOES NOT EXISTS";
+            return false;
+        }
 
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
-            ERROR_STRING = "time since last NLP run exceeds threshold";
+            ERROR_STRING = "TIME SINCE LAST NLP RUN EXCEEDS THRESHOLD";
+            solution_exists = false;
             return false;
         }
-        std::cerr << "I got here! - 4\n" ;
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);
-
-        std::cerr << "I got here! - 98" << t_ind  << " - " << initialized << "\n";
         u_star = input_traj_[t_ind];
 
-        std::cerr << "I got here! - 99\n" ;
         return true;
     }
 
@@ -731,6 +735,8 @@ namespace NMPC{
         initialized = -1;
         // set file count flag
         filecount = -1;
+        // set solution flag
+        solution_exists = false;
 
         // loading default system specs from a file
         if(!loadDefaults()){

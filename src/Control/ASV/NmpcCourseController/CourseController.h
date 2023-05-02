@@ -24,7 +24,8 @@ namespace NMPC{
             // ##################################
             // ##-------MEMBER VARIABLES-------##
             // ##################################
-
+            // flag to check if valid solution exists
+            bool solution_exists;
             // initialization variable
             int initialized;
             // lengths of state, input and paramter vectors

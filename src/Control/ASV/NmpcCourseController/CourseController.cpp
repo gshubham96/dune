@@ -551,6 +551,7 @@ namespace NMPC{
         int t_ind = floor(t_elapsed/Ts);
         u_star = input_traj_[t_ind];
 
+        std::cerr << "I got here! - 99\n" ;
         return true;
     }
 

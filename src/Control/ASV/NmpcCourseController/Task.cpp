@@ -343,6 +343,7 @@ namespace Control
           params_d["Q"] = 4.5;        params_d["R"] = 1.5;
           params_d["Hs"] = 5; params_d["omega_p"] = 0.6283; params_d["gamma_p"] = 1.57;
           controller.updateMpcParams(params_d);
+
           while (!stopping())
           {
 
@@ -359,6 +360,7 @@ namespace Control
               // solve the problem and check for success
               if(controller.optimizeMpcProblem())
                 t_solved = Clock::getSinceEpoch();
+                inf("Controller says : I am SUCCESS");
               // else raise an error
               else{
                 controller.getErrorString(CONTROLLER_STATUS);

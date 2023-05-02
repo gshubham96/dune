@@ -382,6 +382,7 @@ namespace Control
             }
             // update publish time
             t_published = Clock::getSinceEpoch();
+            cri("I got here! - 6");
 
           }
         }

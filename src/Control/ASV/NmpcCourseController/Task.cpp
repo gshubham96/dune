@@ -345,6 +345,7 @@ namespace Control
           controller.updateMpcParams(params_d);
           while (!stopping())
           {  
+            
             // wait till it is time to publish again
             do{
               // get current time

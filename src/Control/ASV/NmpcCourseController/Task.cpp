@@ -207,11 +207,12 @@ namespace Control
         void
         onResourceInitialization(void)
         {
+          t_solved = 0;
           // defined the probelm
           if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");
           else
-            debug("controller initialized!");
+            debug("Controller Initialized!");
           t_now = Clock::getSinceEpoch();
         }
 
@@ -360,7 +361,6 @@ namespace Control
             if((t_now - t_solved) > time_to_solve){
               // solve the problem and check for success
               if(controller.optimizeMpcProblem()){
-                inf("Controller says : I am SUCCESS: %f", (t_now - t_solved));
                 t_solved = Clock::getSinceEpoch();
               }
               // else raise an error

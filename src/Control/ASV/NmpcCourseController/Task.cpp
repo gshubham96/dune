@@ -374,9 +374,11 @@ namespace Control
             // publish the latest available solution
             if(controller.getOptimalInput(m_u_opt_, t_solved-t_now)){
               // send input to topic
+              cri("I got here! - 7");
               dispatchControl(m_u_opt_);
             }
             else{
+              cri("I got here! - 8");
               controller.getErrorString(CONTROLLER_STATUS);
               err("Controller says : %s", CONTROLLER_STATUS.c_str());
             }

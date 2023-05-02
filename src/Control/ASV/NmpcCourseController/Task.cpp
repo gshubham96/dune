@@ -352,9 +352,10 @@ namespace Control
             t_now = Clock::getSinceEpoch();
 
             // wait till it is time to publish again
-            // Time::Delay::wait(t_published + time_to_publish - t_now);
-            // waitForMessages(1.0);
             waitForMessages(t_published + time_to_publish - t_now);
+
+            // get current time
+            t_now = Clock::getSinceEpoch();
 
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
@@ -371,8 +372,9 @@ namespace Control
             }
   
             cri("I got here! - 5");
+            double t_elapsed = t_solved-t_now;
             // publish the latest available solution
-            if(controller.getOptimalInput(m_u_opt_, t_solved-t_now)){
+            if(controller.getOptimalInput(m_u_opt_, t_elapsed)){
               // send input to topic
               cri("I got here! - 7");
               dispatchControl(m_u_opt_);

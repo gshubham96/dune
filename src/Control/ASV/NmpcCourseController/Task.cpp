@@ -140,10 +140,6 @@ namespace Control
           // Initialize entity state.
           setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
 
-          // Update clock
-          t_published = Clock::getSinceEpoch();
-          t_solved = t_published;
-
         }
 
         //! Update internal state with new parameter values.
@@ -207,7 +203,9 @@ namespace Control
         void
         onResourceInitialization(void)
         {
-          t_solved = 0;
+          // Update clock
+          t_published = 0;
+          t_solved = t_published;
           // defined the probelm
           if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");

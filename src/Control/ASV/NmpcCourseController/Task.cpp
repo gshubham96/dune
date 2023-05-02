@@ -343,11 +343,9 @@ namespace Control
           params_d["Q"] = 4.5;        params_d["R"] = 1.5;
           params_d["Hs"] = 5; params_d["omega_p"] = 0.6283; params_d["gamma_p"] = 1.57;
           controller.updateMpcParams(params_d);
-          cri("I got here! - 1");
           while (!stopping())
           {
 
-            cri("I got here! - 2");
             // get current time
             t_now = Clock::getSinceEpoch();
 
@@ -371,22 +369,18 @@ namespace Control
               }
             }
   
-            cri("I got here! - 5");
             double t_elapsed = t_solved-t_now;
             // publish the latest available solution
             if(controller.getOptimalInput(m_u_opt_, t_elapsed)){
               // send input to topic
-              cri("I got here! - 7");
               dispatchControl(m_u_opt_);
             }
             else{
-              cri("I got here! - 8");
               controller.getErrorString(CONTROLLER_STATUS);
               err("Controller says : %s", CONTROLLER_STATUS.c_str());
             }
             // update publish time
             t_published = Clock::getSinceEpoch();
-            cri("I got here! - 6");
 
           }
         }

@@ -355,6 +355,7 @@ namespace Control
             // wait till it is time to publish again
             if ((t_now - t_published) < time_to_publish)
               continue;
+            cri("publishing after: %f", t_published - t_now);
             
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
@@ -362,7 +363,6 @@ namespace Control
               if(controller.optimizeMpcProblem()){
                 inf("Controller says : I am SUCCESS: %f", (t_now - t_solved));
                 t_solved = Clock::getSinceEpoch();
-                t_now = Clock::getSinceEpoch();
               }
               // else raise an error
               else{
@@ -371,6 +371,7 @@ namespace Control
               }
             }
 
+            t_now = Clock::getSinceEpoch();
             // publish the latest available solution
             if(controller.getOptimalInput(m_u_opt_, t_now-t_solved)){
               // send input to topic
@@ -382,7 +383,6 @@ namespace Control
             }
             // update publish time
             t_published = Clock::getSinceEpoch();
-            cri("publishing after: %f", t_published - t_now);
 
           }
         }

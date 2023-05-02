@@ -206,6 +206,7 @@ namespace Control
           // Update clock
           t_published = 0;
           t_solved = t_published;
+
           // defined the probelm
           if(!controller.defineMpcProblem())
             cri("Could not define MPC Problem, EXITING!");
@@ -355,6 +356,7 @@ namespace Control
             if ((t_now - t_published) < time_to_publish)
               continue;
             
+            inf("publishing after : %d", t_now - t_solved);
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
               // solve the problem and check for success
@@ -379,6 +381,7 @@ namespace Control
               err("Controller says : %s", CONTROLLER_STATUS.c_str());
             }
             // update publish time
+            inf("publishing after : %d", t_now - t_published);
             t_published = Clock::getSinceEpoch();
 
           }

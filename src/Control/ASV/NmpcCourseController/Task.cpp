@@ -356,9 +356,9 @@ namespace Control
             if ((t_now - t_published) < time_to_publish)
               continue;
             
-            inf("publishing after : %f", t_now - t_solved);
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
+              inf("solving after : %f", t_now - t_solved);
               // solve the problem and check for success
               if(controller.optimizeMpcProblem()){
                 t_solved = Clock::getSinceEpoch();

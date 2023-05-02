@@ -514,7 +514,6 @@ namespace NMPC{
         arg["lam_g0"] = args_["lam_g0"];
 
         res = solver(arg);
-        t_update = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
         // get optimal input trajectory
         optimized_vars_.clear();
@@ -533,11 +532,12 @@ namespace NMPC{
     }
 
     // 
-    bool CourseController::getOptimalInput(double &u_star){
+    bool CourseController::getOptimalInput(double &u_star, const double &t_elapsed){
 
-        // get current time
-        double t_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        double t_elapsed = (t_now - t_update)/1000;                 // in seconds
+        switch(initialized){
+            case -1: ERROR_STRING = "PROBLEM NOT YET CONFIGURED!"; return false;
+            default: break;
+        }
 
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){

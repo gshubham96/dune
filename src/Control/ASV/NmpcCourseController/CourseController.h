@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <ctime>
 #include <iomanip>
 #include <filesystem>
 #include <casadi/casadi.hpp>
@@ -31,7 +30,7 @@ namespace NMPC{
             // lengths of state, input and paramter vectors
             int nx, nu, np, N;
             // time of last update
-            double t_update, Tp, Ts;
+            double Tp, Ts;
             // course reference for the controller
             double reference_;
             // surge speed model

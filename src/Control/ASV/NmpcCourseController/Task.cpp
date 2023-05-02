@@ -351,7 +351,7 @@ namespace Control
               t_now = Clock::getSinceEpoch();
               waitForMessages(1.0);
             }            
-            while ((t_now - t_published) > time_to_publish)
+            while ((t_now - t_published) > time_to_publish);
             
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){

@@ -369,9 +369,9 @@ namespace Control
               }
             }
   
-            double t_elapsed = t_solved-t_now;
+            // double t_elapsed = ;
             // publish the latest available solution
-            if(controller.getOptimalInput(m_u_opt_, t_elapsed)){
+            if(controller.getOptimalInput(m_u_opt_, t_solved-t_now)){
               // send input to topic
               dispatchControl(m_u_opt_);
             }

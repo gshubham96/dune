@@ -558,6 +558,7 @@ namespace NMPC{
         int t_ind = floor(t_elapsed/Ts);
         u_star = input_traj_[t_ind];
 
+        std::cerr << "Time Elapsed: " << t_elapsed << " and Indice Queried: " << t_ind << "\n";
         return true;
     }
 

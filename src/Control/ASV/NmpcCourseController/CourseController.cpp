@@ -538,12 +538,14 @@ namespace NMPC{
             case -1: ERROR_STRING = "PROBLEM NOT YET CONFIGURED!"; return false;
             default: break;
         }
+        std::cerr << "I got here! - 3\n" ;
 
         // fail if NLP has not been run for a long time
         if(t_elapsed > 0.25*Tp){
             ERROR_STRING = "time since last NLP run exceeds threshold";
             return false;
         }
+        std::cerr << "I got here! - 4\n" ;
 
         // otherwise, find the closest time index and send that input
         int t_ind = floor(t_elapsed/Ts);

@@ -738,7 +738,7 @@ namespace DUNE{
             }
 
             // allow user to skip configuration
-            Course::Course(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile):Dynamics(model_type, Ts, false){
+            Course::Course(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile):Dynamics(model_type, Ts, false), Tp_(Tp){
                 // set init flag
                 initialized_ = -1;
                 // set file count flag

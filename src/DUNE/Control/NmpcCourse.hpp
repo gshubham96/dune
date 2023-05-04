@@ -58,79 +58,9 @@ namespace DUNE
         namespace NMPC
         {
             // Export DLL Symbol.
-            class DUNE_DLL_SYM Dynamics;
+            class DUNE_DLL_SYM NmpcCourse;
 
-            class Dynamics 
-            {
-                private:
-                // ##################################
-                // ##-------MEMBER VARIABLES-------##
-                // ##################################
-                // config params for RK4 simulation
-                int model_type_;
-                // get system parameters from "mat" file and load here
-                std::map<std::string, double> system_;
-                std::string file_path;
-
-                protected:
-                // ##################################
-                // ##-------MEMBER VARIABLES-------##
-                // ##################################
-                // lengths of state, input and paramter vectors
-                int nx, nu, np, N;
-                // config params for RK4 simulation
-                double Ts_; 
-                // surge speed model
-                std::vector<double> speed_model;
-                // dynamics function
-                casadi::Function x_dot;
-                // error handling
-                std::string ERROR_STRING_;
-                // casadi state variables
-                casadi::SX sym_x, sym_u, sym_p;
-                
-                // ##################################
-                // ##-------MEMBER FUNCTIONS-------##
-                // ##################################
-
-                // wrap the angle between [-pi, pi]
-                double ssa(double diff);
-                casadi::SX ssa(casadi::SX diff);
-
-                // reads data from file and stores in passed arg
-                bool loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file);
-
-                // performs sanity check of config params
-                bool areParamsSane(const std::map<std::string, double> &mapped_dict);
-
-                // Function to define and compile the NLP Optimization Problem
-                bool defineDynamicsProblem(bool compile);
-
-                public:
-                // ##################################
-                // ##-------MEMBER FUNCTIONS-------##
-                // ##################################
-
-                //Simulate the dynamics for one time step
-                // params keys: Vc, beta_c, Vw, beta_w, Hs, omega_p, gamma_p
-                // state_(init/next) keys: psi, u, v, r
-                bool simulateDynamics(const std::vector<double> &state_init, const double u0, const std::map<std::string, double> &params, std::vector<double> &state_next);
-
-                // returns error or updates from controller
-                void getErrorString(std::string &err);
-
-                // allow user to skip problem configuration
-                Dynamics(std::string model_type, double Ts, bool compile);
-
-                // Default Constructor
-                Dynamics();
-
-                // Destructor
-                ~Dynamics();
-
-            };
-
-            class Course: public Dynamics {
+            class NmpcCourse: public NmpcDynamics {
                 
                 private:
                     // ##################################
@@ -209,14 +139,14 @@ namespace DUNE
                     // returns error or updates from controller
                     void getErrorString(std::string &err);
 
-            // allow user to skip problem configuration
-            Course(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile);
+                // allow user to skip problem configuration
+                NmpcCourse(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile);
 
-            // Default Constructor
-            Course();
+                // Default Constructor
+                NmpcCourse();
 
-            // Destructor
-            ~Course();
+                // Destructor
+                ~NmpcCourse();
 
             };
 

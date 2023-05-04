@@ -322,6 +322,6 @@ namespace DUNE{
         // Destructor
         Dynamics::~Dynamics() { 
         }
-
+        }
     }
 }

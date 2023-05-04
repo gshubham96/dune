@@ -226,13 +226,13 @@ namespace DUNE{
                 return false;
             }
             std::vector<double> param_vector(np, 0);
-            param_vector[5] = params["Vc"];
-            param_vector[6] = ssa(params["beta_c"]);
-            param_vector[7] = params["Vw"];
-            param_vector[8] = ssa(params["beta_w"]);
-            param_vector[9] = params["Hs"];
-            param_vector[10] = params["omega_p"];
-            param_vector[11] = params["gamma_p"];
+            param_vector[5] = params.at("Vc");
+            param_vector[6] = ssa(params.at("beta_c"));
+            param_vector[7] = params.at("Vw");
+            param_vector[8] = ssa(params.at("beta_w"));
+            param_vector[9] = params.at("Hs");
+            param_vector[10] = params.at("omega_p");
+            param_vector[11] = params.at("gamma_p");
             arg["i2"] = param_vector;
 
             // set initial state

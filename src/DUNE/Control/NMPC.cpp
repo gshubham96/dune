@@ -56,16 +56,13 @@ namespace DUNE{
 
                 // environmental parameters that are constant over a given horizon
                 casadi::SX
-                    chi_d   = sym_p(nx),
                     Vc      = sym_p(nx+1),
                     beta_c  = sym_p(nx+2),
                     Vw      = sym_p(nx+3),
                     beta_w  = sym_p(nx+4),
                     Hs      = sym_p(nx+5),
                     omega_p = sym_p(nx+6),
-                    gamma_p = sym_p(nx+7),
-                    Q       = sym_p(nx+8),
-                    R       = sym_p(nx+9);
+                    gamma_p = sym_p(nx+7);
 
                 // hard coded speed model. 
                 // TODO load from FILE
@@ -330,6 +327,11 @@ namespace DUNE{
                 // ################################################
                 N = Tp_/Ts_;
 
+                casadi::SX
+                    chi_d   = sym_p(nx),
+                    Q       = sym_p(nx+8),
+                    R       = sym_p(nx+9);
+
                 // trajectory / motion planning
                 casadi::SX chi_t_dot, chi_t = chi_d;
 
@@ -384,11 +386,11 @@ namespace DUNE{
 
                     casadi::SX delta_x;
                     // minimizes error in course angle
-                    if(cost_type == 0)
+                    if(cost_type_ == 0)
                         delta_x = ssa(chi_t - psi_p - asin(v_p / SOG));
 
                     // minimizes error in course vector                    
-                    else if(cost_type == 1){
+                    else if(cost_type_ == 1){
                         casadi::SX vec_chi_p = casadi::SX::sym("vec_chi_p", 2);
                         vec_chi_p(0) = 1/SOG * (u_p * cos(psi_p) - v_p * sin(psi_p));
                         vec_chi_p(1) = 1/SOG * (u_p * sin(psi_p) + v_p * cos(psi_p));
@@ -401,7 +403,7 @@ namespace DUNE{
                     }
 
                     // minimizes error in heading angle
-                    else if(cost_type == 2)
+                    else if(cost_type_ == 2)
                         delta_x = ssa(chi_t - psi_p);
                     
                     // 
@@ -621,7 +623,7 @@ namespace DUNE{
                 arg["lam_x0"] = args_["lam_x0"];
                 arg["lam_g0"] = args_["lam_g0"];
 
-                res = solver(arg);
+                res = solver_(arg);
                 solution_exists_ = true;
 
                 // get optimal input trajectory
@@ -745,9 +747,11 @@ namespace DUNE{
                 solution_exists_ = false;
 
                 // get config params
-                if (cost_type.compare("nonlinear"))
+                if (cost_type_.compare("psi_d"))
+                    cost_type_ = 2;
+                else if (cost_type_.compare("chi_d"))
                     cost_type_ = 0;
-                else if (cost_type.compare("linear"))
+                else if (cost_type_.compare("dotv"))
                     cost_type_ = 1;
                 else{
                     ERROR_STRING_ = "cost_type_ NOT FOUND. CAN ONLY BE <chi_d>, <dotv> or <psi_d>";

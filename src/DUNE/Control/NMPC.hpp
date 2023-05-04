@@ -142,7 +142,7 @@ namespace DUNE
                     int initialized_;
                     // MPC Parameters
                     int cost_type_;
-                    double Tp_;
+                    double Tp_, Q, R;
                     // course reference for the controller
                     double reference_;
                     // config parameters, runtime paramters and state for MPC

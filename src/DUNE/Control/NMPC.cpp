@@ -106,7 +106,7 @@ namespace DUNE{
             // CORIOLIS 
             // Add only if model is nonlinear
             casadi::SX coriolis_u = 0, coriolis_v = 0;
-            if(model_type == 0){
+            if(model_type_ == 0){
                     coriolis_u = CR12 * r,
                     coriolis_v = CR21 * r;
             }
@@ -117,14 +117,14 @@ namespace DUNE{
             // RUDDER
             casadi::SX tau_rudr_u, tau_rudr_v, tau_rudr_r;
             // If the model is nonlinear, consider nonlinear dynamics of the rudder
-            if(model_type == 0){
+            if(model_type_ == 0){
                 casadi::SX alpha_r = delta - atan(v_r/u_r);
                 tau_rudr_u = R11 * U_r2 * sin(alpha_r) * sin(delta) ;
                 tau_rudr_v = R22 * U_r2 * sin(alpha_r) * cos(delta) ;
                 tau_rudr_r = R33 * U_r2 * sin(alpha_r) * cos(delta) ;
             }
             // else consider the approximated linear equations
-            else if(model_type == 1){
+            else if(model_type_ == 1){
                 tau_rudr_u = R11 * U_r2 * delta * delta ;
                 tau_rudr_v = R22 * U_r2 * delta * 0.5 ;
                 tau_rudr_r = R33 * U_r2 * delta * 0.5 ;
@@ -133,7 +133,7 @@ namespace DUNE{
             // WIND
             // Add only if model is nonlinear
             casadi::SX tau_wind_u = 0, tau_wind_v = 0, tau_wind_r = 0;
-            if(model_type == 0){
+            if(model_type_ == 0){
                 casadi::SX u_rw = u_e - Vw * cos(beta_w - psi);
                 casadi::SX v_rw = v - Vw * sin(beta_w - psi);
                 casadi::SX V_rw2 = pow(u_rw, 2) + pow(v_rw, 2);
@@ -165,8 +165,8 @@ namespace DUNE{
 
             // Compiles the function for faster compute
             // TODO: Add JIT Compilation using clang?
-            solver.generate_dependencies("nlp.c");
             if (compile) {
+                x_dot.generate_dependencies("x_dot.c");
                 // Compile the c-code
                 int flag = system("gcc -fPIC -shared -O3 x_dot.c -o x_dot.so");
                 casadi_assert(flag==0, "Compilation failed");

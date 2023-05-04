@@ -39,9 +39,9 @@ namespace Control
   //! Controls the course of the vehicle
   //! @author “gshubham96”
   //  #TODO Speed model is constant and hardcoded. Fix this.
-  namespace ASV
+  namespace NMPC
   {
-    namespace NmpcCourseController
+    namespace Course
     {
       using DUNE_NAMESPACES;
 

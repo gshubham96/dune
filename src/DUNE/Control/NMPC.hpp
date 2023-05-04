@@ -85,7 +85,7 @@ namespace DUNE
                 // dynamics function
                 casadi::Function x_dot;
                 // error handling
-                std::string ERROR_STRING;
+                std::string ERROR_STRING_;
                 // casadi state variables
                 casadi::SX sym_x, sym_u, sym_p;
                 
@@ -157,8 +157,6 @@ namespace DUNE
                     int filecount_;
                     std::ofstream file_;
                     std::string filename_;
-                    // error handling
-                    std::string ERROR_STRING_;
                     
                     // ##################################
                     // ##-------MEMBER FUNCTIONS-------##

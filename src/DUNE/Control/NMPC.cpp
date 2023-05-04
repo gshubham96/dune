@@ -27,7 +27,7 @@ namespace DUNE{
 
                 // read system params from file
                 if(!loadDefaultsFromFile(file_path, system_)){
-                    ERROR_STRING = "COULD NOT LOAD SYSTEM PARAMETERS FROM FILE";
+                    ERROR_STRING_ = "COULD NOT LOAD SYSTEM PARAMETERS FROM FILE";
                     return false;
                 }
 
@@ -218,7 +218,7 @@ namespace DUNE{
 
                 // set parameters
                 if(!areParamsSane(params)){
-                    ERROR_STRING = "PARAMETERS ARE NOT SANE";
+                    ERROR_STRING_ = "PARAMETERS ARE NOT SANE";
                     return false;
                 }
                 std::vector<double> param_vector(np, 0);
@@ -277,7 +277,7 @@ namespace DUNE{
             bool Dynamics::areParamsSane(const std::map<std::string, double> &mapped_dict){
                 // check for the correct number of configuration paramters
                 if((int)mapped_dict.size() != np-nx-1){
-                    ERROR_STRING = "PARAMETER NOT OF RIGHT LENGTH!";
+                    ERROR_STRING_ = "PARAMETER NOT OF RIGHT LENGTH!";
                     return false;
                 }
                 
@@ -285,7 +285,7 @@ namespace DUNE{
                 int sum = mapped_dict.count("Vc") + mapped_dict.count("beta_c") + mapped_dict.count("Vw") + mapped_dict.count("beta_w")
                         + mapped_dict.count("Hs") + mapped_dict.count("omega_p") + mapped_dict.count("gamma_p") + mapped_dict.count("Q") + mapped_dict.count("R");
                 if(sum != np-nx-1){
-                    ERROR_STRING = "ALL RUNTIME PARAMETERs NOT PRESENT!";
+                    ERROR_STRING_ = "ALL RUNTIME PARAMETERs NOT PRESENT!";
                     return false;
                 }
                 
@@ -294,8 +294,8 @@ namespace DUNE{
 
             // returns the string that stores errors
             void Dynamics::getErrorString(std::string &err){
-                err = ERROR_STRING;
-                ERROR_STRING = "";
+                err = ERROR_STRING_;
+                ERROR_STRING_ = "";
             }
 
             // allow user to skip configuration
@@ -306,13 +306,13 @@ namespace DUNE{
                 else if (model_type.compare("linear"))
                     model_type_ = 1;
                 else
-                    ERROR_STRING = "model_type NOT FOUND. CAN ONLY BE <linear> or <nonlinear>";
+                    ERROR_STRING_ = "model_type NOT FOUND. CAN ONLY BE <linear> or <nonlinear>";
 
                 // define dynamics
                 if(defineDynamicsProblem(compile))
-                    ERROR_STRING = "PROBLEM DEFINED CORRECTLY";
+                    ERROR_STRING_ = "PROBLEM DEFINED CORRECTLY";
                 else
-                    ERROR_STRING = "ERROR DEFINING PROBLEM";
+                    ERROR_STRING_ = "ERROR DEFINING PROBLEM";
             }
 
             // Destructor
@@ -747,12 +747,12 @@ namespace DUNE{
                 solution_exists_ = false;
 
                 // get config params
-                if (cost_type.compare("psi_d"))
-                    cost_type_ = 2;
-                else if (cost_type.compare("chi_d"))
+                if (cost_type.compare("chi_d"))
                     cost_type_ = 0;
                 else if (cost_type.compare("dotv"))
                     cost_type_ = 1;
+                else if (cost_type.compare("psi_d"))
+                    cost_type_ = 2;
                 else{
                     ERROR_STRING_ = "cost_type_ NOT FOUND. CAN ONLY BE <chi_d>, <dotv> or <psi_d>";
                     return;

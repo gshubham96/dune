@@ -421,13 +421,22 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        NmpcCourse::NmpcCourse(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile):NmpcDynamics(model_type, Ts, false), Tp_(Tp){
+        bool NmpcCourse::configureSolver(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile){
             // set init flag
             initialized_ = -1;
             // set file count flag
             filecount_ = -1;
             // set solution flag
             solution_exists_ = false;
+
+            // configure Dynamics
+            if(!configureDynamics(model_type, Ts, false)){
+                ERROR_STRING_ = "ERROR CONFIGURING DYNAMICS";
+                return false;
+            };
+
+            // Prediction Horizon for MPC
+            Tp_ = Tp;
 
             // get config params
             if (cost_type.compare("chi_d"))
@@ -438,23 +447,19 @@ namespace DUNE{
                 cost_type_ = 2;
             else{
                 ERROR_STRING_ = "cost_type_ NOT FOUND. CAN ONLY BE <chi_d>, <dotv> or <psi_d>";
-                return;
-            }
-
-            // define dynamics
-            if(!defineDynamicsProblem(false)){
-                ERROR_STRING_ = "ERROR DEFINING DYNAMICS";
-                return;
+                return false;
             }
 
             // define solver
-            if(defineMpcProblem(compile))
-                ERROR_STRING_ = "SOLVER DEFINED CORRECTLY";
-            else
+            if(!defineMpcProblem(compile)){
                 ERROR_STRING_ = "ERROR DEFINING SOLVER";
+                return false;
+            }
 
             // initialize logging
             saveTrajectoryToFile();
+
+            return true;
         }
 
         // Destructor

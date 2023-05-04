@@ -118,7 +118,7 @@ namespace DUNE
             void getErrorString(std::string &err);
 
             // allow user to skip problem configuration
-            NmpcDynamics(std::string model_type, double Ts, bool compile);
+            bool configureDynamics(std::string model_type, double Ts, bool compile);
 
             // Default Constructor
             NmpcDynamics();

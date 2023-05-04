@@ -298,20 +298,27 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        NmpcDynamics::NmpcDynamics(std::string model_type, double Ts, bool compile): Ts_(Ts){
+        bool configureDynamics(std::string model_type, double Ts, bool compile){
+            // Time step
+            Ts_ = Ts;
+
             // get config params
             if (model_type.compare("nonlinear"))
                 model_type_ = 0;
             else if (model_type.compare("linear"))
                 model_type_ = 1;
-            else
+            else{
                 ERROR_STRING_ = "model_type NOT FOUND. CAN ONLY BE <linear> or <nonlinear>";
+                return false;
+            }
 
             // define dynamics
-            if(defineDynamicsProblem(compile))
-                ERROR_STRING_ = "PROBLEM DEFINED CORRECTLY";
-            else
+            if(!defineDynamicsProblem(compile)){
                 ERROR_STRING_ = "ERROR DEFINING PROBLEM";
+                return false;
+            }
+
+            return true;
         }
 
         // Destructor

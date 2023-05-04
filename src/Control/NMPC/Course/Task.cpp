@@ -194,7 +194,7 @@ namespace Control
 
           // defined the probelm
           NmpcCourse NewClass(m_args.model_type, m_args.cost_type, m_args.Tp, m_args.Ts, false);
-          controller = NewClass;
+          *controller = new NmpcCourse(m_args.model_type, m_args.cost_type, m_args.Tp, m_args.Ts, false);
           if(!controller.isProblemConfigured()){
             controller.getErrorString(CONTROLLER_STATUS);
             cri("Could not define MPC Problem, solver says %s!", CONTROLLER_STATUS.c_str());

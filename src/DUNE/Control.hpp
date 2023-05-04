@@ -50,4 +50,7 @@ namespace DUNE
 #include <DUNE/Control/CoarseAltitude.hpp>
 #include <DUNE/Control/FilterEstimator.hpp>
 
+#include <DUNE/Control/NmpcDynamics.hpp>
+#include <DUNE/Control/NmpcCourse.hpp>
+
 #endif

@@ -113,6 +113,9 @@ namespace DUNE
             // allow user to skip problem configuration
             Dynamics(std::string model_type, double Ts, bool compile);
 
+            // Default Constructor
+            Dynamics();
+
             // Destructor
             ~Dynamics();
 

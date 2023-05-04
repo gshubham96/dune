@@ -303,7 +303,7 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        Dynamics(std::string model_type, double Tp, double Ts):Tp_(Tp), Ts_(Ts){
+        Dynamics::Dynamics(std::string model_type, double Tp, double Ts):Tp_(Tp), Ts_(Ts){
             // get config params
             if (model_type.compare("nonlinear"))
                 model_type_ = 0;

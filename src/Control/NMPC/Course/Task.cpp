@@ -31,8 +31,6 @@
 #include <DUNE/DUNE.hpp>
 
 // NMPC Library
-// #include <casadi/casadi.hpp>
-#include "CourseController.h"
 
 namespace Control
 {

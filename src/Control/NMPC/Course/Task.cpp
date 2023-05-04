@@ -192,8 +192,6 @@ namespace Control
           t_published = 0;
           t_solved = t_published;
 
-          std::cerr << "m_args << " << m_args.model_type << ", " << m_args.cost_type << ", " << m_args.Tp << ", " << m_args.Ts << "\n";
-
           // defined the probelm
           bool stat = controller.configureSolver(m_args.model_type, m_args.cost_type, m_args.Tp, m_args.Ts, false);
           if(!stat){

@@ -323,7 +323,7 @@ namespace DUNE{
             }
 
             // Function to define and compile the NLP Optimization Problem
-            bool Course::defineMpcProblem(void){
+            bool Course::defineMpcProblem(bool compile){
 
                 // ################################################
                 // ###----------------SETUP LOOP----------------###
@@ -471,15 +471,15 @@ namespace DUNE{
                 // opts_dict["ipopt.sb"] = "yes";
                 opts["print_time"] = 0;
 
-                solver = casadi::nlpsol("solver", "ipopt", nlp, opts);
+                solver_ = casadi::nlpsol("solver", "ipopt", nlp, opts);
                 if (compile) {
-                    solver.generate_dependencies("solver.c");
+                    solver_.generate_dependencies("solver.c");
                     // Compile the c-code
                     int flag = system("gcc -fPIC -shared -O3 solver.c -o solver.so");
                     casadi_assert(flag==0, "Compilation failed");
 
                     // Create a new NLP solver instance from the compiled code
-                    solver = casadi::nlpsol("solver", "ipopt", "solver.so");
+                    solver_ = casadi::nlpsol("solver", "ipopt", "solver.so");
                 }
 
                 // define state bounds

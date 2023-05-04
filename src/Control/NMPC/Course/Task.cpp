@@ -64,7 +64,6 @@ namespace Control
         std::vector<double> m_theta_;
         std::map<std::string, double> m_config_, m_params_, m_state_;
         Arguments m_args;
-        NmpcDynamcis dynamics;
         NmpcCourse controller;
 
         // DUNE Vars
@@ -210,7 +209,7 @@ namespace Control
           controller.reset();
           controller.updateMpcConfig(m_config_);
           if(!controller.isProblemConfigured()){
-            if(!controller.defineMpcProblem())
+            if(!controller.defineMpcProblem(false))
               cri("Could not define MPC Problem, EXITING!");
           }
         }

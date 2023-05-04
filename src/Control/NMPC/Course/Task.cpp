@@ -49,7 +49,7 @@ namespace Control
       {
         std::string file_path;
         // config parameters for MPC
-        int model_type, cost_type;
+        std::string model_type, cost_type;
         double Tp, Ts;
         // runtime params for MPC
         double Hs, omega_p, gamma, Q, R;

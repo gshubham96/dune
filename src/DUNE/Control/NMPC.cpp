@@ -1,7 +1,7 @@
 #include <DUNE/Control/NMPC.hpp>
 
 namespace DUNE{
-    namespace CONTROL{
+    namespace Control{
         namespace NMPC{
 
         // wrap the angle between [-pi, pi]

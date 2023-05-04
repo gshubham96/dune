@@ -328,6 +328,7 @@ namespace DUNE{
                 // ################################################
                 // ###----------------SETUP LOOP----------------###
                 // ################################################
+                N = Tp_/Ts_;
 
                 // trajectory / motion planning
                 casadi::SX chi_t_dot, chi_t = chi_d;
@@ -379,7 +380,7 @@ namespace DUNE{
 
                     // trajectory
                     chi_t_dot = ssa(chi_d - chi_t);
-                    chi_t = ssa(chi_t + Ts * chi_t_dot);
+                    chi_t = ssa(chi_t + Ts_ * chi_t_dot);
 
                     casadi::SX delta_x;
                     // minimizes error in course angle
@@ -418,25 +419,25 @@ namespace DUNE{
                     casadi::SX rk1 = f_eval["o0"];
 
                     // Stage 2
-                    args["i0"] = sym_x + 0.5*Ts*rk1;
+                    args["i0"] = sym_x + 0.5*Ts_*rk1;
                     args["i1"] = sym_u;
                     f_eval = x_dot(args);
                     casadi::SX rk2 = f_eval["o0"];
 
                     // Stage 3
-                    args["i0"] = sym_x + 0.5*Ts*rk2;
+                    args["i0"] = sym_x + 0.5*Ts_*rk2;
                     args["i1"] = sym_u;
                     f_eval = x_dot(args);
                     casadi::SX rk3 = f_eval["o0"];
 
                     // Stage 4
-                    args["i0"] = sym_x + Ts*rk3;
+                    args["i0"] = sym_x + Ts_*rk3;
                     args["i1"] = sym_u;
                     f_eval = x_dot(args);
                     casadi::SX rk4 = f_eval["o0"];
 
                     // next state
-                    casadi::SX sym_x_rk4 = sym_x + (Ts/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
+                    casadi::SX sym_x_rk4 = sym_x + (Ts_/6) * (rk1 + 2*rk2 + 2*rk3 + rk4);
 
                     // introduce dynamics to constraints
                     for(int j = 0; j < nx; j++)
@@ -655,14 +656,14 @@ namespace DUNE{
                 }
 
                 // fail if NLP has not been run for a long time
-                if(t_elapsed > 0.25*Tp){
+                if(t_elapsed > 0.25*Tp_){
                     ERROR_STRING_ = "TIME SINCE LAST NLP RUN EXCEEDS THRESHOLD";
                     solution_exists_ = false;
                     return false;
                 }
 
                 // otherwise, find the closest time index and send that input
-                int t_ind = round(t_elapsed/Ts);
+                int t_ind = round(t_elapsed/Ts_);
                 u_star = input_traj_[t_ind];
 
                 return true;

@@ -56,103 +56,98 @@ namespace DUNE
 {
     namespace Control
     {
-        namespace NMPC
-        {
-            // Export DLL Symbol.
-            class DUNE_DLL_SYM NmpcCourse;
+        // Export DLL Symbol.
+        class DUNE_DLL_SYM NmpcCourse;
 
-            class NmpcCourse: public NmpcDynamics {
+        class NmpcCourse: public NmpcDynamics {
+            
+            private:
+                // ##################################
+                // ##-------MEMBER VARIABLES-------##
+                // ##################################
+                // flag to check if valid solution exists
+                bool solution_exists_;
+                // initialization variable
+                int initialized_;
+                // MPC Parameters
+                int cost_type_;
+                double Tp_;
+                // course reference for the controller
+                double reference_;
+                // config parameters, runtime paramters and state for MPC
+                std::map<std::string, double> params_, state_;
+                // initial guess for warm start
+                std::map<std::string, std::vector<double>> args_;
+                // NLP Solver
+                casadi::Function solver_;
+                // optimized input trajectory
+                std::vector<double> optimized_vars_, input_traj_;
+                // file handling
+                int filecount_;
+                std::ofstream file_;
+                std::string filename_;
                 
-                private:
-                    // ##################################
-                    // ##-------MEMBER VARIABLES-------##
-                    // ##################################
-                    // flag to check if valid solution exists
-                    bool solution_exists_;
-                    // initialization variable
-                    int initialized_;
-                    // MPC Parameters
-                    int cost_type_;
-                    double Tp_;
-                    // course reference for the controller
-                    double reference_;
-                    // config parameters, runtime paramters and state for MPC
-                    std::map<std::string, double> params_, state_;
-                    // initial guess for warm start
-                    std::map<std::string, std::vector<double>> args_;
-                    // NLP Solver
-                    casadi::Function solver_;
-                    // optimized input trajectory
-                    std::vector<double> optimized_vars_, input_traj_;
-                    // file handling
-                    int filecount_;
-                    std::ofstream file_;
-                    std::string filename_;
-                    
-                    // ##################################
-                    // ##-------MEMBER FUNCTIONS-------##
-                    // ##################################
+                // ##################################
+                // ##-------MEMBER FUNCTIONS-------##
+                // ##################################
 
-                    // Function to load defaults for config, params and system dynamics
-                    bool loadDefaults();
+                // Function to load defaults for config, params and system dynamics
+                bool loadDefaults();
 
-                    // cosntructs a mpc-friendly format parameter vector
-                    std::vector<double> reWriteParams();
+                // cosntructs a mpc-friendly format parameter vector
+                std::vector<double> reWriteParams();
 
-                    // generates random vector for warm start
-                    std::vector<double> generateRandomVector(int n);
+                // generates random vector for warm start
+                std::vector<double> generateRandomVector(int n);
 
-                public:
-                    // Function to define and compile the NLP Optimization Problem
-                    bool defineMpcProblem(bool compile);
+            public:
+                // Function to define and compile the NLP Optimization Problem
+                bool defineMpcProblem(bool compile);
 
-                    // updates config parameters if user wants to change the NLP
-                    bool updateMpcConfig(const std::map<std::string, double> &config);
+                // updates config parameters if user wants to change the NLP
+                bool updateMpcConfig(const std::map<std::string, double> &config);
 
-                    // updates parameters such as wind, currents, etc
-                    // need to do it atlease once
-                    bool updateMpcParams(const std::map<std::string, double> &param);
+                // updates parameters such as wind, currents, etc
+                // need to do it atlease once
+                bool updateMpcParams(const std::map<std::string, double> &param);
 
-                    // updates mpc state
-                    bool updateMpcState(const std::map<std::string, double> &state);
+                // updates mpc state
+                bool updateMpcState(const std::map<std::string, double> &state);
 
-                    // updates course reference angle [rad]
-                    bool updateMpcReference(const double &reference);
+                // updates course reference angle [rad]
+                bool updateMpcReference(const double &reference);
 
-                    // Optimize the NLP with updated state and parameters
-                    bool optimizeMpcProblem();
+                // Optimize the NLP with updated state and parameters
+                bool optimizeMpcProblem();
 
-                    // Get the result from the optimized input
-                    bool getOptimalInput(double &u_star, const double &t_elapsed);
+                // Get the result from the optimized input
+                bool getOptimalInput(double &u_star, const double &t_elapsed);
 
-                    // debug function to save trajectory to file
-                    void saveTrajectoryToFile(void);
+                // debug function to save trajectory to file
+                void saveTrajectoryToFile(void);
 
-                    // debug function to print trajectory and other info on screen
-                    void print_details(void);
+                // debug function to print trajectory and other info on screen
+                void print_details(void);
 
-                    // resets the controller
-                    void reset(void);
+                // resets the controller
+                void reset(void);
 
-                    // checks if the problem is configured properly. If not, configure it
-                    bool isProblemConfigured();
+                // checks if the problem is configured properly. If not, configure it
+                bool isProblemConfigured();
 
-                    // returns error or updates from controller
-                    void getErrorString(std::string &err);
+                // returns error or updates from controller
+                void getErrorString(std::string &err);
 
-                // allow user to skip problem configuration
-                NmpcCourse(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile);
+            // allow user to skip problem configuration
+            NmpcCourse(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile);
 
-                // Default Constructor
-                NmpcCourse();
+            // Default Constructor
+            NmpcCourse();
 
-                // Destructor
-                ~NmpcCourse();
+            // Destructor
+            ~NmpcCourse();
 
-            };
-
-
-        }
+        };
     }
 }
 

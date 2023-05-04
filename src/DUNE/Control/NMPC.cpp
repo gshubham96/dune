@@ -217,13 +217,11 @@ namespace DUNE{
 
             std::map<std::string, casadi::DM> arg, f_eval;
 
-            x_dot = casadi::Function("x_dot", {sym_x, sym_u, sym_p}, {nu_dot});
-
             // set input
             arg["i1"] = u0;
 
             // set parameters
-            if(!areParamsSane(params_)){
+            if(!areParamsSane(params)){
                 ERROR_STRING = "PARAMETERS ARE NOT SANE";
                 return false;
             }

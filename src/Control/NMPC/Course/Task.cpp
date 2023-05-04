@@ -207,7 +207,6 @@ namespace Control
         reset(void)
         {
           controller.reset();
-          controller.updateMpcConfig(m_config_);
           if(!controller.isProblemConfigured()){
             if(!controller.defineMpcProblem(false))
               cri("Could not define MPC Problem, EXITING!");

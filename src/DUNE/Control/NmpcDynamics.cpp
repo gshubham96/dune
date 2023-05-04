@@ -298,7 +298,7 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        bool configureDynamics(std::string model_type, double Ts, bool compile){
+        bool NmpcDynamics::configureDynamics(std::string model_type, double Ts, bool compile){
             // Time step
             Ts_ = Ts;
 

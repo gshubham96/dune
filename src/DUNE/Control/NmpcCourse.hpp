@@ -27,11 +27,12 @@
 // Author: Shubham Garg                                                     *
 //***************************************************************************
 
-#ifndef DUNE_CONTROL_NMPC_HPP_INCLUDED_
-#define DUNE_CONTROL_NMPC_HPP_INCLUDED_
+#ifndef DUNE_CONTROL_NMPC_COURSE_HPP_INCLUDED_
+#define DUNE_CONTROL_NMPC_COURSE_HPP_INCLUDED_
 
 // DUNE headers.
 #include <DUNE/Tasks/Task.hpp>
+#include <DUNE/Control/NmpcDynamics.hpp>
 
 #include <iostream>
 #include <fstream>

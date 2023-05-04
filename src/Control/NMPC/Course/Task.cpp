@@ -67,7 +67,7 @@ namespace Control
         std::vector<double> m_theta_;
         std::map<std::string, double> m_config_, m_params_, m_state_;
         Arguments m_args;
-        NMPC::CourseController controller;
+        NmpcCourse controller;
 
         // DUNE Vars
         double t_now, t_published, t_solved;
@@ -146,16 +146,8 @@ namespace Control
         void
         onUpdateParameters(void)
         {
-          std::map<std::string, double> m_new_configs, m_new_params;
+          std::map<std::string, double> m_new_params;
           // checks if MPC config params are changed
-          if(paramChanged(m_args.model_type))
-            m_new_configs["model_type"] = m_args.model_type;
-          if(paramChanged(m_args.cost_type))
-            m_new_configs["cost_type"] = m_args.cost_type;
-          if(paramChanged(m_args.Tp))
-            m_new_configs["Tp"] = m_args.Tp;
-          if(paramChanged(m_args.Ts))
-            m_new_configs["Ts"] = m_args.Ts;
           if(paramChanged(m_args.Q))
             m_new_params["Q"] = m_args.Q;
           if(paramChanged(m_args.R))
@@ -166,10 +158,6 @@ namespace Control
             m_new_params["omega_p"] = m_args.omega_p;
           if(paramChanged(m_args.R))
             m_new_params["gamma"] = m_args.gamma;
-
-          // update MPC configuration
-          if(!controller.updateMpcConfig(m_new_configs))
-            war("Configuration Parameters NOT Updated!");
 
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))
@@ -208,8 +196,11 @@ namespace Control
           t_solved = t_published;
 
           // defined the probelm
-          if(!controller.defineMpcProblem())
-            cri("Could not define MPC Problem, EXITING!");
+          controller = NmpcCourse(m_args.model_type, m_args.cost_type, m_args.Tp, m_args.Ts, false);
+          if(!controller.isProblemConfigured()){
+            controller.getErrorString(CONTROLLER_STATUS);
+            cri("Could not define MPC Problem, solver says %s!", CONTROLLER_STATUS.c_str());
+          }
           else
             debug("Controller Initialized!");
           t_now = Clock::getSinceEpoch();

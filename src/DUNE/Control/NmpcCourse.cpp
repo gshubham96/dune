@@ -443,7 +443,7 @@ namespace DUNE{
 
             // define dynamics
             if(!defineDynamicsProblem(false)){
-                ERROR_STRING_ = "ERROR DEFINING PROBLEM";
+                ERROR_STRING_ = "ERROR DEFINING DYNAMICS";
                 return;
             }
 
@@ -451,7 +451,7 @@ namespace DUNE{
             if(defineMpcProblem(compile))
                 ERROR_STRING_ = "SOLVER DEFINED CORRECTLY";
             else
-                ERROR_STRING_ = "ERROR DEFINING PROBLEM";
+                ERROR_STRING_ = "ERROR DEFINING SOLVER";
 
             // initialize logging
             saveTrajectoryToFile();

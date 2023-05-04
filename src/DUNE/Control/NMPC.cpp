@@ -310,7 +310,7 @@ namespace DUNE{
             else if (model_type.compare("linear"))
                 model_type_ = 1;
             else
-                ERROR_STRING = "model_type NOT FOUND. CAN ONLY BE <linear> or <nonlinear>"
+                ERROR_STRING = "model_type NOT FOUND. CAN ONLY BE <linear> or <nonlinear>";
 
             // define dynamics
             if(defineDynamicsProblem(compile))

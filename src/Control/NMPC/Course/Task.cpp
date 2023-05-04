@@ -38,7 +38,6 @@ namespace Control
   //!
   //! Controls the course of the vehicle
   //! @author “gshubham96”
-  //  #TODO Speed model is constant and hardcoded. Fix this.
   namespace NMPC
   {
     namespace Course
@@ -65,6 +64,7 @@ namespace Control
         std::vector<double> m_theta_;
         std::map<std::string, double> m_config_, m_params_, m_state_;
         Arguments m_args;
+        NmpcDynamcis dynamics;
         NmpcCourse controller;
 
         // DUNE Vars

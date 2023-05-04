@@ -358,7 +358,7 @@ namespace Control
             
             // if duration of last solved is greater than threshold
             if((t_now - t_solved) > time_to_solve){
-              inf("solving after : %f", t_now - t_solved);
+              // inf("solving after : %f", t_now - t_solved);
               // solve the problem and check for success
               if(controller.optimizeMpcProblem()){
                 t_solved = Clock::getSinceEpoch();
@@ -370,8 +370,8 @@ namespace Control
               }
             }
 
-            t_now = Clock::getSinceEpoch();
             // publish the latest available solution
+            t_now = Clock::getSinceEpoch();
             if(controller.getOptimalInput(m_u_opt_, t_now-t_solved)){
               // send input to topic
               dispatchControl(m_u_opt_);
@@ -380,8 +380,9 @@ namespace Control
               controller.getErrorString(CONTROLLER_STATUS);
               err("Controller says : %s", CONTROLLER_STATUS.c_str());
             }
+
             // update publish time
-            inf("publishing after : %f", t_now - t_published);
+            // inf("publishing after : %f", t_now - t_published);
             t_published = Clock::getSinceEpoch();
 
           }

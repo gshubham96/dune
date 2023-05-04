@@ -105,7 +105,7 @@ namespace DUNE
             //Simulate the dynamics for one time step
             // params keys: Vc, beta_c, Vw, beta_w, Hs, omega_p, gamma_p
             // state_(init/next) keys: psi, u, v, r
-            bool simulateDynamics(const std::map<std::string, double> &state_init, const std::map<std::string, double> &params, const std::map<std::string, double> &state_next);
+            bool simulateDynamics(const std::vector<double> &state_init, const double u0, const std::map<std::string, double> &params, std::vector<double> &state_next);
 
             // returns error or updates from controller
             void getErrorString(std::string &err);

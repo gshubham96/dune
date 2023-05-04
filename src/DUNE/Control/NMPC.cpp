@@ -504,7 +504,7 @@ namespace DUNE{
                 args_["lam_x0"] = generateRandomVector(nx*(N+1)+nu*N);
                 args_["lam_g0"] = generateRandomVector(nx*(N+1));
 
-                initialized=0;
+                initialized_=0;
                 return true;
             }
 
@@ -524,9 +524,9 @@ namespace DUNE{
             // need to do it atlease once
             bool Course::updateMpcParams(const std::map<std::string, double> &param){
                 // Controller is ready to run when parameters are set
-                switch(initialized){
+                switch(initialized_){
                     case -1: ERROR_STRING_ = "configure problem first!\n"; return false;
-                    case  0: initialized++; break;
+                    case  0: initialized_++; break;
                     default: break;
                 }
 
@@ -541,10 +541,10 @@ namespace DUNE{
             bool Course::updateMpcState(const std::map<std::string, double> &state){
 
                 // flag to check if state was updated
-                switch(initialized){
+                switch(initialized_){
                     case -1: ERROR_STRING_ = "configure problem first!\n"; return false;
                     case  0: ERROR_STRING_ = "update parameters first!\n"; return false;
-                    case  1: initialized++; break;
+                    case  1: initialized_++; break;
                     default: break;
                 }
 
@@ -592,7 +592,7 @@ namespace DUNE{
             bool Course::optimizeMpcProblem(){
 
                 // flag to check if nlp was set up and parameters were updated
-                switch(initialized){
+                switch(initialized_){
                     case -1: ERROR_STRING_ = "configure problem first!"; return false;
                     case  0: ERROR_STRING_ = "update parameters first!"; return false;
                     case  1: ERROR_STRING_ = "update state first!"; return false;
@@ -621,7 +621,7 @@ namespace DUNE{
                 arg["lam_g0"] = args_["lam_g0"];
 
                 res = solver(arg);
-                solution_exists = true;
+                solution_exists_ = true;
 
                 // get optimal input trajectory
                 optimized_vars_.clear();
@@ -635,21 +635,21 @@ namespace DUNE{
                 args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
                 args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
-                initialized--;
+                initialized_--;
                 return true;
             }
 
             // get solution from the latest optimized input trajectory
             bool Course::getOptimalInput(double &u_star, const double &t_elapsed){
 
-                // fail if problem is not yet initialized
-                switch(initialized){
+                // fail if problem is not yet initialized_
+                switch(initialized_){
                     case -1: ERROR_STRING_ = "PROBLEM NOT YET CONFIGURED!"; return false;
                     default: break;
                 }
 
                 // fail if NLP hasn't been solved even once 
-                if(!solution_exists){
+                if(!solution_exists_){
                     ERROR_STRING_ = "VALID SOLUTION DOES NOT EXISTS";
                     return false;
                 }
@@ -657,7 +657,7 @@ namespace DUNE{
                 // fail if NLP has not been run for a long time
                 if(t_elapsed > 0.25*Tp){
                     ERROR_STRING_ = "TIME SINCE LAST NLP RUN EXCEEDS THRESHOLD";
-                    solution_exists = false;
+                    solution_exists_ = false;
                     return false;
                 }
 
@@ -670,22 +670,22 @@ namespace DUNE{
 
             // 
             void Course::saveTrajectoryToFile(){
-                if(filecount == -1){
+                if(filecount_ == -1){
                     // open a file
-                    filename = fs::current_path().parent_path().string();
-                    filename = filename + "/results/course_gen.m";
-                    file.open(filename.c_str());
-                    file << "% Results file from " __FILE__ << std::endl;
-                    file << "% Generated " __DATE__ " at " __TIME__ << std::endl << std::endl;
-                    file.close();
-                    filecount++;
+                    filename_ = fs::current_path().parent_path().string();
+                    filename_ = filename_ + "/results/course_gen.m";
+                    file_.open(filename_.c_str());
+                    file_ << "% Results file_ from " __FILE__ << std::endl;
+                    file_ << "% Generated " __DATE__ " at " __TIME__ << std::endl << std::endl;
+                    file_.close();
+                    filecount_++;
                 }
-                else if(filecount > -1){
+                else if(filecount_ > -1){
                     // save trajectory to file
-                    file.open(filename.c_str(), std::ios::app);
-                    file<< "chi_d" << filecount << " = " << reference_ << ";" << std::endl;
-                    file<< "optims" << filecount++ << " = " << optimized_vars_ << ";" << std::endl;
-                    file.close();
+                    file_.open(filename_.c_str(), std::ios::app);
+                    file_<< "chi_d" << filecount_ << " = " << reference_ << ";" << std::endl;
+                    file_<< "optims" << filecount_++ << " = " << optimized_vars_ << ";" << std::endl;
+                    file_.close();
                 }
             }
 
@@ -729,7 +729,7 @@ namespace DUNE{
             // checks if the problem is configured properly. If not, configure it
             bool Course::isProblemConfigured(){
                 // returns true if initalized is greater than -1.
-                if (initialized > -1)
+                if (initialized_ > -1)
                     return true;
                 return false;
             }
@@ -737,11 +737,11 @@ namespace DUNE{
             // allow user to skip configuration
             Course::Course(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile){
                 // set init flag
-                initialized = -1;
+                initialized_ = -1;
                 // set file count flag
-                filecount = -1;
+                filecount_ = -1;
                 // set solution flag
-                solution_exists = false;
+                solution_exists_ = false;
 
                 // get config params
                 if (cost_type.compare("nonlinear"))

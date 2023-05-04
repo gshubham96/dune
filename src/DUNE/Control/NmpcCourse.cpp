@@ -352,9 +352,9 @@ namespace DUNE{
             int t_ind = round(t_elapsed/Ts_);
             u_star = input_traj_[t_ind];
 
-            for(int j = 0; j < 25; j++)
-                std::cout << "traj at " << j << " is " << input_traj_[j] << ", ";
-            std::cout << std::endl;
+            // for(int j = 0; j < 25; j++)
+            //     std::cout << "traj at " << j << " is " << input_traj_[j] << ", ";
+            // std::cout << std::endl;
 
             return true;
         }

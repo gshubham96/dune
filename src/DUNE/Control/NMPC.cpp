@@ -1,4 +1,4 @@
-#include "Dynamics.h"
+#include <DUNE/Control/NMPC.hpp>
 
 namespace DUNE{
     namespace CONTROL{

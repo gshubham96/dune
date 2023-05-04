@@ -747,11 +747,11 @@ namespace DUNE{
                 solution_exists_ = false;
 
                 // get config params
-                if (cost_type_.compare("psi_d"))
+                if (cost_type.compare("psi_d"))
                     cost_type_ = 2;
-                else if (cost_type_.compare("chi_d"))
+                else if (cost_type.compare("chi_d"))
                     cost_type_ = 0;
-                else if (cost_type_.compare("dotv"))
+                else if (cost_type.compare("dotv"))
                     cost_type_ = 1;
                 else{
                     ERROR_STRING_ = "cost_type_ NOT FOUND. CAN ONLY BE <chi_d>, <dotv> or <psi_d>";

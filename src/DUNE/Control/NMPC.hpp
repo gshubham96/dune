@@ -27,8 +27,8 @@
 // Author: Shubham Garg                                                     *
 //***************************************************************************
 
-#ifndef DUNE_CONTROL_FILTER_HPP_INCLUDED_
-#define DUNE_CONTROL_FILTER_HPP_INCLUDED_
+#ifndef DUNE_CONTROL_NMPC_HPP_INCLUDED_
+#define DUNE_CONTROL_NMPC_HPP_INCLUDED_
 
 // DUNE headers.
 #include <DUNE/Tasks/Task.hpp>
@@ -73,7 +73,7 @@ namespace DUNE
             int nx, nu, np, N;
             // config params for RK4 simulation
             int model_type_;
-            double Tp_, Ts_; 
+            double Ts_; 
             // surge speed model
             std::vector<double> speed_model;
             // get system parameters from "mat" file and load here
@@ -111,7 +111,7 @@ namespace DUNE
             void getErrorString(std::string &err);
 
             // allow user to skip problem configuration
-            Dynamics(std::string &model_type, double &Tp, &double Ts, bool compile);
+            Dynamics(std::string model_type, double Ts, bool compile);
 
             // Destructor
             ~Dynamics();

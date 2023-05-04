@@ -247,21 +247,21 @@ namespace DUNE{
 
             // RUNGE KUTTA STAGE 2
             for(int i=0; i<nx; i++)
-                p0[i] = state_init[i] + 0.5*Ts*rk1[i];
+                p0[i] = state_init[i] + 0.5*Ts_*rk1[i];
             args["i0"] = p0;
             f_eval = x_dot(args);
             std::vector<double> rk2(f_eval["o0"]);
 
             // RUNGE KUTTA STAGE 3
             for(int i=0; i<nx; i++)
-                p0[i] = state_init[i] + 0.5*Ts*rk2[i];
+                p0[i] = state_init[i] + 0.5*Ts_*rk2[i];
             args["i0"] = p0;
             f_eval = x_dot(args);
             std::vector<double> rk3(f_eval["o0"]);
 
             // RUNGE KUTTA STAGE 4
             for(int i=0; i<nx; i++)
-                p0[i] = state_init[i] + Ts*rk3[i];
+                p0[i] = state_init[i] + Ts_*rk3[i];
             args["i0"] = p0;
             f_eval = x_dot(args);
             std::vector<double> rk4(f_eval["o0"]);
@@ -272,7 +272,7 @@ namespace DUNE{
                 rk2[i] *= 2;
                 rk3[i] *= 2;
 
-                x_rk4[i] = p0[i] + (Ts/6) * (rk1[i] + rk2[i] + rk3[i] + rk4[i]);
+                x_rk4[i] = p0[i] + (Ts_/6) * (rk1[i] + rk2[i] + rk3[i] + rk4[i]);
             }
 
             state_next = x_rk4;
@@ -305,7 +305,7 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        Dynamics(const std::string &model_type, const double &Tp, const &double Ts):Tp_(Tp), Ts_(Ts){
+        Dynamics(std::string model_type, double Tp, double Ts):Tp_(Tp), Ts_(Ts){
             // get config params
             if (model_type.compare("nonlinear"))
                 model_type_ = 0;

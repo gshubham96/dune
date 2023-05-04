@@ -62,64 +62,166 @@ namespace DUNE
 
             class Dynamics 
             {
+                private:
+                // ##################################
+                // ##-------MEMBER VARIABLES-------##
+                // ##################################
+                // config params for RK4 simulation
+                int model_type_;
+                // get system parameters from "mat" file and load here
+                std::map<std::string, double> system_;
+                std::string file_path;
 
-            private:
-            // ##################################
-            // ##-------MEMBER VARIABLES-------##
-            // ##################################
-            // initialization variable
-            int initialized;
-            // lengths of state, input and paramter vectors
-            int nx, nu, np, N;
-            // config params for RK4 simulation
-            int model_type_;
-            double Ts_; 
-            // surge speed model
-            std::vector<double> speed_model;
-            // get system parameters from "mat" file and load here
-            std::map<std::string, double> system_;
-            std::string file_path;
-            // dynamics function
-            casadi::Function x_dot;
-            // error handling
-            std::string ERROR_STRING;
-            
-            // ##################################
-            // ##-------MEMBER FUNCTIONS-------##
-            // ##################################
+                protected:
+                // ##################################
+                // ##-------MEMBER VARIABLES-------##
+                // ##################################
+                // lengths of state, input and paramter vectors
+                int nx, nu, np, N;
+                // config params for RK4 simulation
+                double Ts_; 
+                // surge speed model
+                std::vector<double> speed_model;
+                // dynamics function
+                casadi::Function x_dot;
+                // error handling
+                std::string ERROR_STRING;
+                // casadi state variables
+                casadi::SX sym_x, sym_u, sym_p;
+                
+                // ##################################
+                // ##-------MEMBER FUNCTIONS-------##
+                // ##################################
 
-            // wrap the angle between [-pi, pi]
-            double ssa(double diff);
-            casadi::SX ssa(casadi::SX diff);
+                // wrap the angle between [-pi, pi]
+                double ssa(double diff);
+                casadi::SX ssa(casadi::SX diff);
 
-            // reads data from file and stores in passed arg
-            bool loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file);
+                // reads data from file and stores in passed arg
+                bool loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file);
 
-            // performs sanity check of config params
-            bool areParamsSane(const std::map<std::string, double> &mapped_dict);
+                // performs sanity check of config params
+                bool areParamsSane(const std::map<std::string, double> &mapped_dict);
 
-            public:
-            // Function to define and compile the NLP Optimization Problem
-            bool defineDynamicsProblem(bool compile);
+                // Function to define and compile the NLP Optimization Problem
+                bool defineDynamicsProblem(bool compile);
 
-            //Simulate the dynamics for one time step
-            // params keys: Vc, beta_c, Vw, beta_w, Hs, omega_p, gamma_p
-            // state_(init/next) keys: psi, u, v, r
-            bool simulateDynamics(const std::vector<double> &state_init, const double u0, const std::map<std::string, double> &params, std::vector<double> &state_next);
+                public:
+                // ##################################
+                // ##-------MEMBER FUNCTIONS-------##
+                // ##################################
 
-            // returns error or updates from controller
-            void getErrorString(std::string &err);
+                //Simulate the dynamics for one time step
+                // params keys: Vc, beta_c, Vw, beta_w, Hs, omega_p, gamma_p
+                // state_(init/next) keys: psi, u, v, r
+                bool simulateDynamics(const std::vector<double> &state_init, const double u0, const std::map<std::string, double> &params, std::vector<double> &state_next);
 
-            // allow user to skip problem configuration
-            Dynamics(std::string model_type, double Ts, bool compile);
+                // returns error or updates from controller
+                void getErrorString(std::string &err);
 
-            // Default Constructor
-            Dynamics();
+                // allow user to skip problem configuration
+                Dynamics(std::string model_type, double Ts, bool compile);
 
-            // Destructor
-            ~Dynamics();
+                // Default Constructor
+                Dynamics();
+
+                // Destructor
+                ~Dynamics();
 
             };
+
+            class Course: public Dynamics {
+                
+                private:
+                    // ##################################
+                    // ##-------MEMBER VARIABLES-------##
+                    // ##################################
+                    // flag to check if valid solution exists
+                    bool solution_exists_;
+                    // initialization variable
+                    int initialized_;
+                    // MPC Parameters
+                    int cost_type_;
+                    double Tp_;
+                    // course reference for the controller
+                    double reference_;
+                    // config parameters, runtime paramters and state for MPC
+                    std::map<std::string, double> params_, state_;
+                    // initial guess for warm start
+                    std::map<std::string, std::vector<double>> args_;
+                    // NLP Solver
+                    casadi::Function solver_;
+                    // optimized input trajectory
+                    std::vector<double> optimized_vars_, input_traj_;
+                    // file handling
+                    int filecount_;
+                    std::ofstream file_;
+                    std::string filename_;
+                    // error handling
+                    std::string ERROR_STRING_;
+                    
+                    // ##################################
+                    // ##-------MEMBER FUNCTIONS-------##
+                    // ##################################
+
+                    // Function to load defaults for config, params and system dynamics
+                    bool loadDefaults();
+
+                    // cosntructs a mpc-friendly format parameter vector
+                    std::vector<double> reWriteParams();
+
+                    // generates random vector for warm start
+                    std::vector<double> generateRandomVector(int n);
+
+                public:
+                    // Function to define and compile the NLP Optimization Problem
+                    bool defineMpcProblem(bool compile);
+
+                    // updates config parameters if user wants to change the NLP
+                    bool updateMpcConfig(const std::map<std::string, double> &config);
+
+                    // updates parameters such as wind, currents, etc
+                    // need to do it atlease once
+                    bool updateMpcParams(const std::map<std::string, double> &param);
+
+                    // updates mpc state
+                    bool updateMpcState(const std::map<std::string, double> &state);
+
+                    // updates course reference angle [rad]
+                    bool updateMpcReference(const double &reference);
+
+                    // Optimize the NLP with updated state and parameters
+                    bool optimizeMpcProblem();
+
+                    // Get the result from the optimized input
+                    bool getOptimalInput(double &u_star, const double &t_elapsed);
+
+                    // debug function to save trajectory to file
+                    void saveTrajectoryToFile(void);
+
+                    // debug function to print trajectory and other info on screen
+                    void print_details(void);
+
+                    // resets the controller
+                    void reset(void);
+
+                    // checks if the problem is configured properly. If not, configure it
+                    bool isProblemConfigured();
+
+                    // returns error or updates from controller
+                    void getErrorString(std::string &err);
+
+            // allow user to skip problem configuration
+            Course(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile);
+
+            // Default Constructor
+            Course();
+
+            // Destructor
+            ~Course();
+
+            };
+
 
         }
     }

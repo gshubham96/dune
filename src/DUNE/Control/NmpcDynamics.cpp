@@ -21,8 +21,6 @@ namespace DUNE{
             // ################################################
             // ###----------------SETUP PARAMS--------------###
             // ################################################
-            // mpc params
-            nx = 4; nu = 1; np = 14;                                                    // constants as their is no plan to allow multiple models yet
 
             // read system params from file
             if(!loadDefaultsFromFile(file_path, system_)){
@@ -319,6 +317,13 @@ namespace DUNE{
             }
 
             return true;
+        }
+
+        // Constructor
+        NmpcDynamics::NmpcDynamics() { 
+            // mpc params
+            // TODO constants as their is no plan to allow multiple models yet
+            nx = 4; nu = 1; np = 14;                                                    
         }
 
         // Destructor

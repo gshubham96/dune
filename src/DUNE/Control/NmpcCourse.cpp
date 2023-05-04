@@ -462,6 +462,13 @@ namespace DUNE{
             return true;
         }
 
+        // Default Constructor
+        NmpcCourse::NmpcCourse(){
+            // set init flag
+            initialized_ = -1;
+        }
+
+
         // Destructor
         NmpcCourse::~NmpcCourse() { 
             // std::cout << "My class is destroyed here. :(" << std::endl; 

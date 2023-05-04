@@ -177,7 +177,7 @@ namespace DUNE{
             return true;
         }
 
-        // reads data from file and stores in passed arg
+        // reads data from file and stores in passed args
         bool Dynamics::loadDefaultsFromFile(const std::string &file_name, std::map<std::string, double> &data_from_file){
 
             // get file name + path
@@ -215,10 +215,10 @@ namespace DUNE{
 
         bool Dynamics::simulateDynamics(const std::vector<double> &state_init, const double u0, const std::map<std::string, double> &params, std::vector<double> &state_next){
 
-            std::map<std::string, casadi::DM> arg, f_eval;
+            std::map<std::string, casadi::DM> args, f_eval;
 
             // set input
-            arg["i1"] = u0;
+            args["i1"] = u0;
 
             // set parameters
             if(!areParamsSane(params)){
@@ -233,11 +233,11 @@ namespace DUNE{
             param_vector[9] = params.at("Hs");
             param_vector[10] = params.at("omega_p");
             param_vector[11] = params.at("gamma_p");
-            arg["i2"] = param_vector;
+            args["i2"] = param_vector;
 
             // set initial state
             std::vector<double> p0 = state_init;
-            arg["i0"] = p0;
+            args["i0"] = p0;
 
             // RUNGE KUTTA STAGE 1
             f_eval = x_dot(args);

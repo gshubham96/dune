@@ -52,7 +52,7 @@ namespace Control
         std::string model_type, cost_type;
         double Tp, Ts;
         // runtime params for MPC
-        double Hs, omega_p, gamma, Q, R;
+        double Hs, omega_p, gamma_p, Q, R;
         // solver and output frequency
         double Hz_solver, Hz_output;
       };
@@ -69,7 +69,13 @@ namespace Control
         // DUNE Vars
         double t_now, t_published, t_solved;
         double time_to_solve, time_to_publish;
+        // Stores error messages from the controller
         std::string CONTROLLER_STATUS;
+        // True if vehicle is in service mode.
+        bool m_service;
+        // True if vehicle is in maneuver mode.
+        bool m_maneuver;
+
 
         //! Constructor.
         //! @param[in] name task name.
@@ -109,7 +115,7 @@ namespace Control
             .defaultValue("0.6283")
             .description("Specify output frequency in Hz");
 
-          param("Wave Angle of Attack", m_args.gamma)
+          param("Wave Angle of Attack", m_args.gamma_p)
             .defaultValue("1.57")
             .description("Specify output frequency in Hz");
 
@@ -126,10 +132,10 @@ namespace Control
           time_to_solve = 1/m_args.Hz_solver;
 
           bind<IMC::Abort>(this);
+          bind<IMC::VehicleState>(this);
           bind<IMC::EstimatedState>(this);
           bind<IMC::DesiredHeading>(this);
           bind<IMC::AbsoluteWind>(this);
-          // bind<IMC::EstimatedFreq>(this);
           bind<IMC::SingleCurrentCell>(this);
 
           // Making the task activable
@@ -149,12 +155,12 @@ namespace Control
             m_new_params["Q"] = m_args.Q;
           if(paramChanged(m_args.R))
             m_new_params["R"] = m_args.R;
-          if(paramChanged(m_args.R))
+          if(paramChanged(m_args.Hs))
             m_new_params["Hs"] = m_args.Hs;
-          if(paramChanged(m_args.R))
+          if(paramChanged(m_args.omega_p))
             m_new_params["omega_p"] = m_args.omega_p;
-          if(paramChanged(m_args.R))
-            m_new_params["gamma"] = m_args.gamma;
+          if(paramChanged(m_args.gamma_p))
+            m_new_params["gamma_p"] = m_args.gamma_p;
 
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))
@@ -310,11 +316,42 @@ namespace Control
 
         }
 
+        //! Checks vehicle state
+        void
+        consume(const IMC::VehicleState* msg)
+        {
+          if(msg->getSource() != getSystemId())
+            return;
+          if(msg->op_mode == IMC::VehicleState::VS_SERVICE)
+          {
+            m_service = true;
+            m_maneuver = false;
+          }
+          if(msg->op_mode == IMC::VehicleState::VS_MANEUVER)
+          {
+            m_maneuver = true;
+            m_service = false;
+          }
+        }
+
         //! publisher function
         void dispatchControl(double u = 1000){
+
           // IMC Vars
           IMC::SetServoPosition msg;
-          msg.value = u;
+
+          // TODO: Consider adding  
+          // Check if VEHICLE is in MANEOUVRING STAGE
+          if(m_service)
+          {
+            debug("(service) Dispatching a 0 rudder angle");
+            msg.value = 0;
+          }
+          else if (m_maneuver){
+            debug("(maneuver) Dispatching a %f rudder angle", u);
+            msg.value = u;
+          }
+
           cri("dispatching output: %f", u);
           // dispatch(msg);
         } 

@@ -29,71 +29,209 @@
 
 // DUNE headers.
 #include <DUNE/DUNE.hpp>
+using DUNE_NAMESPACES;
 
 namespace Simulators
 {
-  //! Insert short task description here.
+  //! Vehicle SIMulator for DUNE.
+  //! %VSIM is responsible for multiple vehicle simulation.
+  //! In the present, it is able to simulate
+  //! Unmanned Underwater Vehicles
+  //! and Autonomous Surface Vehicles.
   //!
-  //! Insert explanation on task behaviour here.
-  //! @author gshubham96
+  //! @author Bruno Terra
+  //! @author José Braga
   namespace VSIMCasadi
   {
-    using DUNE_NAMESPACES;
-
-    struct Task: public DUNE::Tasks::Task
+    //! %Task arguments.
+    struct Arguments
     {
-      //! Constructor.
-      //! @param[in] name task name.
-      //! @param[in] ctx context.
+      //! Entity label of the stream velocity source.
+      std::string svlabel, cvlabel, wvlabel;
+      //! Simulation time multiplier
+      double time_multiplier;
+      //! time step
+      double Ts;
+      //! model type
+      std::string model_type;
+    };
+
+    //! Simulator task.
+    struct Task: public Tasks::Periodic
+    {
+      //! Simulation vehicle.
+      NmpcDynamics m_sim;
+      //! Simulated position (X,Y,Z).
+      IMC::SimulatedState m_state;
+      //! Environment Forces
+      //! Task arguments.
+      Arguments m_args;
+      //! Stream velocity.
+      double m_svel[3];
+
       Task(const std::string& name, Tasks::Context& ctx):
-        DUNE::Tasks::Task(name, ctx)
+        Periodic(name, ctx),
+        m_vehicle(NULL),
+        m_world(NULL)
       {
+        param("Time Multiplier", m_args.time_multiplier)
+        .defaultValue("1.0")
+        .description("Simulation time multiplier");
+
+        param("Entity Label - Stream Velocity Source", m_args.svlabel)
+            .defaultValue("Stream Velocity Simulator")
+            .description("Entity label of the stream velocity source.");
+
+        // Register handler routines.
+        bind<IMC::GpsFix>(this);
+        bind<IMC::ServoPosition>(this);
+        bind<IMC::SetThrusterActuation>(this);
+        bind<IMC::EstimatedStreamVelocity>(this);
       }
 
-      //! Update internal state with new parameter values.
       void
       onUpdateParameters(void)
       {
+        if (m_args.time_multiplier != 1.0)
+        {
+          Time::Clock::setTimeMultiplier(m_args.time_multiplier);
+          war("Using time multiplier: x%.2f", Time::Clock::getTimeMultiplier());
+        }
       }
 
-      //! Reserve entity identifiers.
-      void
-      onEntityReservation(void)
-      {
-      }
-
-      //! Resolve entity names.
-      void
-      onEntityResolution(void)
-      {
-      }
-
-      //! Acquire resources.
-      void
-      onResourceAcquisition(void)
-      {
-      }
-
-      //! Initialize resources.
-      void
-      onResourceInitialization(void)
-      {
-      }
-
-      //! Release resources.
+      //! Release allocated resources.
       void
       onResourceRelease(void)
       {
+        Memory::clear(m_vehicle);
+        Memory::clear(m_world);
       }
 
-      //! Main loop.
+      //! Initialize resources and add vehicle to the world.
       void
-      onMain(void)
+      onResourceInitialization(void)
       {
-        while (!stopping())
-        {
-          waitForMessages(1.0);
-        }
+        // Initialize simulation world.
+        m_world = Factory::produceWorld(m_ctx.config);
+        if (!m_world)
+          throw std::runtime_error(DTR("error loading world parameters."));
+
+        m_vehicle = Factory::produceVehicle(m_ctx.config);
+        if (!m_vehicle)
+          throw std::runtime_error(DTR("error loading vehicle parameters."));
+
+        m_world->addVehicle(m_vehicle);
+        m_world->setTimeStep(1.0 / getFrequency());
+
+        m_svel[0] = 0.0;
+        m_svel[1] = 0.0;
+        m_svel[2] = 0.0;
+
+        setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
+      }
+
+      void
+      consume(const IMC::GpsFix* msg)
+      {
+        if (msg->type != IMC::GpsFix::GFT_MANUAL_INPUT)
+          return;
+
+        // We assume vehicle starts at sea surface.
+        m_vehicle->setPosition(0, 0, 0);
+        m_vehicle->setOrientation(0, 0, msg->cog);
+
+        // Define vehicle origin.
+        m_sstate.lat = msg->lat;
+        m_sstate.lon = msg->lon;
+        m_sstate.height = msg->height;
+
+        requestActivation();
+
+        // Save message to cache.
+        IMC::CacheControl cop;
+        cop.op = IMC::CacheControl::COP_STORE;
+        cop.message.set(*msg);
+        dispatch(cop);
+      }
+
+      void
+      consume(const IMC::ServoPosition* msg)
+      {
+        UUV* v = static_cast<UUV*>(m_vehicle);
+        v->updateFin(msg->id, msg->value);
+      }
+
+      void
+      consume(const IMC::SetThrusterActuation* msg)
+      {
+        m_vehicle->updateEngine(msg->id, msg->value);
+      }
+
+      void
+      consume(const IMC::EstimatedStreamVelocity* msg)
+      {
+        // Filter valid messages.
+        if (msg->getSource() != getSystemId() ||
+            resolveEntity(msg->getSourceEntity()) != m_args.svlabel)
+          return;
+
+        m_svel[0] = msg->x;
+        m_svel[1] = msg->y;
+        m_svel[2] = msg->z;
+
+        debug(DTR("Setting stream velocity: %f m/s N : %f m/s E : %f m/s D"),
+              m_svel[0],
+              m_svel[1],
+              m_svel[2]);
+      }
+
+      void
+      task(void)
+      {
+        if (!isActive())
+          return;
+
+        m_world->takeStep();
+
+        // Fill position.
+        double* position = m_vehicle->getPosition();
+
+        // TODO
+        // This is a temporary fix and this operation should probably be done
+        // inside the Vehicle class.
+        // Add stream velocity.
+        position[0] += m_world->getTimeStep() * m_svel[0];
+        position[1] += m_world->getTimeStep() * m_svel[1];
+        position[2] += m_world->getTimeStep() * m_svel[2];
+
+        m_sstate.x = position[0];
+        m_sstate.y = position[1];
+        m_sstate.z = std::max(position[2], 0.0);
+
+        // Fill attitude.
+        double* attitude = m_vehicle->getOrientation();
+        m_sstate.phi = Angles::normalizeRadian(attitude[0]);
+        m_sstate.theta = Angles::normalizeRadian(attitude[1]);
+        m_sstate.psi = Angles::normalizeRadian(attitude[2]);
+
+        // Fill angular velocity.
+        double* av = m_vehicle->getAngularVelocity();
+        m_sstate.p = av[0];
+        m_sstate.q = av[1];
+        m_sstate.r = av[2];
+
+        // Fill linear velocity.
+        double* lv = m_vehicle->getLinearVelocity();
+        m_sstate.u = lv[0];
+        m_sstate.v = lv[1];
+        m_sstate.w = lv[2];
+
+        // Fill stream velocity.
+        m_sstate.svx = m_svel[0];
+        m_sstate.svy = m_svel[1];
+        m_sstate.svz = m_svel[2];
+
+        dispatch(m_sstate);
       }
     };
   }

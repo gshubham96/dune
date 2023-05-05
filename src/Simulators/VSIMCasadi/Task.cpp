@@ -70,9 +70,7 @@ namespace Simulators
       double m_svel[3];
 
       Task(const std::string& name, Tasks::Context& ctx):
-        Periodic(name, ctx),
-        m_vehicle(NULL),
-        m_world(NULL)
+        Periodic(name, ctx)
       {
         param("Time Multiplier", m_args.time_multiplier)
         .defaultValue("1.0")

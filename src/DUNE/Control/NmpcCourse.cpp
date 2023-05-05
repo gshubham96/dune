@@ -312,7 +312,6 @@ namespace DUNE{
             // get optimal input trajectory
             optimized_vars_.clear();
             optimized_vars_ = std::vector<double>(res.at("x"));                
-            std::cout << "optimized vars: " << optimized_vars_ << std::endl;
 
             input_traj_.clear();
             input_traj_.assign(optimized_vars_.begin()+nx*(N+1), optimized_vars_.end());

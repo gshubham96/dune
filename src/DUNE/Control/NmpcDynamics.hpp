@@ -68,7 +68,7 @@ namespace DUNE
             int model_type_;
             // get system parameters from "mat" file and load here
             std::map<std::string, double> system_;
-            std::string file_path;
+            std::string file_path_;
 
             protected:
             // ##################################
@@ -118,7 +118,7 @@ namespace DUNE
             void getErrorString(std::string &err);
 
             // allow user to skip problem configuration
-            bool configureDynamics(std::string model_type, double Ts, bool compile);
+            bool configureDynamics(const std::string model_type, const std::string &file_path, const double &Ts, const bool &compile);
 
             // Default Constructor
             NmpcDynamics();

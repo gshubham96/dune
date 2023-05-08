@@ -23,7 +23,7 @@ namespace DUNE{
             // ################################################
 
             // read system params from file
-            if(!loadDefaultsFromFile(file_path, system_)){
+            if(!loadDefaultsFromFile(file_path_, system_)){
                 ERROR_STRING_ = "COULD NOT LOAD SYSTEM PARAMETERS FROM FILE";
                 std::cout << ERROR_STRING_ << std::endl;
                 return false;
@@ -300,9 +300,11 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        bool NmpcDynamics::configureDynamics(std::string model_type, double Ts, bool compile){
+        bool NmpcDynamics::configureDynamics(const std::string model_type, const std::string &file_path, const double &Ts, const bool &compile){
             // Time step
             Ts_ = Ts;
+
+            file_path_ = file_path;
 
             // get config params
             if (model_type.compare("nonlinear"))

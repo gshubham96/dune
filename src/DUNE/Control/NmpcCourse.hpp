@@ -137,7 +137,7 @@ namespace DUNE
 
                 // configures the class. 
                 // TODO make this a constructor instead?
-                bool configureSolver(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile);
+                bool configureSolver(std::string model_type, std::string cost_type, std::string file_path, double Tp, double Ts, bool compile);
 
             // Default Constructor
             NmpcCourse();

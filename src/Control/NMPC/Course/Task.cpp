@@ -289,7 +289,7 @@ namespace Control
           m_params_["Vw"] = msg->speed;
           m_params_["beta_w"] = msg->dir;
           controller.updateMpcParams(m_params_);
-          debug("updated param: wind");
+          debug("updated param: wind %f, %f", msg->speed, msg->dir);
 
         }
 
@@ -316,7 +316,7 @@ namespace Control
           m_params_["Vc"] = vels[0];
           m_params_["beta_c"] = dirs[0];
           controller.updateMpcParams(m_params_);
-          debug("updated param: current");
+          debug("updated param: current, %f, %f", vels[0], dirs[0]);
 
         }
 
@@ -385,7 +385,6 @@ namespace Control
             state_d["v"] = 0.19964;
             state_d["r"] = 0.031876;
             controller.updateMpcState(state_d);
-            controller.updateMpcReference(0.5);
 
             // wait till it is time to publish again
             if ((t_now - t_published) < time_to_publish)

@@ -72,8 +72,6 @@ namespace DUNE{
                 k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma_p) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],
                 k_2 = speed_model[3]*Vw;
 
-            std::cout << "$$$$ system_ = " << system_ << std::endl;
-
             // detived states
             casadi::SX 
                 u_e = u + EPS,
@@ -109,7 +107,6 @@ namespace DUNE{
 
             // WAVE FOILS
             casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
-            std::cout << "tau_foil_u = " << tau_foil_u << "D11: " << D11 << std::endl;
 
             // RUDDER
             casadi::SX tau_rudr_u, tau_rudr_v, tau_rudr_r;
@@ -180,8 +177,6 @@ namespace DUNE{
             // get file name + path
             // std::string full_file_name = fs::current_path().parent_path().string() + "/dune/etc/autonaut-mpc/" + file_name;
             std::string full_file_name = file_name;
-
-            std::cout << "reading from: ======== " << full_file_name << "\n" ;
 
             std::ifstream myFile(full_file_name);
             std::string line;

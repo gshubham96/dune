@@ -269,7 +269,7 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
-          // inf("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          inf("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
         // Updated desired course

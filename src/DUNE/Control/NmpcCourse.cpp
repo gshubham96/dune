@@ -296,7 +296,7 @@ namespace DUNE{
             // checks if params are sane
             if(areParamsSane(params_)){
                 std::vector p = reWriteParams();
-                arg["p"] = p;            
+                arg["p"] = p;           
             }
             else
                 return false;
@@ -305,6 +305,7 @@ namespace DUNE{
             arg["x0"] = args_["x0"];
             arg["lam_x0"] = args_["lam_x0"];
             arg["lam_g0"] = args_["lam_g0"];
+
 
             res = solver_(arg);
             solution_exists_ = true;
@@ -320,6 +321,9 @@ namespace DUNE{
             args_["x0"]  = optimized_vars_;
             args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
             args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
+
+            std::cout << "parameters         : " << arg["p"] << std::endl;
+            print_details();
 
             initialized_--;
             return true;
@@ -406,9 +410,9 @@ namespace DUNE{
             //     std::cout << optimized_vars_[nx * N + j] << ", ";                    
 
             for(int j = 0; j < 10; j++)
-                std::cout << "traj at " << j << " is " << input_traj_[j] << std::endl;
+                std::cout << "input traj at " << j << " is " << input_traj_[j] << std::endl;
 
-            std::cout << "\n##################################\n\n ";
+            std::cout << "\n##################################\n";
         }
 
         // 

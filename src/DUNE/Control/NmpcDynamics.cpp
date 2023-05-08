@@ -30,11 +30,11 @@ namespace DUNE{
             }
 
             // system params
-            const double D11 = system_["D11"], R11 = system_["R11"], INV_M11 = system_["INV_M11"];
-            const double D22 = system_["D22"], R22 = system_["R21"], INV_M22 = system_["INV_M22"], INV_M23 = system_["INV_M23"];
-            const double D33 = system_["D33"], R33 = system_["R31"], INV_M32 = system_["INV_M32"], INV_M33 = system_["INV_M33"];
-            const double CR12 = system_["CR12"], CR21 = system_["CR21"];
-            const double W11 = system_["W11"], W21 = system_["W21"], W31 = system_["W31"];
+            const double D11 = system_.at("D11"), R11 = system_.at("R11"), INV_M11 = system_.at("INV_M11");
+            const double D22 = system_.at("D22"), R22 = system_.at("R21"), INV_M22 = system_.at("INV_M22"), INV_M23 = system_.at("INV_M23");
+            const double D33 = system_.at("D33"), R33 = system_.at("R31"), INV_M32 = system_.at("INV_M32"), INV_M33 = system_.at("INV_M33");
+            const double CR12 = system_.at("CR12"), CR21 = system_.at("CR21");
+            const double W11 = system_.at("W11"), W21 = system_.at("W21"), W31 = system_.at("W31");
 
             // ################################################
             // ###----------------SETUP CONTROL DYNAMICS----###

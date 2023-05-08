@@ -49,7 +49,7 @@ namespace Control
       {
         std::string file_path;
         // config parameters for MPC
-        std::string model_type, cost_type, file_path;
+        std::string model_type, cost_type;
         double Tp, Ts;
         // runtime params for MPC
         double Hs, omega_p, gamma_p, Q, R;
@@ -86,6 +86,10 @@ namespace Control
           param("Model Type", m_args.model_type)
             .defaultValue("1")
             .description("Choose betweem: Linear(1) and Nonlinear(0)");
+
+          param("File Path", m_args.file_path)
+            .defaultValue("1")
+            .description("Absolute Path of the system.csv file");
 
           param("Cost Type", m_args.cost_type)
             .defaultValue("1")

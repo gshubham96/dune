@@ -49,7 +49,7 @@ namespace Control
       {
         std::string file_path;
         // config parameters for MPC
-        std::string model_type, cost_type;
+        std::string model_type, cost_type, file_path;
         double Tp, Ts;
         // runtime params for MPC
         double Hs, omega_p, gamma_p, Q, R;
@@ -199,7 +199,7 @@ namespace Control
           t_solved = t_published;
 
           // defined the probelm
-          bool stat = controller.configureSolver(m_args.model_type, m_args.cost_type, m_args.Tp, m_args.Ts, false);
+          bool stat = controller.configureSolver(m_args.model_type, m_args.cost_type, m_args.file_path, m_args.Tp, m_args.Ts, false);
           if(!stat){
             controller.getErrorString(CONTROLLER_STATUS);
             cri("Could not define MPC Problem, solver says %s!", CONTROLLER_STATUS.c_str());

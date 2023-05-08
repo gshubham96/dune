@@ -429,7 +429,7 @@ namespace DUNE{
         }
 
         // allow user to skip configuration
-        bool NmpcCourse::configureSolver(std::string model_type, std::string cost_type, double Tp, double Ts, bool compile){
+        bool NmpcCourse::configureSolver(std::string model_type, std::string cost_type, std::string file_path, double Tp, double Ts, bool compile){
             // set init flag
             initialized_ = -1;
             // set file count flag
@@ -438,7 +438,7 @@ namespace DUNE{
             solution_exists_ = false;
 
             // configure Dynamics
-            if(!configureDynamics(model_type, Ts, false)){
+            if(!configureDynamics(model_type, file_path, Ts, false)){
                 ERROR_STRING_ = "ERROR CONFIGURING DYNAMICS";
                 return false;
             };

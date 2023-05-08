@@ -385,6 +385,7 @@ namespace Control
             state_d["v"] = 0.19964;
             state_d["r"] = 0.031876;
             controller.updateMpcState(state_d);
+            controller.updateMpcReference(0.5);
 
             // wait till it is time to publish again
             if ((t_now - t_published) < time_to_publish)

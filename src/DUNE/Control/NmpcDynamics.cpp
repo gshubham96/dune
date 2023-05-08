@@ -108,7 +108,7 @@ namespace DUNE{
 
             // WAVE FOILS
             casadi::SX tau_foil_u = (k_1 + k_2*cos(psi - beta_w - PI)) * D11;
-            std::cout << "tau_foil_u = " << tau_foil_u << std::endl;
+            std::cout << "tau_foil_u = " << tau_foil_u << "D11: " << D11 << std::endl;
 
             // RUDDER
             casadi::SX tau_rudr_u, tau_rudr_v, tau_rudr_r;

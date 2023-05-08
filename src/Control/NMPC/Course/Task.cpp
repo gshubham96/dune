@@ -352,11 +352,10 @@ namespace Control
             msg.value = 0;
           }
           else if (m_maneuver){
-            debug("(maneuver) Dispatching a %f rudder angle", u);
+            cri("(maneuver) Dispatching a %f rudder angle", u);
             msg.value = u;
           }
 
-          cri("dispatching output: %f", u);
           // dispatch(msg);
         } 
 
@@ -379,6 +378,13 @@ namespace Control
 
             // get current time
             t_now = Clock::getSinceEpoch();
+
+            std::map<std::string, double> state_d;
+            state_d["psi"] = 0.091855;
+            state_d["u"] = 0.9821;
+            state_d["v"] = 0.19964;
+            state_d["r"] = 0.031876;
+            controller.updateMpcState(state_d);
 
             // wait till it is time to publish again
             if ((t_now - t_published) < time_to_publish)

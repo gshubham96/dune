@@ -260,7 +260,6 @@ namespace DUNE{
             param_vector[3] = state_["r"];
             // set desired state
             param_vector[4] = reference_;
-            param_vector[4] = 0.5;
             // set env params                
             param_vector[5] = params_["Vc"];
             param_vector[6] = ssa(params_["beta_c"]);

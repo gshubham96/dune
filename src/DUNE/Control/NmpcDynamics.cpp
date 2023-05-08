@@ -25,6 +25,7 @@ namespace DUNE{
             // read system params from file
             if(!loadDefaultsFromFile(file_path, system_)){
                 ERROR_STRING_ = "COULD NOT LOAD SYSTEM PARAMETERS FROM FILE";
+                std::cout << ERROR_STRING_ << std::endl;
                 return false;
             }
 
@@ -71,7 +72,7 @@ namespace DUNE{
                 k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma_p) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],
                 k_2 = speed_model[3]*Vw;
 
-            std::cout << "$$$$ k1 = " << k_1 << ", k_2" << k_2 << std::endl;
+            std::cout << "$$$$ system_ = " << system_ << std::endl;
 
             // detived states
             casadi::SX 

@@ -71,6 +71,8 @@ namespace DUNE{
                 k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma_p) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],
                 k_2 = speed_model[3]*Vw;
 
+            std::cout << "$$$$ k1 = " << k_1 << ", k_2" << k_2 << std::endl;
+
             // detived states
             casadi::SX 
                 u_e = u + EPS,

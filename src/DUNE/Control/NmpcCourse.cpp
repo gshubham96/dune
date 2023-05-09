@@ -409,8 +409,8 @@ namespace DUNE{
             // for(int j = 0; j < nx; j++)
             //     std::cout << optimized_vars_[nx * N + j] << ", ";                    
 
-            for(int j = 0; j < 10; j++)
-                std::cout << "input traj at " << j << " is " << input_traj_[j] << std::endl;
+            // for(int j = 0; j < 10; j++)
+            //     std::cout << "input traj at " << j << " is " << input_traj_[j] << std::endl;
 
             std::cout << "\n##################################\n";
         }

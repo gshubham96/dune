@@ -176,6 +176,7 @@ namespace DUNE{
 
             // get file name + path
             // std::string full_file_name = fs::current_path().parent_path().string() + "/dune/etc/autonaut-mpc/" + file_name;
+            // std::string full_file_name = file_name + "/system.csv";
             std::string full_file_name = file_name;
 
             std::ifstream myFile(full_file_name);

@@ -476,7 +476,6 @@ namespace DUNE{
             initialized_ = -1;
         }
 
-
         // Destructor
         NmpcCourse::~NmpcCourse() { 
             // std::cout << "My class is destroyed here. :(" << std::endl; 

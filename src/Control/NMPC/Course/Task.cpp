@@ -61,7 +61,6 @@ namespace Control
       {
         // CLASS Vars
         double m_reference_, m_u_opt_;
-        std::vector<double> m_theta_;
         std::map<std::string, double> m_config_, m_params_, m_state_;
         Arguments m_args;
         NmpcCourse controller;
@@ -76,7 +75,6 @@ namespace Control
         // True if vehicle is in maneuver mode.
         bool m_maneuver;
 
-
         //! Constructor.
         //! @param[in] name task name.
         //! @param[in] ctx context.
@@ -88,7 +86,7 @@ namespace Control
             .description("Choose betweem: Linear(1) and Nonlinear(0)");
 
           param("File Path", m_args.file_path)
-            .defaultValue("1")
+            .defaultValue("system.csv")
             .description("Absolute Path of the system.csv file");
 
           param("Cost Type", m_args.cost_type)
@@ -153,18 +151,20 @@ namespace Control
         void
         onUpdateParameters(void)
         {
-          std::map<std::string, double> m_new_params;
           // checks if MPC config params are changed
           if(paramChanged(m_args.Q))
-            m_new_params["Q"] = m_args.Q;
+            m_params_["Q"] = m_args.Q;
           if(paramChanged(m_args.R))
-            m_new_params["R"] = m_args.R;
+            m_params_["R"] = m_args.R;
           if(paramChanged(m_args.Hs))
-            m_new_params["Hs"] = m_args.Hs;
+            m_params_["Hs"] = m_args.Hs;
           if(paramChanged(m_args.omega_p))
-            m_new_params["omega_p"] = m_args.omega_p;
+            m_params_["omega_p"] = m_args.omega_p;
           if(paramChanged(m_args.gamma_p))
-            m_new_params["gamma_p"] = m_args.gamma_p;
+            m_params_["gamma_p"] = m_args.gamma_p;
+
+          // updates using parameters
+          controller.updateMpcParams(m_params_);
 
           // checks if task params are updated
           if(paramChanged(m_args.Hz_solver))
@@ -363,15 +363,21 @@ namespace Control
         void
         onMain(void)
         {
-          // set default parameters
-          std::map<std::string, double> params_d;
-          params_d["Vc"] = 0.35;      params_d["beta_c"] = 1.57;
-          params_d["Vw"] = 5;         params_d["beta_w"] = 1.57;
-          params_d["Q"] = 4.5;        params_d["R"] = 1.5;
-          params_d["Hs"] = 5; params_d["omega_p"] = 0.6283; params_d["gamma_p"] = 1.57;
-          controller.updateMpcParams(params_d);
+          // // set default parameters
+          // std::map<std::string, double> params_d;
+          // params_d["Vc"] = 0.35;      params_d["beta_c"] = 1.57;
+          // params_d["Vw"] = 5;         params_d["beta_w"] = 1.57;
+          // params_d["Q"] = 4.5;        params_d["R"] = 1.5;
+          // params_d["Hs"] = 5; params_d["omega_p"] = 0.6283; params_d["gamma_p"] = 1.57;
+          // controller.updateMpcParams(params_d);
+
           while (!stopping())
           {  
+
+            debug("currents: %f and %f", m_params_["Vc"], m_params_["beta_c"]);      
+            debug("winds   : %f and %f", m_params_["Vw"], m_params_["beta_w"]);      
+            debug("waves   : %f, %f and %f", m_params_["Hs"], m_params_["omega_p"], m_params_["gamma_p"]);      
+            debug("costs   : %f and %f", m_params_["Q"], m_params_["R"]);      
             
             // wait to receive messages
             waitForMessages(1.0);

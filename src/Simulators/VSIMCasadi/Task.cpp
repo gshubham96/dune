@@ -54,42 +54,107 @@ namespace Simulators
       double Ts;
       //! model type
       std::string model_type;
+
+      //! parameters const for debugging only! (change to update from topics/msgs)
+      double Vc, Vw, beta_c, beta_w, Hs, omega_p, gamma_p;
     };
 
     //! Simulator task.
     struct Task: public Tasks::Periodic
     {
       //! Simulation vehicle.
-      NmpcDynamics m_sim;
+      NmpcDynamics m_simulator;
       //! Simulated position (X,Y,Z).
       IMC::SimulatedState m_state;
       //! Environment Forces
+      std::map<std::string, double> m_config_, m_params_;
+      std::vector<double> m_pose, m_pose_next;
       //! Task arguments.
       Arguments m_args;
       //! Stream velocity.
       double m_svel[3];
+      //! Rudder input, Discretization Time
+      double delta, tS;
 
       Task(const std::string& name, Tasks::Context& ctx):
         Periodic(name, ctx)
       {
         param("Time Multiplier", m_args.time_multiplier)
-        .defaultValue("1.0")
-        .description("Simulation time multiplier");
+          .defaultValue("1.0")
+          .description("Simulation time multiplier");
+
+        param("Time Step", m_args.Ts)
+          .defaultValue("0.1")
+          .description("Discretization Time");
+
+        param("Current Speed", m_args.Vc)
+          .defaultValue("0.35")
+          .description("Speed of Currents");
+        param("Current Direction", m_args.beta_c)
+          .defaultValue("1.57")
+          .description("Direction of Currents");
+
+        param("Wind Speed", m_args.Vw)
+          .defaultValue("5.0")
+          .description("Wind Speed");
+        param("Wind Direction", m_args.beta_w)
+          .defaultValue("1.0")
+          .description("Direction of Winds");
+
+        param("Wave Height", m_args.Hs)
+          .defaultValue("5.0")
+          .description("Peak Wave Height");
+        param("Wave Frequency", m_args.omega_p)
+          .defaultValue("0.683")
+          .description("Fill");
+        param("Wave Direction", m_args.gamma_p)
+          .defaultValue("1.57")
+          .description("Direction of Propulsion Waves");
 
         param("Entity Label - Stream Velocity Source", m_args.svlabel)
-            .defaultValue("Stream Velocity Simulator")
-            .description("Entity label of the stream velocity source.");
+          .defaultValue("Stream Velocity Simulator")
+          .description("Entity label of the stream velocity source.");
 
         // Register handler routines.
         bind<IMC::GpsFix>(this);
         bind<IMC::ServoPosition>(this);
         bind<IMC::SetThrusterActuation>(this);
-        bind<IMC::EstimatedStreamVelocity>(this);
+        // bind<IMC::EstimatedStreamVelocity>(this);
       }
 
       void
       onUpdateParameters(void)
       {
+        // controls sim speed?
+        if (m_args.time_multiplier != 1.0)
+        {
+          Time::Clock::setTimeMultiplier(m_args.time_multiplier);
+          war("Using time multiplier: x%.2f", Time::Clock::getTimeMultiplier());
+        }
+
+        if(paramChanged(m_args.Ts))
+          tS = m_args.Ts;
+
+        // Currents
+        if(paramChanged(m_args.Vc))
+          m_params_["Vc"] = m_args.Vc;
+        if(paramChanged(m_args.beta_c))
+          m_params_["beta_c"] = m_args.beta_c;
+
+        // Winds
+        if(paramChanged(m_args.Vw))
+          m_params_["Vw"] = m_args.Vw;
+        if(paramChanged(m_args.beta_w))
+          m_params_["beta_w"] = m_args.beta_w;
+
+        // Waves
+        if(paramChanged(m_args.Hs))
+          m_params_["Hs"] = m_args.Hs;
+        if(paramChanged(m_args.omega_p))
+          m_params_["omega_p"] = m_args.omega_p;
+        if(paramChanged(m_args.gamma_p))
+          m_params_["gamma_p"] = m_args.gamma_p;
+
       }
 
       //! Release allocated resources.
@@ -102,6 +167,7 @@ namespace Simulators
       void
       onResourceInitialization(void)
       {
+        m_simulator.configure("nonlinear", file_path, tS, true);
       }
 
       void
@@ -112,21 +178,37 @@ namespace Simulators
       void
       consume(const IMC::ServoPosition* msg)
       {
-      }
-
-      void
-      consume(const IMC::SetThrusterActuation* msg)
-      {
-      }
-
-      void
-      consume(const IMC::EstimatedStreamVelocity* msg)
-      {
+        delta = msg->value;
       }
 
       void
       task(void)
       {
+
+        // inputs == m_state_, delta, m_params_, m_state_next
+        m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next);
+        m_vel = m_vel_next;
+
+        // Fill attitude.
+        m_state.psi = Angles::normalizeRadian(m_vel[0]);
+
+        // position
+        m_state.x += ts*m_vel[1];
+        m_state.y += ts*m_vel[2];
+
+        // Fill angular velocity.
+        m_state.r = m_vel[3];
+
+        // Fill linear velocity.
+        m_state.u = m_vel[1];
+        m_state.v = m_vel[2];
+
+        // // Fill stream velocity.
+        // m_state.svx = m_svel[0];
+        // m_state.svy = m_svel[1];
+        // m_state.svz = m_svel[2];
+
+        dispatch(m_state);
 
       }
     };

@@ -382,6 +382,8 @@ namespace Control
             // wait to receive messages
             waitForMessages(1.0);
 
+            continue;
+
             // get current time
             t_now = Clock::getSinceEpoch();
 

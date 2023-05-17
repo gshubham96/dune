@@ -172,6 +172,7 @@ namespace Simulators
       {
         m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, true);
         setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
+        requestActivation();
       }
 
       void

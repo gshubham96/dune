@@ -11,9 +11,9 @@ namespace DUNE{
             N = Tp_/Ts_;
 
             casadi::SX
-                chi_d   = sym_p(nx),
-                Q       = sym_p(nx+8),
-                R       = sym_p(nx+9);
+                chi_d   = sym_p(4),
+                Q       = sym_p(12),
+                R       = sym_p(13);
 
             // trajectory / motion planning
             casadi::SX chi_t_dot, chi_t = chi_d;

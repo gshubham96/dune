@@ -171,11 +171,21 @@ namespace Simulators
       onResourceInitialization(void)
       {
         m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, true);
+        req
       }
 
       void
       consume(const IMC::GpsFix* msg)
       {
+        if (msg->type != IMC::GpsFix::GFT_MANUAL_INPUT)
+          return;
+
+        // Define vehicle origin.
+        m_state.lat = msg->lat;
+        m_state.lon = msg->lon;
+        m_state.height = msg->height;
+
+        requestActivation();
       }
 
       void

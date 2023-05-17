@@ -269,7 +269,7 @@ namespace Control
           m_state_["v"] = msg->v;
           m_state_["r"] = msg->r;
 
-          controller.updateMpcState(m_state_);
+          // controller.updateMpcState(m_state_);
           // debug("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
@@ -379,6 +379,14 @@ namespace Control
             // debug("---------------------------");
             // wait to receive messages
             waitForMessages(1.0);
+
+            std::map<std::string, double> state_d;
+            state_d["psi"] = 0.091855;
+            state_d["u"] = 0.9821;
+            state_d["v"] = 0.19964;
+            state_d["r"] = 0.031876;
+            controller.updateMpcState(state_d);
+
 
             // get current time
             t_now = Clock::getSinceEpoch();

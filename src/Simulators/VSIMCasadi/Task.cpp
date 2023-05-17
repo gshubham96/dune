@@ -173,7 +173,7 @@ namespace Simulators
         setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
         requestActivation();
 
-        m_vel = std::vector<double> param_vector(4, 0);
+        m_vel = {0, 0, 0, 0};
 
       }
 
@@ -207,7 +207,6 @@ namespace Simulators
 
         debug("2");
         m_vel = m_vel_next;
-        debug(m_vel);
 
         // Fill attitude.
         m_state.psi = Angles::normalizeRadian(m_vel[0]);

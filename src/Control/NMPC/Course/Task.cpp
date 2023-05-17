@@ -365,9 +365,8 @@ namespace Control
         onMain(void)
         {
           // set default parameters
-          std::map<std::string, double> params_d;
-          params_d["Vc"] = 0.35;      params_d["beta_c"] = 1.57;
-          params_d["Vw"] = 5;         params_d["beta_w"] = 1.57;
+          m_params_["Vc"] = 0.35;      m_params_["beta_c"] = 1.57;
+          m_params_["Vw"] = 5;         m_params_["beta_w"] = 1.57;
           controller.updateMpcParams(params_d);
 
           while (!stopping())

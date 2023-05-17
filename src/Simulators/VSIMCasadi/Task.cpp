@@ -39,8 +39,7 @@ namespace Simulators
   //! Unmanned Underwater Vehicles
   //! and Autonomous Surface Vehicles.
   //!
-  //! @author Bruno Terra
-  //! @author José Braga
+  //! @author Shubham Garg
   namespace VSIMCasadi
   {
     //! %Task arguments.
@@ -170,7 +169,7 @@ namespace Simulators
       void
       onResourceInitialization(void)
       {
-        m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, true);
+        m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, false);
         setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
         requestActivation();
       }

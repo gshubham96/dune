@@ -173,8 +173,8 @@ namespace Simulators
         setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
         requestActivation();
 
-        m_vel = std::vector<double> param_vector(np, 0);
-        
+        m_vel = std::vector<double> param_vector(4, 0);
+
       }
 
       void

@@ -270,7 +270,7 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
-          debug("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          // debug("updated state: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
         // Updated desired course
@@ -384,13 +384,6 @@ namespace Control
 
             // get current time
             t_now = Clock::getSinceEpoch();
-
-            std::map<std::string, double> state_d;
-            state_d["psi"] = 0.091855;
-            state_d["u"] = 0.9821;
-            state_d["v"] = 0.19964;
-            state_d["r"] = 0.031876;
-            controller.updateMpcState(state_d);
 
             // wait till it is time to publish again
             if ((t_now - t_published) < time_to_publish)

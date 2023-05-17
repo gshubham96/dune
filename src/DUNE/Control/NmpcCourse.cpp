@@ -250,7 +250,7 @@ namespace DUNE{
         }
 
         // performs sanity check of config params
-        bool NmpcDynamics::areParamsSane(const std::map<std::string, double> &mapped_dict){
+        bool NmpcCourse::areParamsSane(const std::map<std::string, double> &mapped_dict){
             // check for the correct number of configuration paramters
             if((int)mapped_dict.size() != np-nx-1){
                 ERROR_STRING_ = "PARAMETER NOT OF RIGHT LENGTH!";

@@ -387,6 +387,8 @@ namespace Control
             state_d["r"] = 0.031876;
             controller.updateMpcState(state_d);
 
+            controller.updateMpcReference(0.4);
+
 
             // get current time
             t_now = Clock::getSinceEpoch();

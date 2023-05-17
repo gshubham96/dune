@@ -171,7 +171,7 @@ namespace Simulators
       onResourceInitialization(void)
       {
         m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, true);
-        req
+        setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
       }
 
       void

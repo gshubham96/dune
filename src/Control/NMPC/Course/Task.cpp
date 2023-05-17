@@ -83,15 +83,15 @@ namespace Control
           DUNE::Tasks::Task(name, ctx)
         {
           param("Model Type", m_args.model_type)
-            .defaultValue("1")
-            .description("Choose betweem: Linear(1) and Nonlinear(0)");
+            .defaultValue("nonlinear")
+            .description("Choose betweem: linear and nonlinear");
 
           param("File Path", m_args.file_path)
             .defaultValue("system.csv")
             .description("Absolute Path of the system.csv file");
 
           param("Cost Type", m_args.cost_type)
-            .defaultValue("1")
+            .defaultValue("chi_d")
             .description("Choose between: psi_d(2), dotv(1) and chi_d(0)");
 
           param("Prediction Horizon", m_args.Tp)

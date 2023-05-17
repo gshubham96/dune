@@ -188,6 +188,8 @@ namespace Simulators
         m_state.lon = msg->lon;
         m_state.height = msg->height;
 
+        debug("%f, %f, %f", m_state.lat, m_state.lon, m_state.height);
+
         requestActivation();
       }
 
@@ -200,23 +202,18 @@ namespace Simulators
       void
       task(void)
       {
-        debug("1");
-
         // inputs == m_state_, delta, m_params_, m_state_next
         m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next);
 
-        debug("2");
         m_vel = m_vel_next;
 
         // Fill attitude.
         m_state.psi = Angles::normalizeRadian(m_vel[0]);
 
-        debug("3");
         // position
         m_state.x += tS*m_vel[1];
         m_state.y += tS*m_vel[2];
 
-        debug("4");
         // Fill angular velocity.
         m_state.r = m_vel[3];
 
@@ -224,13 +221,11 @@ namespace Simulators
         m_state.u = m_vel[1];
         m_state.v = m_vel[2];
 
-        debug("5");
         // // Fill stream velocity.
         // m_state.svx = m_svel[0];
         // m_state.svy = m_svel[1];
         // m_state.svz = m_svel[2];
 
-        debug("6");
         debug("state - %f, %f, %f, %f", m_state.psi, m_state.u, m_state.v, m_state.r);
         dispatch(m_state);
 

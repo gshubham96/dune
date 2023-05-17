@@ -210,10 +210,9 @@ namespace Simulators
       task(void)
       {
         // inputs == m_state_, delta (rudder), m_params_, m_state_next
-        if(m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next)){
+        if(!m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next)){
           m_simulator.getErrorString(SIMULATOR_STATUS);
           err("SIMULATOR says : %s", SIMULATOR_STATUS.c_str());
-
         }
           
 

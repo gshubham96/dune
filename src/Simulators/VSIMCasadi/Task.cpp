@@ -201,6 +201,8 @@ namespace Simulators
 
         // inputs == m_state_, delta, m_params_, m_state_next
         m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next);
+
+        debug("2");
         m_vel = m_vel_next;
 
         // Fill attitude.

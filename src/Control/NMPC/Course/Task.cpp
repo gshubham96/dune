@@ -372,11 +372,11 @@ namespace Control
           while (!stopping())
           {  
 
-            debug("currents: %f and %f", m_params_["Vc"], m_params_["beta_c"]);      
-            debug("winds   : %f and %f", m_params_["Vw"], m_params_["beta_w"]);      
-            debug("waves   : %f, %f and %f", m_params_["Hs"], m_params_["omega_p"], m_params_["gamma_p"]);      
-            debug("costs   : %f and %f", m_params_["Q"], m_params_["R"]);      
-            debug("---------------------------");
+            // debug("currents: %f and %f", m_params_["Vc"], m_params_["beta_c"]);      
+            // debug("winds   : %f and %f", m_params_["Vw"], m_params_["beta_w"]);      
+            // debug("waves   : %f, %f and %f", m_params_["Hs"], m_params_["omega_p"], m_params_["gamma_p"]);      
+            // debug("costs   : %f and %f", m_params_["Q"], m_params_["R"]);      
+            // debug("---------------------------");
             // wait to receive messages
             waitForMessages(1.0);
 

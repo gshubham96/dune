@@ -66,6 +66,7 @@ namespace Control
         NmpcCourse controller;
 
         // DUNE Vars
+        double tS;
         double t_now, t_published, t_solved;
         double time_to_solve, time_to_publish;
         // Stores error messages from the controller

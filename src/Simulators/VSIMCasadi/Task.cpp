@@ -53,7 +53,7 @@ namespace Simulators
       //! time step
       double Ts;
       //! model type
-      std::string model_type;
+      std::string model_type, file_path;
 
       //! parameters const for debugging only! (change to update from topics/msgs)
       double Vc, Vw, beta_c, beta_w, Hs, omega_p, gamma_p;
@@ -87,6 +87,10 @@ namespace Simulators
           .defaultValue("0.1")
           .description("Discretization Time");
 
+        param("File Path", m_args.file_path)
+          .defaultValue("system.csv")
+          .description("Absolute Path of the system.csv file");
+
         param("Current Speed", m_args.Vc)
           .defaultValue("0.35")
           .description("Speed of Currents");
@@ -105,7 +109,7 @@ namespace Simulators
           .defaultValue("5.0")
           .description("Peak Wave Height");
         param("Wave Frequency", m_args.omega_p)
-          .defaultValue("0.683")
+          .defaultValue("0.6283")
           .description("Fill");
         param("Wave Direction", m_args.gamma_p)
           .defaultValue("1.57")
@@ -166,7 +170,7 @@ namespace Simulators
       void
       onResourceInitialization(void)
       {
-        m_simulator.configureDynamics("nonlinear", "file_path", tS, true);
+        m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, true);
       }
 
       void
@@ -207,6 +211,7 @@ namespace Simulators
         // m_state.svy = m_svel[1];
         // m_state.svz = m_svel[2];
 
+        debug("state - %f, %f, %f, %f", m_state.psi, m_state.u, m_state.v, m_state.r);
         dispatch(m_state);
 
       }

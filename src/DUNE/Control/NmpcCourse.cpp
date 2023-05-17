@@ -323,8 +323,7 @@ namespace DUNE{
             args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
             args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
-            std::cout << "parameters         : " << arg["p"] << std::endl;
-            print_details();
+            // print_details();
 
             initialized_--;
             return true;
@@ -395,6 +394,7 @@ namespace DUNE{
             double chi = psi + beta;
 
             // prints out desired and current states
+            std::cout << "parameters         : " << reWriteParams() << std::endl;
             std::cout << "desired angle      : " << reference_ << std::endl;
             std::cout << "final heading angle: " << psi << std::endl;
             std::cout << "final course  angle: " << chi  << std::endl;

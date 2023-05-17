@@ -129,6 +129,10 @@ namespace DUNE
                 // debug function to print trajectory and other info on screen
                 void print_details(void);
 
+                // TODO: Change to override
+                bool areBigParamsSane(const std::map<std::string, double> &mapped_dict);
+
+
                 // resets the controller
                 void reset(void);
 

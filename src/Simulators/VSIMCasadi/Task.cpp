@@ -169,6 +169,14 @@ namespace Simulators
       void
       onResourceInitialization(void)
       {
+        m_params_["Vc"] = m_args.Vc;
+        m_params_["beta_c"] = m_args.beta_c;
+        m_params_["Vw"] = m_args.Vw;
+        m_params_["beta_w"] = m_args.beta_w;
+        m_params_["Hs"] = m_args.Hs;
+        m_params_["omega_p"] = m_args.omega_p;
+        m_params_["gamma_p"] = m_args.gamma_p;
+
         m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, false);
         setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
         requestActivation();
@@ -202,7 +210,7 @@ namespace Simulators
       void
       task(void)
       {
-        // inputs == m_state_, delta, m_params_, m_state_next
+        // inputs == m_state_, delta (rudder), m_params_, m_state_next
         m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next);
 
         m_vel = m_vel_next;

@@ -367,7 +367,7 @@ namespace Control
           // set default parameters
           m_params_["Vc"] = 0.35;      m_params_["beta_c"] = 1.57;
           m_params_["Vw"] = 5;         m_params_["beta_w"] = 1.57;
-          controller.updateMpcParams(params_d);
+          controller.updateMpcParams(m_params_);
 
           while (!stopping())
           {  

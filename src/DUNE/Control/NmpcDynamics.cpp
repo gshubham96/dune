@@ -270,6 +270,13 @@ namespace DUNE{
             }
 
             state_next = x_rk4;
+
+            std::cout << "state init: " << state_init << std::endl;
+            std::cout << "input     : " << u0 << std::endl;
+            std::cout << "params    : " << params << std::endl;
+            std::cout << "state next: " << state_next << std::endl;
+            std::cout << "-----------------------\n";
+
             return true;
         }
 

@@ -196,8 +196,6 @@ namespace Simulators
         m_state.lon = msg->lon;
         m_state.height = msg->height;
 
-        debug("%f, %f, %f", m_state.lat, m_state.lon, m_state.height);
-
         requestActivation();
       }
 

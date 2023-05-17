@@ -249,6 +249,25 @@ namespace DUNE{
             return true;
         }
 
+        // performs sanity check of config params
+        bool NmpcDynamics::areParamsSane(const std::map<std::string, double> &mapped_dict){
+            // check for the correct number of configuration paramters
+            if((int)mapped_dict.size() != np-nx-1){
+                ERROR_STRING_ = "PARAMETER NOT OF RIGHT LENGTH!";
+                return false;
+            }
+            
+            // checks for all keys 
+            int sum = mapped_dict.count("Vc") + mapped_dict.count("beta_c") + mapped_dict.count("Vw") + mapped_dict.count("beta_w")
+                    + mapped_dict.count("Hs") + mapped_dict.count("omega_p") + mapped_dict.count("gamma_p") + mapped_dict.count("Q") + mapped_dict.count("R");
+            if(sum != np-nx-1){
+                ERROR_STRING_ = "ALL RUNTIME PARAMETERs NOT PRESENT!";
+                return false;
+            }
+            
+            return true;
+        }
+
         // cosntructs a mpc-friendly format parameter vector
         std::vector<double> NmpcCourse::reWriteParams(){
             

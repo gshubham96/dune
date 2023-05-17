@@ -172,6 +172,9 @@ namespace Simulators
         m_simulator.configureDynamics("nonlinear", m_args.file_path, tS, false);
         setEntityState(IMC::EntityState::ESTA_NORMAL, Status::CODE_ACTIVE);
         requestActivation();
+
+        m_vel = std::vector<double> param_vector(np, 0);
+        
       }
 
       void
@@ -204,6 +207,7 @@ namespace Simulators
 
         debug("2");
         m_vel = m_vel_next;
+        debug(m_vel);
 
         // Fill attitude.
         m_state.psi = Angles::normalizeRadian(m_vel[0]);

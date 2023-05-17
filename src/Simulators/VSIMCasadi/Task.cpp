@@ -198,6 +198,7 @@ namespace Simulators
       void
       task(void)
       {
+        debug("1");
 
         // inputs == m_state_, delta, m_params_, m_state_next
         m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next);

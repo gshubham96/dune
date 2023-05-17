@@ -68,7 +68,7 @@ namespace Simulators
       IMC::SimulatedState m_state;
       //! Environment Forces
       std::map<std::string, double> m_config_, m_params_;
-      std::vector<double> m_pose, m_pose_next;
+      std::vector<double> m_vel, m_vel_next;
       //! Task arguments.
       Arguments m_args;
       //! Stream velocity.
@@ -118,7 +118,6 @@ namespace Simulators
         // Register handler routines.
         bind<IMC::GpsFix>(this);
         bind<IMC::ServoPosition>(this);
-        bind<IMC::SetThrusterActuation>(this);
         // bind<IMC::EstimatedStreamVelocity>(this);
       }
 
@@ -167,7 +166,7 @@ namespace Simulators
       void
       onResourceInitialization(void)
       {
-        m_simulator.configure("nonlinear", file_path, tS, true);
+        m_simulator.configureDynamics("nonlinear", "file_path", tS, true);
       }
 
       void
@@ -193,8 +192,8 @@ namespace Simulators
         m_state.psi = Angles::normalizeRadian(m_vel[0]);
 
         // position
-        m_state.x += ts*m_vel[1];
-        m_state.y += ts*m_vel[2];
+        m_state.x += tS*m_vel[1];
+        m_state.y += tS*m_vel[2];
 
         // Fill angular velocity.
         m_state.r = m_vel[3];

@@ -285,7 +285,7 @@ namespace DUNE{
             // check for the correct number of configuration paramters
             if((int)mapped_dict.size() != np-nx-1){
                 ERROR_STRING_ = "PARAMETER NOT OF RIGHT LENGTH!";
-                std::cout << "## --" << ERROR_STRING_ << std::endl;
+                std::cout << "## --" << ERROR_STRING_ << mapped_dict << std::endl;
                 return false;
             }
             

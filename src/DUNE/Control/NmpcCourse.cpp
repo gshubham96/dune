@@ -61,6 +61,7 @@ namespace DUNE{
                     u_p = sym_x(1) + EPS,
                     v_p = sym_x(2),
                     r_p = sym_x(3);
+
                 casadi::SX SOG = sqrt( pow(u_p,2) + pow(v_p,2) );
 
                 // trajectory
@@ -322,8 +323,9 @@ namespace DUNE{
             args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
             args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
+            std::cout << "state              : " << arg["x0"] << std::endl;
             std::cout << "parameters         : " << arg["p"] << std::endl;
-            print_details();
+            // print_details();
 
             initialized_--;
             return true;

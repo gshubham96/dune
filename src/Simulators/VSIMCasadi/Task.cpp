@@ -60,9 +60,10 @@ namespace Simulators
 
     //! Simulator task.
     struct Task: public Tasks::Periodic
-    {
+    {      
       //! Simulation vehicle.
       NmpcDynamics m_simulator;
+      std::string SIMULATOR_STATUS;
       //! Simulated position (X,Y,Z).
       IMC::SimulatedState m_state;
       //! Environment Forces
@@ -209,7 +210,12 @@ namespace Simulators
       task(void)
       {
         // inputs == m_state_, delta (rudder), m_params_, m_state_next
-        m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next);
+        if(m_simulator.simulateDynamics(m_vel, delta, m_params_, m_vel_next)){
+          m_simulator.getErrorString(SIMULATOR_STATUS);
+          err("SIMULATOR says : %s", SIMULATOR_STATUS.c_str());
+
+        }
+          
 
         m_vel = m_vel_next;
 

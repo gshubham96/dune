@@ -285,6 +285,7 @@ namespace DUNE{
             // check for the correct number of configuration paramters
             if((int)mapped_dict.size() != 7){
                 ERROR_STRING_ = "PARAMETER NOT OF RIGHT LENGTH!";
+                std::cout << "## --" << ERROR_STRING_ << std::endl;
                 return false;
             }
             
@@ -293,6 +294,7 @@ namespace DUNE{
                     + mapped_dict.count("Hs") + mapped_dict.count("omega_p") + mapped_dict.count("gamma_p");
             if(sum != np-nx-1){
                 ERROR_STRING_ = "ALL RUNTIME PARAMETERs NOT PRESENT!";
+                std::cout << "## --" << ERROR_STRING_ << std::endl;
                 return false;
             }
             

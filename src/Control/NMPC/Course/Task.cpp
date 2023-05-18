@@ -347,17 +347,17 @@ namespace Control
 
           // TODO: Consider adding  
           // Check if VEHICLE is in MANEOUVRING STAGE
-          if(m_service)
-          {
-            debug("(service) Dispatching a 0 rudder angle");
-            msg.value = 0;
-          }
-          else if (m_maneuver){
+          // if(m_service)
+          // {
+          //   debug("(service) Dispatching a 0 rudder angle");
+          //   msg.value = 0;
+          // }
+          // else if (m_maneuver){
             cri("(maneuver) Dispatching a %f rudder angle", u);
             msg.value = u;
-          }
+          // }
 
-          // dispatch(msg);
+          dispatch(msg);
         } 
 
         //! Main loop.

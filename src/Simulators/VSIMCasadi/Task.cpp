@@ -204,7 +204,7 @@ namespace Simulators
       consume(const IMC::ServoPosition* msg)
       {
         delta = msg->value;
-        debug("u0 is %f", msg->value);
+        debug("Got ServoPosition %f from %s", delta, resolveEntity(msg->getSourceEntity()).c_str());
       }
 
       void

@@ -203,8 +203,8 @@ namespace Simulators
       void
       consume(const IMC::ServoPosition* msg)
       {
-        std::cout << "msg: " << msg << std::endl;
         delta = msg->value;
+        debug("u0 is %f", msg->value);
       }
 
       void

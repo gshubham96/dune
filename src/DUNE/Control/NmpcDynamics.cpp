@@ -271,11 +271,11 @@ namespace DUNE{
 
             state_next = x_rk4;
 
-            std::cout << "state init: " << state_init << std::endl;
-            std::cout << "input     : " << u0 << std::endl;
-            std::cout << "params    : " << params << std::endl;
-            std::cout << "state next: " << state_next << std::endl;
-            std::cout << "-----------------------\n";
+            // std::cout << "state init: " << state_init << std::endl;
+            // std::cout << "input     : " << u0 << std::endl;
+            // std::cout << "params    : " << params << std::endl;
+            // std::cout << "state next: " << state_next << std::endl;
+            // std::cout << "-----------------------\n";
 
             return true;
         }
@@ -283,21 +283,17 @@ namespace DUNE{
         // performs sanity check of config params
         bool NmpcDynamics::areParamsSane(const std::map<std::string, double> &mapped_dict){
 
-            std::cout << "mapped_dict --" << mapped_dict << std::endl;
-            
             // check for the correct number of configuration paramters
-            if((int)mapped_dict.size() != 7){
+            if((int)mapped_dict.size() != n_sim_params){
                 ERROR_STRING_ = "PARAMETER NOT OF RIGHT LENGTH!";
-                std::cout << "## --" << ERROR_STRING_ << std::endl;
                 return false;
             }
             
             // checks for all keys 
             int sum = mapped_dict.count("Vc") + mapped_dict.count("beta_c") + mapped_dict.count("Vw") + mapped_dict.count("beta_w")
                     + mapped_dict.count("Hs") + mapped_dict.count("omega_p") + mapped_dict.count("gamma_p");
-            if(sum != 7){
+            if(sum != n_sim_params){
                 ERROR_STRING_ = "ALL RUNTIME PARAMETERs NOT PRESENT!";
-                std::cout << "## --" << ERROR_STRING_ << std::endl;
                 return false;
             }
             
@@ -341,6 +337,7 @@ namespace DUNE{
             // mpc params
             // TODO constants as their is no plan to allow multiple models yet
             nx = 4; nu = 1; np = 14;                                                    
+            n_sim_params = 7;
         }
 
         // Destructor

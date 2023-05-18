@@ -77,7 +77,7 @@ namespace DUNE
             // lengths of state, input and paramter vectors
             int nx, nu, np, N;
             // config params for RK4 simulation
-            double Ts_;
+            double Ts_, n_sim_params;
             // surge speed model
             std::vector<double> speed_model;
             // dynamics function

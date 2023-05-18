@@ -215,7 +215,6 @@ namespace Simulators
           err("SIMULATOR says : %s", SIMULATOR_STATUS.c_str());
         }
           
-
         m_vel = m_vel_next;
 
         // Fill attitude.

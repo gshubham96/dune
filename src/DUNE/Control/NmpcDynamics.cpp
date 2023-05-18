@@ -295,7 +295,7 @@ namespace DUNE{
             // checks for all keys 
             int sum = mapped_dict.count("Vc") + mapped_dict.count("beta_c") + mapped_dict.count("Vw") + mapped_dict.count("beta_w")
                     + mapped_dict.count("Hs") + mapped_dict.count("omega_p") + mapped_dict.count("gamma_p");
-            if(sum != np-nx-1){
+            if(sum != 7){
                 ERROR_STRING_ = "ALL RUNTIME PARAMETERs NOT PRESENT!";
                 std::cout << "## --" << ERROR_STRING_ << std::endl;
                 return false;

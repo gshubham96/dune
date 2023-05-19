@@ -413,9 +413,9 @@ namespace DUNE{
             double chi = psi + beta;
 
             // prints out desired and current states
-            std::cout << "parameters         : " << reWriteParams() << std::endl;
+            // std::cout << "parameters         : " << reWriteParams() << std::endl;
             std::cout << "desired angle      : " << reference_ << std::endl;
-            std::cout << "computed input     : " << input_traj_[0] << std::endl;
+            // std::cout << "computed input     : " << input_traj_[0] << std::endl;
             std::cout << "final heading angle: " << psi << std::endl;
             std::cout << "final course  angle: " << chi  << std::endl;
 

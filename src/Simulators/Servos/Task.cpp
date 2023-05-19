@@ -179,7 +179,6 @@ namespace Simulators
                                                  -m_args.max_angle,
                                                  m_args.max_angle);
           dispatch(m_positions[msg->id]);
-          debug("Got SetServoPosition %f from %s", msg->value, resolveEntity(msg->getSourceEntity()).c_str());
         }
         else
         {
@@ -234,6 +233,7 @@ namespace Simulators
             m_positions[i].value += diff;
           }
 
+          debug("dispatching SetServoPosition %f from %s", msg->value, resolveEntity(msg->getSourceEntity()).c_str());
           dispatch(m_positions[i]);
         }
 

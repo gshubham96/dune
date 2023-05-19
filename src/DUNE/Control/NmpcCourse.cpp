@@ -486,7 +486,7 @@ namespace DUNE{
                 return false;
             }
 
-            std::cout << "############ cost_type " << cost_type << " and int " << cost_type_ << std::endl;
+            std::cout << "############ cost_type " << cost_type << " and int " << cost_type_ << "and check " << cost_type.compare("chi_d") << std::endl;
 
             // define solver
             if(!defineMpcProblem(compile)){

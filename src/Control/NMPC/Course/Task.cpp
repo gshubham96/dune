@@ -204,7 +204,6 @@ namespace Control
           t_solved = t_published;
 
           // defined the probelm
-          std::cout << "******* cost type in task is " << m_args.cost_type << std::endl;
           bool stat = controller.configureSolver(m_args.model_type, m_args.cost_type, m_args.file_path, m_args.Tp, m_args.Ts, false);
           if(!stat){
             controller.getErrorString(CONTROLLER_STATUS);

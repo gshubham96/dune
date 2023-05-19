@@ -353,7 +353,7 @@ namespace Control
           //   msg.value = 0;
           // }
           // else if (m_maneuver){
-            debug("(maneuver) Dispatching a %f rudder angle", u);
+          //   debug("(maneuver) Dispatching a %f rudder angle", u);
             msg.value = u;
           // }
 
@@ -387,7 +387,7 @@ namespace Control
             // state_d["r"] = 0.031876;
             // controller.updateMpcState(state_d);
 
-            controller.updateMpcReference(0.4);
+            controller.updateMpcReference(1.2);
 
 
             // get current time

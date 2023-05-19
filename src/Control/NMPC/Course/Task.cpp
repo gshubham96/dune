@@ -343,7 +343,7 @@ namespace Control
         void dispatchControl(double u = 1000){
 
           // IMC Vars
-          IMC::SetServoPosition msg;
+          IMC::ServoPosition msg;
 
           // TODO: Consider adding  
           // Check if VEHICLE is in MANEOUVRING STAGE

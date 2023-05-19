@@ -66,7 +66,6 @@ namespace DUNE{
             // TODO load from FILE
             speed_model = {0.116392998053662, 0.214487083945715, 0.0880678632611925, -0.00635496887217675, 0.0937464223577265, 0.238364678400396 };        
 
-
             // surge coefficients
             casadi::SX
                 k_1 = speed_model[0]*Hs + speed_model[1]*omega_p + speed_model[2]*cos(gamma_p) + speed_model[4]*Vc*cos(beta_c) + speed_model[5],

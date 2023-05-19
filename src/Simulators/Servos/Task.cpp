@@ -179,6 +179,7 @@ namespace Simulators
                                                  -m_args.max_angle,
                                                  m_args.max_angle);
           dispatch(m_positions[msg->id]);
+          debug("Got SetervoPosition %f from %s", msg->value, resolveEntity(msg->getSourceEntity()).c_str());
         }
         else
         {

@@ -143,7 +143,8 @@ namespace DUNE{
                     temp = obj;
                 }
             }
-            std::cout << "obj = " << obj << std::endl;
+            std::cout << "##########################\n"            
+            std::cout << "obj 1 = " << temp << std::endl;
 
             for(int j = 0; j < nx; j++)
                 optims(nx*N + j) = X(j,N);

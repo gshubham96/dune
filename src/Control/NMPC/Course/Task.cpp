@@ -258,7 +258,7 @@ namespace Control
 
         // Updates vehicle state
         void
-        consume(const IMC::EstimatedState* msg)
+        consume(const IMC::SimulatedState* msg)
         {
           if (msg->getSource() != getSystemId())
             return;

@@ -143,7 +143,7 @@ namespace DUNE{
                     temp = obj;
                 }
             }
-            std::cout << "##########################\n"            
+            std::cout << "##########################\n"      ;      
             std::cout << "obj 1 = " << temp << std::endl;
 
             for(int j = 0; j < nx; j++)

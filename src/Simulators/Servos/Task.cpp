@@ -215,7 +215,7 @@ namespace Simulators
       void
       consume(const IMC::SimulatedState* msg)
       {
-        debug("got SetServoPosition %f from %s", msg.value, resolveEntity(msg->getSourceEntity()).c_str());
+        debug("got SetServoPosition %f from %s", msg->value, resolveEntity(msg->getSourceEntity()).c_str());
         (void)msg;
 
         if (!m_args.limit_rate)

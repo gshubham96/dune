@@ -38,7 +38,6 @@ namespace DUNE{
             sym_dx(0) = ssa(sym_dx(0));
 
             // fill in the constraint vector
-            casadi::SX temp;
             for(int j = 0; j < nx; j++)
                 g(j) = sym_dx(j);
 
@@ -138,13 +137,7 @@ namespace DUNE{
                 for(int j = 0; j < nx; j++)
                     optims(nx*i + j) = sym_x(j);
                 optims(nx*(N+1) + i) = sym_u;
-
-                if(i==0){
-                    temp = obj;
-                }
             }
-            std::cout << "##########################\n"      ;      
-            std::cout << "obj 1 = " << temp << std::endl;
 
             for(int j = 0; j < nx; j++)
                 optims(nx*N + j) = X(j,N);
@@ -349,7 +342,7 @@ namespace DUNE{
             args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
             args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
-            // print_details();
+            print_details();
 
             initialized_--;
             return true;

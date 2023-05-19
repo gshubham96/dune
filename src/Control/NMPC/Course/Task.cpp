@@ -136,7 +136,7 @@ namespace Control
 
           bind<IMC::Abort>(this);
           bind<IMC::VehicleState>(this);
-          bind<IMC::EstimatedState>(this);
+          bind<IMC::SimulatedState>(this);
           bind<IMC::DesiredHeading>(this);
           bind<IMC::AbsoluteWind>(this);
           bind<IMC::SingleCurrentCell>(this);

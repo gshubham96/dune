@@ -313,9 +313,9 @@ namespace DUNE{
             file_path_ = file_path;
 
             // get config params
-            if (model_type.compare("nonlinear"))
+            if (!model_type.compare("nonlinear"))
                 model_type_ = 0;
-            else if (model_type.compare("linear"))
+            else if (!model_type.compare("linear"))
                 model_type_ = 1;
             else{
                 ERROR_STRING_ = "model_type NOT FOUND. CAN ONLY BE <linear> or <nonlinear>";

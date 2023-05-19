@@ -349,7 +349,7 @@ namespace DUNE{
             args_["lam_x0"]  = std::vector<double>(res.at("lam_x"));
             args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
-            print_details();
+            // print_details();
 
             initialized_--;
             return true;
@@ -422,7 +422,7 @@ namespace DUNE{
             // prints out desired and current states
             std::cout << "parameters         : " << reWriteParams() << std::endl;
             std::cout << "desired angle      : " << reference_ << std::endl;
-            std::cout << "computed input     : " << 1 << std::endl;
+            std::cout << "computed input     : " << input_traj_[0] << std::endl;
             std::cout << "final heading angle: " << psi << std::endl;
             std::cout << "final course  angle: " << chi  << std::endl;
 
@@ -485,8 +485,6 @@ namespace DUNE{
                 ERROR_STRING_ = "cost_type_ NOT FOUND. CAN ONLY BE <chi_d>, <dotv> or <psi_d>";
                 return false;
             }
-
-            std::cout << "############ cost_type " << cost_type << " and int " << cost_type_ << "and check " << cost_type.compare("chi_d") << std::endl;
 
             // define solver
             if(!defineMpcProblem(compile)){

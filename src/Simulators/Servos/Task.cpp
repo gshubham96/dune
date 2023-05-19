@@ -233,7 +233,7 @@ namespace Simulators
             m_positions[i].value += diff;
           }
 
-          debug("dispatching SetServoPosition %f from %s", msg->value, resolveEntity(msg->getSourceEntity()).c_str());
+          debug("dispatching SetServoPosition %f from %s", m_positions[i].value, resolveEntity(msg->getSourceEntity()).c_str());
           dispatch(m_positions[i]);
         }
 

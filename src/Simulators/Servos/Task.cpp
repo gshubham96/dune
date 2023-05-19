@@ -173,7 +173,7 @@ namespace Simulators
       void
       consume(const IMC::SetServoPosition* msg)
       {
-        debug("Got SetervoPosition %f from %s", msg->value, resolveEntity(msg->getSourceEntity()).c_str());
+        debug("Got SetervoPosition %f from ??", msg->value);
         if (!m_args.limit_rate)
         {
           m_positions[msg->id].value = trimValue(msg->value,

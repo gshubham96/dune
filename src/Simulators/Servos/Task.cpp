@@ -215,6 +215,7 @@ namespace Simulators
       void
       consume(const IMC::SimulatedState* msg)
       {
+        debug("got SetServoPosition %f from %s", msg.value, resolveEntity(msg->getSourceEntity()).c_str());
         (void)msg;
 
         if (!m_args.limit_rate)
@@ -233,7 +234,6 @@ namespace Simulators
             m_positions[i].value += diff;
           }
 
-          debug("dispatching SetServoPosition %f from %s", m_positions[i].value, resolveEntity(msg->getSourceEntity()).c_str());
           dispatch(m_positions[i]);
         }
 

@@ -422,6 +422,7 @@ namespace DUNE{
             // prints out desired and current states
             std::cout << "parameters         : " << reWriteParams() << std::endl;
             std::cout << "desired angle      : " << reference_ << std::endl;
+            std::cout << "computed input     : " << 1 << std::endl;
             std::cout << "final heading angle: " << psi << std::endl;
             std::cout << "final course  angle: " << chi  << std::endl;
 
@@ -484,6 +485,8 @@ namespace DUNE{
                 ERROR_STRING_ = "cost_type_ NOT FOUND. CAN ONLY BE <chi_d>, <dotv> or <psi_d>";
                 return false;
             }
+
+            std::cout << "############ cost_type " << cost_type << " and int " << cost_type_ << std::endl;
 
             // define solver
             if(!defineMpcProblem(compile)){

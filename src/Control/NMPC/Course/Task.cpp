@@ -278,26 +278,6 @@ namespace Control
 
           controller.updateMpcState(m_state_);
           // debug("con: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
-
-        // temp
-            if(filecount_ == -1){
-                // open a file
-                filename_ = fs::current_path().parent_path().string();
-                filename_ = filename_ + "/SimulatedState.m";
-                file_.open(filename_.c_str());
-                file_ << "% Results file_ from " __FILE__ << std::endl;
-                file_ << "% Generated " __DATE__ " at " __TIME__ << std::endl << std::endl;
-                file_<< "state = [" << std::endl;
-                file_.close();
-                filecount_++;
-            }
-            else if(filecount_++ > -1){
-                // save trajectory to file
-                file_.open(filename_.c_str(), std::ios::app);
-                file_ << m_state_.at("psi") << ", " << m_state_.at("u") << ", " << m_state_.at("v") << ", " << m_state_.at("r") << ";" << std::endl;
-                file_.close();
-            }
-
         }
 
 

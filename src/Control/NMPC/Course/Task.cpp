@@ -287,7 +287,6 @@ namespace Control
           m_reference_ = msg->value;
           controller.updateMpcReference(m_reference_);
           debug("updated heading");
-
         }
 
         // fill in m_theta_ for wind params
@@ -298,7 +297,6 @@ namespace Control
           m_params_["beta_w"] = msg->dir;
           controller.updateMpcParams(m_params_);
           debug("updated param: wind %f, %f", msg->speed, msg->dir);
-
         }
 
         void
@@ -369,7 +367,7 @@ namespace Control
 
             // wait to receive messages
             waitForMessages(1.0);
-
+            debug("updating reference");
             controller.updateMpcReference(1.2);
 
             // get current time

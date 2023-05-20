@@ -396,7 +396,7 @@ namespace DUNE{
             else if(filecount_ > -1){
                 // save trajectory to file
                 file_.open(filename_.c_str(), std::ios::app);
-                file_<< "params" << filecount_ << " = " << reWriteParams() << ";" << std::endl;
+                file_<< "params" << filecount_ << " = " << reference_ << ";" << std::endl;
                 file_<< "optims" << filecount_++ << " = " << optimized_vars_ << ";" << std::endl;
                 file_.close();
             }

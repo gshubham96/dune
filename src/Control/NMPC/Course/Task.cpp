@@ -71,10 +71,9 @@ namespace Control
         double time_to_solve, time_to_publish;
         // Stores error messages from the controller
         std::string CONTROLLER_STATUS;
-        // True if vehicle is in service mode.
-        bool m_service;
-        // True if vehicle is in maneuver mode.
-        bool m_maneuver;
+        // vehicle mode(s)
+        enum Mode {service, maneuver};
+        Mode mode_;
 
         //! Constructor.
         //! @param[in] name task name.
@@ -136,7 +135,7 @@ namespace Control
 
           bind<IMC::Abort>(this);
           bind<IMC::VehicleState>(this);
-          bind<IMC::SimulatedState>(this);
+          bind<IMC::EstimatedState>(this);
           bind<IMC::DesiredHeading>(this);
           bind<IMC::AbsoluteWind>(this);
           bind<IMC::SingleCurrentCell>(this);
@@ -258,8 +257,9 @@ namespace Control
 
         // Updates vehicle state
         void
-        consume(const IMC::SimulatedState* msg)
+        consume(const IMC::EstimatedState* msg)
         {
+          debug("Got EstimatedState from %s",resolveEntity(msg->getSourceEntity()).c_str());
           if (msg->getSource() != getSystemId())
             return;
 
@@ -328,15 +328,9 @@ namespace Control
           if(msg->getSource() != getSystemId())
             return;
           if(msg->op_mode == IMC::VehicleState::VS_SERVICE)
-          {
-            m_service = true;
-            m_maneuver = false;
-          }
+            mode_ = service;
           if(msg->op_mode == IMC::VehicleState::VS_MANEUVER)
-          {
-            m_maneuver = true;
-            m_service = false;
-          }
+            mode_ = maneuver;
         }
 
         //! publisher function
@@ -345,18 +339,12 @@ namespace Control
           // IMC Vars
           IMC::ServoPosition msg;
 
-          // TODO: Consider adding  
           // Check if VEHICLE is in MANEOUVRING STAGE
-          // if(m_service)
-          // {
-          //   debug("(service) Dispatching a 0 rudder angle");
-          //   msg.value = 0;
-          // }
-          // else if (m_maneuver){
-          //   debug("(maneuver) Dispatching a %f rudder angle", u);
-            msg.value = u;
-          // }
-
+          switch(mode_){
+            case service: msg.value = 0; break;
+            case maneuver: msg.value = u; break;
+          }
+          msg.value = u;
           dispatch(msg);
         } 
 
@@ -372,23 +360,10 @@ namespace Control
           while (!stopping())
           {  
 
-            // debug("currents: %f and %f", m_params_["Vc"], m_params_["beta_c"]);      
-            // debug("winds   : %f and %f", m_params_["Vw"], m_params_["beta_w"]);      
-            // debug("waves   : %f, %f and %f", m_params_["Hs"], m_params_["omega_p"], m_params_["gamma_p"]);      
-            // debug("costs   : %f and %f", m_params_["Q"], m_params_["R"]);      
-            // debug("---------------------------");
             // wait to receive messages
             waitForMessages(1.0);
 
-            // std::map<std::string, double> state_d;
-            // state_d["psi"] = 0.091855;
-            // state_d["u"] = 0.9821;
-            // state_d["v"] = 0.19964;
-            // state_d["r"] = 0.031876;
-            // controller.updateMpcState(state_d);
-
             controller.updateMpcReference(1.2);
-
 
             // get current time
             t_now = Clock::getSinceEpoch();

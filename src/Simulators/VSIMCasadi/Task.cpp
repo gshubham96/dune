@@ -236,7 +236,6 @@ namespace Simulators
         // m_state.svy = m_svel[1];
         // m_state.svz = m_svel[2];
 
-        // debug("sim - %f, %f, %f, %f", m_state.psi, m_state.u, m_state.v, m_state.r);
         dispatch(m_state);
 
       }

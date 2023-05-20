@@ -387,7 +387,8 @@ namespace DUNE{
             if(filecount_ == -1){
                 // open a file
                 filename_ = fs::current_path().parent_path().string();
-                filename_ = filename_ + "/results/course_gen.m";
+                filename_ = filename_ + "/course_gen.m";
+                std::cout << "file: " << filename_ << std::endl;
                 file_.open(filename_.c_str());
                 file_ << "% Results file_ from " __FILE__ << std::endl;
                 file_ << "% Generated " __DATE__ " at " __TIME__ << std::endl << std::endl;

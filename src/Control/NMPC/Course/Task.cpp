@@ -277,10 +277,8 @@ namespace Control
 
           controller.updateMpcState(m_state_);
           // debug("con: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
-        }
 
         // temp
-        void NmpcCourse::saveTrajectoryToFile(){
             if(filecount_ == -1){
                 // open a file
                 filename_ = fs::current_path().parent_path().string();
@@ -298,7 +296,9 @@ namespace Control
                 file_ << m_state_.at("psi") << ", " << m_state_.at("u") << ", " << m_state_.at("v") << ", " << m_state_.at("r") << ";" << std::endl;
                 file_.close();
             }
+
         }
+
 
         // Updated desired course
         void

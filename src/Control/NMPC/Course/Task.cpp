@@ -276,7 +276,7 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
-          // debug("con: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          debug("con: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
         }
 
 
@@ -367,7 +367,7 @@ namespace Control
 
             // wait to receive messages
             waitForMessages(1.0);
-            debug("updating reference");
+            // debug("updating reference");
             controller.updateMpcReference(1.2);
 
             // get current time
@@ -403,7 +403,7 @@ namespace Control
             }
 
             // update publish time
-            inf("publishing after : %f", t_now - t_published);
+            // inf("publishing after : %f", t_now - t_published);
             t_published = Clock::getSinceEpoch();
 
           }

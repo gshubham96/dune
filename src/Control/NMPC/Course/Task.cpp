@@ -367,7 +367,7 @@ namespace Control
             // wait to receive messages
             waitForMessages(1.0);
             // debug("updating reference");
-            controller.updateMpcReference(1.2);
+            controller.updateMpcReference(1.57);
 
             // get current time
             t_now = Clock::getSinceEpoch();

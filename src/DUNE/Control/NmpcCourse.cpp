@@ -343,6 +343,7 @@ namespace DUNE{
             args_["lam_g0"]  = std::vector<double>(res.at("lam_g"));
 
             // print_details();
+            saveTrajectoryToFile();
 
             initialized_--;
             return true;

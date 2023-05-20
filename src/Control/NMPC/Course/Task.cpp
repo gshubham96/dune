@@ -68,7 +68,6 @@ namespace Control
         // TEMP Vars
         int filecount_;
         std::string filename_;
-        std::ofstream file_;
 
         // DUNE Vars
         double tS;

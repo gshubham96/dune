@@ -65,6 +65,10 @@ namespace Control
         Arguments m_args;
         NmpcCourse controller;
 
+        // TEMP Vars
+        int filecount_;
+        std::string filename_;
+
         // DUNE Vars
         double tS;
         double t_now, t_published, t_solved;
@@ -135,7 +139,7 @@ namespace Control
 
           bind<IMC::Abort>(this);
           bind<IMC::VehicleState>(this);
-          bind<IMC::EstimatedState>(this);
+          bind<IMC::SimulatedState>(this);
           bind<IMC::DesiredHeading>(this);
           bind<IMC::AbsoluteWind>(this);
           bind<IMC::SingleCurrentCell>(this);
@@ -198,6 +202,8 @@ namespace Control
         void
         onResourceInitialization(void)
         {
+          filecount_ = -1;
+
           // Update clock
           t_published = 0;
           t_solved = t_published;
@@ -257,9 +263,9 @@ namespace Control
 
         // Updates vehicle state
         void
-        consume(const IMC::EstimatedState* msg)
+        consume(const IMC::SimulatedState* msg)
         {
-          debug("Got EstimatedState from %s",resolveEntity(msg->getSourceEntity()).c_str());
+          // debug("Got SimulatedState from %s",resolveEntity(msg->getSourceEntity()).c_str());
           if (msg->getSource() != getSystemId())
             return;
 
@@ -270,7 +276,28 @@ namespace Control
           m_state_["r"] = msg->r;
 
           controller.updateMpcState(m_state_);
-          debug("con: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+          // debug("con: %f, %f, %f, %f", m_state_["psi"], m_state_["u"], m_state_["v"], m_state_["r"]);
+        }
+
+        // temp
+        void NmpcCourse::saveTrajectoryToFile(){
+            if(filecount_ == -1){
+                // open a file
+                filename_ = fs::current_path().parent_path().string();
+                filename_ = filename_ + "/SimulatedState.m";
+                file_.open(filename_.c_str());
+                file_ << "% Results file_ from " __FILE__ << std::endl;
+                file_ << "% Generated " __DATE__ " at " __TIME__ << std::endl << std::endl;
+                file_<< "state = [" << std::endl;
+                file_.close();
+                filecount_++;
+            }
+            else if(filecount_++ > -1){
+                // save trajectory to file
+                file_.open(filename_.c_str(), std::ios::app);
+                file_ << m_state_.at("psi") << ", " << m_state_.at("u") << ", " << m_state_.at("v") << ", " << m_state_.at("r") << ";" << std::endl;
+                file_.close();
+            }
         }
 
         // Updated desired course

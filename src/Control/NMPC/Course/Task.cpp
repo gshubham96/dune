@@ -405,7 +405,7 @@ namespace Control
             }
 
             // update publish time
-            // inf("publishing after : %f", t_now - t_published);
+            inf("publishing after : %f", t_now - t_published);
             t_published = Clock::getSinceEpoch();
 
           }
